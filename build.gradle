@@ -1,0 +1,93 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.8"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'java-library'
+apply plugin: 'application'
+apply plugin: 'jacoco'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'org.sonarqube'
+
+mainClassName = 'com.issue.runner.RunStats'
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+ext {
+  junitVersion = '5.4.2'
+  jacocoDestinationFile = file("$buildDir/jacoco/test.exec")
+}
+
+repositories {
+  mavenCentral()
+}
+
+test {
+  useJUnitPlatform()
+  jacoco {
+    destinationFile = file(jacocoDestinationFile)
+  }
+  afterSuite { desc, result ->
+    if (!desc.parent) {
+      println "\nTest result: ${result.resultType}"
+      println "Test summary: ${result.testCount} tests, " +
+              "${result.successfulTestCount} succeeded, " +
+              "${result.failedTestCount} failed, " +
+              "${result.skippedTestCount} skipped"
+    }
+  }
+}
+
+dependencies {
+  implementation "com.fasterxml.jackson.core:jackson-databind:2.9.9"
+  implementation "org.apache.poi:poi-ooxml:4.1.1"
+  implementation "org.apache.logging.log4j:log4j-core:2.13.0"
+  implementation "org.apache.logging.log4j:log4j-api:2.13.0"
+  implementation "info.picocli:picocli:4.2.0"
+  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+  testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+  testImplementation "org.junit.jupiter:junit-jupiter-params:${junitVersion}"
+  testImplementation "org.junit.platform:junit-platform-launcher:1.5.2"
+  testImplementation "org.assertj:assertj-core:3.13.2"
+  testCompileOnly "org.apiguardian:apiguardian-api:1.0.0"
+}
+
+def versionMajor = 1
+def versionMinor = 0
+def versionPatch = 0
+def versionBuild = 1
+version = "R${versionMajor}.${versionMinor}.${versionPatch}"
+
+jar{
+  setArchiveBaseName('SprintStats.' + archiveExtension)
+  manifest{
+    attributes 'Specification-Title': rootProject.name,
+    'Specification-Version': archiveVersion,
+    'Implementation-Title': 'com.issue',
+    'Implementation-Version': versionBuild,
+    'Main-Class': 'com.issue.runner.RunStats'
+  }
+}
+
+jacoco {
+  toolVersion = '0.8.2'
+}
+
+jacocoTestReport {
+  reports {
+    xml.enabled true
+  }
+}
+
+sonarqube {
+  properties {
+    property "sonar.projectKey", "BranislavBeno_SprintStats"
+
+  }
+}

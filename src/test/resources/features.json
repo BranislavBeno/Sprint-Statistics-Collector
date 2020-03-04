@@ -1,0 +1,104 @@
+{
+ "expand": "schema,names",
+ "maxResults": 50,
+ "issues": [
+  {
+   "key": "ISSUE-10800",
+   "fields": {
+    "customfield_12641": "[Basic] Feature009"
+   },
+   "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+   "id": "1181902",
+   "self": "http://jira/rest/api/2/issue/1181902"
+  },{
+   "key": "ISSUE-10648",
+   "fields": {
+    "customfield_12641": "[Basic] Feature006"
+   },
+   "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+   "id": "1181299",
+   "self": "http://jira/rest/api/2/issue/1181299"
+  },{
+   "key": "ISSUE-10415",
+   "fields": {
+    "customfield_12641": "[Advanced] Feature004"
+   },
+   "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+   "id": "1097226",
+   "self": "http://jira/rest/api/2/issue/1097226"
+  },{
+   "key": "ISSUE-10414",
+   "fields": {
+    "customfield_12641": "[Commercial] Feature004"
+   },
+   "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+   "id": "1097225",
+   "self": "http://jira/rest/api/2/issue/1097225"
+  },{
+   "key": "ISSUE-9605",
+   "fields": {
+    "customfield_12641": "[Future] Feature008"
+   },
+   "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+   "id": "975303",
+   "self": "http://jira/rest/api/2/issue/975303"
+  },{
+   "key": "ISSUE-9592",
+   "fields": {
+    "customfield_12641": "[Basic] Feature003"
+   },
+   "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+   "id": "975228",
+   "self": "http://jira/rest/api/2/issue/975228"
+  },{
+   "key": "ISSUE-9587",
+   "fields": {
+    "customfield_12641": "[Basic] Feature002"
+   },
+   "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+   "id": "975221",
+   "self": "http://jira/rest/api/2/issue/975221"
+  },{
+   "key": "ISSUE-9584",
+   "fields": {
+    "customfield_12641": "[Advanced] Feature007"
+   },
+   "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+   "id": "975216",
+   "self": "http://jira/rest/api/2/issue/975216"
+  },{
+   "key": "ISSUE-9580",
+   "fields": {
+    "customfield_12641": "[Basic] Feature001"
+   },
+   "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+   "id": "975209",
+   "self": "http://jira/rest/api/2/issue/975209"
+  },{
+   "key": "ISSUE-9146",
+   "fields": {
+    "customfield_12641": "[Basic] Feature007"
+   },
+   "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+   "id": "811391",
+   "self": "http://jira/rest/api/2/issue/811391"
+  },{
+   "key": "ISSUE-8904",
+   "fields": {
+    "customfield_12641": "[Basic] Feature005"
+   },
+   "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+   "id": "496302",
+   "self": "http://jira/rest/api/2/issue/496302"
+  },{
+   "key": "ISSUE-465",
+   "fields": {
+    "customfield_12641": "Feature000"
+   },
+   "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+   "id": "290358",
+   "self": "http://jira/rest/api/2/issue/290358"
+  }],
+ "total": 12,
+ "startAt": 0
+}
