@@ -2,7 +2,7 @@
 
 | GitLab-CI | Test coverage |
 | --- | --- |
-| [![pipeline status](https://gitlab.websupport.sk/biea/sprintstats/badges/master/pipeline.svg)](https://gitlab.websupport.sk/biea/sprintstats/commits/master) | [![coverage report](https://gitlab.websupport.sk/biea/sprintstats/badges/master/coverage.svg)](https://gitlab.websupport.sk/biea/sprintstats/commits/master) |
+| [![pipeline status](https://gitlab.websupport.sk/biea/sprint-statistics/badges/master/pipeline.svg)](https://gitlab.websupport.sk/biea/sprint-statistics/commits/master) | [![coverage report](https://gitlab.websupport.sk/biea/sprint-statistics/badges/master/coverage.svg)](https://gitlab.websupport.sk/biea/sprint-statistics/commits/master) |
 
 Abstract
 ========
