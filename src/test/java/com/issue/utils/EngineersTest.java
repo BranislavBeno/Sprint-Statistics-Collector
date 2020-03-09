@@ -114,7 +114,7 @@ class EngineersTest {
 		globalParams.setOutputFileName4Xlsx("sprints.xlsx");
 
 		// Get Json string
-		String jsonString = StoriesTest.readFileContent("src/test/resources/CompleteSprint52Black.json");
+		String jsonString = StoriesTest.readFileContent("src/test/resources/CompleteSprint.json");
 
 		// extract stories from json
 		StoryDao<Story> stories = Stories.extractStories(jsonString);

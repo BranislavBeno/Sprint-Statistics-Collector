@@ -120,7 +120,7 @@ class SprintsTest {
 		FeatureDao<String, Feature> features = Features.createFeaturesRepo(globalParams);
 
 		// Get Json string
-		String jsonString = StoriesTest.readFileContent("src/test/resources/CompleteSprint52Black.json");
+		String jsonString = StoriesTest.readFileContent("src/test/resources/CompleteSprint.json");
 
 		// extract stories from json
 		StoryDao<Story> stories = Stories.extractStories(jsonString);

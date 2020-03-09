@@ -125,7 +125,7 @@ class StoriesTest {
 		features.saveAll(Features.extractFeatures(null).getAll());
 
 		// Get Json string
-		String storiesJson = StoriesTest.readFileContent("src/test/resources/CompleteSprint52Black.json");
+		String storiesJson = StoriesTest.readFileContent("src/test/resources/CompleteSprint.json");
 		// extract stories from json
 		StoryDao<Story> stories = Stories.extractStories(storiesJson);
 
@@ -190,7 +190,7 @@ class StoriesTest {
 		features.saveAll(Features.extractFeatures(featuresJson).getAll());
 
 		// Get Json string
-		String storiesJson = StoriesTest.readFileContent("src/test/resources/CompleteSprint52Black.json");
+		String storiesJson = StoriesTest.readFileContent("src/test/resources/CompleteSprint.json");
 		// extract stories from json
 		StoryDao<Story> stories = Stories.extractStories(storiesJson);
 
@@ -216,7 +216,7 @@ class StoriesTest {
 	@Test
 	void testPositiveTeamMebersCounting() throws IOException, InterruptedException {
 		// Get Json string
-		String storiesJson = StoriesTest.readFileContent("src/test/resources/CompleteSprint52Black.json");
+		String storiesJson = StoriesTest.readFileContent("src/test/resources/CompleteSprint.json");
 		// extract stories from json
 		StoryDao<Story> stories = Stories.extractStories(storiesJson);
 
@@ -237,7 +237,7 @@ class StoriesTest {
 	@Test
 	void testStoriesExtraction() throws IOException {
 		// Get Json string
-		String jsonString = readFileContent("src/test/resources/CompleteSprint52Black.json");
+		String jsonString = readFileContent("src/test/resources/CompleteSprint.json");
 		// extract stories from json
 		StoryDao<Story> stories = Stories.extractStories(jsonString);
 
@@ -254,7 +254,7 @@ class StoriesTest {
 	@Test
 	void testNoStoriesExtraction() throws IOException {
 		// Get Json string
-		String jsonString = readFileContent("src/test/resources/CompleteOutsideSprint52Red.json");
+		String jsonString = readFileContent("src/test/resources/CompleteOutsideSprint.json");
 		// extract stories from json
 		StoryDao<Story> stories = Stories.extractStories(jsonString);
 
@@ -271,7 +271,7 @@ class StoriesTest {
 	void testStoriesExtractionFromNonExistingFile() throws IOException {
 		// Assert non existing file
 		assertThrows(FileNotFoundException.class,
-				() -> readFileContent("src/test/resources/CompleteSprint52White.json"));
+				() -> readFileContent("src/test/resources/CompleteInSprint.json"));
 	}
 
 	/**
@@ -298,7 +298,7 @@ class StoriesTest {
 	@Test
 	void testNotClosedHighPriorStoriesCounting() throws IOException {
 		// Get Json string
-		String jsonString = readFileContent("src/test/resources/CompleteSprint52Black.json");
+		String jsonString = readFileContent("src/test/resources/CompleteSprint.json");
 
 		// Extract stories from json
 		StoryDao<Story> stories = Stories.extractStories(jsonString);
@@ -333,7 +333,7 @@ class StoriesTest {
 	@Test
 	void testFinishedBugsSPSummming() throws IOException {
 		// Get Json string
-		String jsonString = readFileContent("src/test/resources/CompleteSprint52Black.json");
+		String jsonString = readFileContent("src/test/resources/CompleteSprint.json");
 
 		// Extract stories from json
 		StoryDao<Story> stories = Stories.extractStories(jsonString);
@@ -371,7 +371,7 @@ class StoriesTest {
 	@Test
 	void testTimeEstimationSumming() throws IOException {
 		// Get Json string
-		String jsonString = readFileContent("src/test/resources/CompleteSprint52Black.json");
+		String jsonString = readFileContent("src/test/resources/CompleteSprint.json");
 
 		// Extract stories from json
 		StoryDao<Story> stories = Stories.extractStories(jsonString);
@@ -409,7 +409,7 @@ class StoriesTest {
 	@Test
 	void testInProgressStoryPointsSumming() throws IOException {
 		// Get Json string
-		String jsonString = readFileContent("src/test/resources/IncompleteSprint52Black.json");
+		String jsonString = readFileContent("src/test/resources/IncompleteSprint.json");
 
 		// Extract stories from json
 		StoryDao<Story> stories = Stories.extractStories(jsonString);
