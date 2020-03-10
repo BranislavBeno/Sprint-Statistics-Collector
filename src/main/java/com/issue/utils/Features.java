@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.issue.configuration.GlobalParams;
 import com.issue.entity.Feature;
 import com.issue.enums.FeatureScope;
@@ -94,6 +95,29 @@ public class Features {
 	}
 
 	/**
+	 * @param issue
+	 * @return
+	 */
+	private static String parseKey(JsonNode issue) {
+		// Get json node "summary"
+		JsonNode keyField = Optional.ofNullable(issue.get("key")).orElseThrow();
+
+		return keyField.asText();
+	}
+
+	/**
+	 * @param issueFields
+	 * @return
+	 */
+	private static String parseSummary(JsonNode issueFields) {
+		// Get json node "summary"
+		JsonNode summaryField = Optional.ofNullable(issueFields.get(FEATURE_NAME_FIELD_ID))
+				.orElse(new ObjectNode(null));
+
+		return summaryField.asText();
+	}
+
+	/**
 	 * Extract features.
 	 *
 	 * @param jsonString the json string
@@ -110,19 +134,23 @@ public class Features {
 			issuesNode = new ObjectMapper().readTree(jsonString).get("issues");
 			// run through issues
 			Optional.ofNullable(issuesNode).ifPresent(i -> i.forEach(issue -> {
-				// Get key
-				String key = issue.get("key").textValue();
 
 				// Get json node "fields"
 				JsonNode issueFields = issue.get("fields");
-				// Get issue summary
-				String summary = issueFields.get(FEATURE_NAME_FIELD_ID).asText();
 
-				// Get feature scope
-				FeatureScope scope = parseFeatureScope(summary);
+				if (issueFields != null) {
+					// Get key
+					String key = parseKey(issue);
 
-				// Add new feature into map
-				features.save(new Feature(key, scope));
+					// Get issue summary
+					String summary = parseSummary(issueFields);
+
+					// Get feature scope
+					FeatureScope scope = parseFeatureScope(summary);
+
+					// Add new feature into map
+					features.save(new Feature(key, scope));
+				}
 			}));
 		}
 

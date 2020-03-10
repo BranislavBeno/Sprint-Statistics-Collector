@@ -33,7 +33,6 @@
      "id": "17242",
      "self": "http://jira/rest/api/2/customFieldOption/17242"
     },
-    "customfield_10002": 3,
     "status": {
      "statusCategory": {
       "key": "done",
@@ -76,7 +75,6 @@
       "32x32": "http://jira/secure/useravatar?size=medium&ownerId=john&avatarId=15441"
      }
     },
-    "customfield_12640": "ISSUE-9592",
     "customfield_10540": {
      "value": "Bugfix",
      "id": "17243",
@@ -115,7 +113,6 @@
      "key": "john",
      "timeZone": "Europe/Berlin",
      "emailAddress": "john@example.com",
-     "displayName": "John",
      "self": "http://jira/rest/api/2/user?username=john",
      "name": "john",
      "avatarUrls": {
@@ -159,21 +156,6 @@
      "name": "Medium"
     },
     "aggregatetimeoriginalestimate": 64800,
-    "customfield_16040": {
-     "active": true,
-     "key": "james",
-     "timeZone": "Europe/Berlin",
-     "emailAddress": "james@example.com",
-     "displayName": "James",
-     "self": "http://jira/rest/api/2/user?username=james",
-     "name": "james",
-     "avatarUrls": {
-      "24x24": "http://jira/secure/useravatar?size=small&avatarId=10162",
-      "16x16": "http://jira/secure/useravatar?size=xsmall&avatarId=10162",
-      "48x48": "http://jira/secure/useravatar?avatarId=10162",
-      "32x32": "http://jira/secure/useravatar?size=medium&avatarId=10162"
-     }
-    },
     "customfield_12640": "ISSUE-9605",
     "customfield_10540": {
      "value": "Bugfix",
@@ -204,8 +186,7 @@
     "priority": {
      "id": "3",
      "iconUrl": "http://jira/images/icons/priorities/major.svg",
-     "self": "http://jira/rest/api/2/priority/3",
-     "name": "High"
+     "self": "http://jira/rest/api/2/priority/3"
     },
     "aggregatetimeoriginalestimate": 64800,
     "customfield_16040": {
@@ -250,12 +231,6 @@
   },{
    "key": "ISSUE-13133",
    "fields": {
-    "priority": {
-     "id": "4",
-     "iconUrl": "http://jira/images/icons/priorities/minor.svg",
-     "self": "http://jira/rest/api/2/priority/4",
-     "name": "Medium"
-    },
     "aggregatetimeoriginalestimate": 108000,
     "customfield_16040": {
      "active": true,
@@ -323,7 +298,6 @@
     },
     "customfield_12640": "ISSUE-9580",
     "customfield_10540": {
-     "value": "Story",
      "id": "17242",
      "self": "http://jira/rest/api/2/customFieldOption/17242"
     },
@@ -420,11 +394,6 @@
      }
     },
     "customfield_12640": "ISSUE-9146",
-    "customfield_10540": {
-     "value": "Bugfix",
-     "id": "17243",
-     "self": "http://jira/rest/api/2/customFieldOption/17243"
-    },
     "customfield_10002": 2,
     "status": {
      "statusCategory": {
@@ -485,8 +454,7 @@
      },
      "id": "5",
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
-     "self": "http://jira/rest/api/2/status/5",
-     "name": "Resolved"
+     "self": "http://jira/rest/api/2/status/5"
     }
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
@@ -523,20 +491,7 @@
      "id": "17240",
      "self": "http://jira/rest/api/2/customFieldOption/17240"
     },
-    "customfield_10002": 3,
-    "status": {
-     "statusCategory": {
-      "key": "done",
-      "colorName": "green",
-      "id": 3,
-      "self": "http://jira/rest/api/2/statuscategory/3",
-      "name": "Done"
-     },
-     "id": "5",
-     "iconUrl": "http://jira/images/icons/statuses/resolved.png",
-     "self": "http://jira/rest/api/2/status/5",
-     "name": "Resolved"
-    }
+    "customfield_10002": 3
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
    "id": "1341914",
@@ -599,7 +554,6 @@
      "self": "http://jira/rest/api/2/priority/4",
      "name": "Medium"
     },
-    "aggregatetimeoriginalestimate": 72000,
     "customfield_16040": {
      "active": true,
      "key": "john",

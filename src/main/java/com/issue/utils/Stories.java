@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.issue.configuration.GlobalParams;
 import com.issue.entity.Feature;
 import com.issue.entity.Story;
@@ -76,7 +77,7 @@ public class Stories {
 	 * @param username        the username
 	 * @param password        the password
 	 * @param issueTrackerUri the issue tracker uri
-	 * @param query     the features jql
+	 * @param query           the features jql
 	 * @return the string
 	 * @throws IOException          Signals that an I/O exception has occurred.
 	 * @throws InterruptedException the interrupted exception
@@ -88,6 +89,119 @@ public class Stories {
 						+ "," + STORY_OWNER_FIELD_ID + "," + STORY_TYPE_FIELD_ID);
 
 		return Utils.gatherJsonString(username, password, request);
+	}
+
+	/**
+	 * @param issueFields
+	 * @return
+	 */
+	private static int parseStoryPoints(JsonNode issueFields) {
+		// Get json node story points
+		JsonNode storyPoints = Optional.ofNullable(issueFields.get(STORY_POINTS_FIELD_ID)).orElse(new ObjectNode(null));
+
+		return storyPoints.asInt(0);
+	}
+
+	/**
+	 * @param issueFields
+	 * @return
+	 */
+	private static int parseTimeEstimation(JsonNode issueFields) {
+		// Get json node aggregate time original estimate
+		JsonNode timeEstimation = Optional.ofNullable(issueFields.get("aggregatetimeoriginalestimate"))
+				.orElse(new ObjectNode(null));
+
+		return timeEstimation.asInt(0);
+	}
+
+	/**
+	 * @param issueFields
+	 * @return
+	 */
+	private static String parseEpicLink(JsonNode issueFields) {
+		// Initialize epic link text
+		String link = "";
+
+		// Get json node epic link
+		if (issueFields.get(EPIC_LINK_FIELD_ID) != null) {
+			link = issueFields.get(EPIC_LINK_FIELD_ID).asText();
+		}
+
+		return link;
+	}
+
+	/**
+	 * @param issueFields
+	 * @return
+	 */
+	private static String parseStoryOwner(JsonNode issueFields) {
+		// Initialize story owner name
+		JsonNode storyOwnerName = null;
+
+		// Get story owner field
+		JsonNode storyOwnerField = issueFields.get(STORY_OWNER_FIELD_ID);
+
+		if (storyOwnerField != null)
+			storyOwnerName = storyOwnerField.get("displayName");
+
+		// Get story owner
+		JsonNode owner = Optional.ofNullable(storyOwnerName).orElse(new ObjectNode(null));
+
+		return owner.asText();
+	}
+
+	/**
+	 * @param issueFields
+	 * @return
+	 */
+	private static String parseStoryPriority(JsonNode issueFields) {
+		// Initialize priority name json node
+		JsonNode priorityName = null;
+
+		// Get json node priority
+		JsonNode priorityField = issueFields.get("priority");
+
+		if (priorityField != null) {
+			priorityName = priorityField.get("name");
+		}
+
+		return Optional.ofNullable(priorityName).orElse(new ObjectNode(null)).asText();
+	}
+
+	/**
+	 * @param issueFields
+	 * @return
+	 */
+	private static String parseStoryType(JsonNode issueFields) {
+		// Initialize story type name json node
+		JsonNode storyTypeName = null;
+
+		// Get json node story type
+		JsonNode storyTypeField = issueFields.get(STORY_TYPE_FIELD_ID);
+
+		if (storyTypeField != null) {
+			storyTypeName = storyTypeField.get("value");
+		}
+
+		return Optional.ofNullable(storyTypeName).orElse(new ObjectNode(null)).asText();
+	}
+
+	/**
+	 * @param issueFields
+	 * @return
+	 */
+	private static String parseStoryStatus(JsonNode issueFields) {
+		// Initialize status name json node
+		JsonNode statusName = null;
+
+		// Get json node status
+		JsonNode statusField = issueFields.get("status");
+
+		if (statusField != null) {
+			statusName = statusField.get("name");
+		}
+
+		return Optional.ofNullable(statusName).orElse(new ObjectNode(null)).asText();
 	}
 
 	/**
@@ -111,41 +225,33 @@ public class Stories {
 			// Get json node "fields"
 			JsonNode issueFields = issue.get("fields");
 
-			// Get story points
-			int sp = issueFields.get(STORY_POINTS_FIELD_ID).asInt(0);
+			if (issueFields != null) {
 
-			// Get epic link
-			String epic = issueFields.get(EPIC_LINK_FIELD_ID).asText("");
+				// Get story points
+				int sp = parseStoryPoints(issueFields);
 
-			// Get json node "fields.customfield_16040"
-			JsonNode storyOwnerField = issueFields.get(STORY_OWNER_FIELD_ID);
-			JsonNode storyOwnerDisplayName = null;
-			if (storyOwnerField != null)
-				storyOwnerDisplayName = storyOwnerField.get("displayName");
-			// Get story owner
-			JsonNode owner = Optional.ofNullable(storyOwnerDisplayName).orElse(null);
-			// Set story owner
-			StringBuilder storyOwner = new StringBuilder();
-			if (owner != null)
-				storyOwner.append(owner.textValue());
+				// Get aggregate time original estimate
+				int timeEstimation = parseTimeEstimation(issueFields);
 
-			// Get priority name
-			String priority = issueFields.get("priority").get("name").asText("");
+				// Get epic link
+				String epic = parseEpicLink(issueFields);
 
-			// Get aggregate time original estimate
-			int timeEstimation = issueFields.get("aggregatetimeoriginalestimate").asInt(0);
+				// Get story owner
+				String storyOwner = parseStoryOwner(issueFields);
 
-			// Get story type
-			String storyType = issueFields.get(STORY_TYPE_FIELD_ID).get("value").asText("");
+				// Get priority name
+				String priority = parseStoryPriority(issueFields);
 
-			// Get json node "fields.status"
-			JsonNode statusField = issueFields.get("status");
-			// Get issue status
-			String status = statusField.get("name").asText();
+				// Get story type
+				String storyType = parseStoryType(issueFields);
 
-			// Add new story into list
-			stories.save(new Story.Builder().epic(epic).storyPoints(sp).storyOwner(storyOwner.toString())
-					.priority(priority).timeEstimation(timeEstimation).storyType(storyType).status(status).build());
+				// Get story status
+				String status = parseStoryStatus(issueFields);
+
+				// Add new story into list
+				stories.save(new Story.Builder().epic(epic).storyPoints(sp).storyOwner(storyOwner).priority(priority)
+						.timeEstimation(timeEstimation).storyType(storyType).status(status).build());
+			}
 		}));
 
 		return stories;

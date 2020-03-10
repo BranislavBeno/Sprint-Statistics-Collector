@@ -135,11 +135,11 @@ class StoriesTest {
 		// Get finished story points count
 		int finishedStoryPointsCount = Stories.summarizeStoryPoints(finishedStoryPoints);
 
-		assertThat(finishedStoryPoints.get(FeatureScope.BASIC)).isEqualTo(58);
+		assertThat(finishedStoryPoints.get(FeatureScope.BASIC)).isEqualTo(55);
 		assertThat(finishedStoryPoints.get(FeatureScope.ADVANCED)).isEqualTo(0);
 		assertThat(finishedStoryPoints.get(FeatureScope.COMMERCIAL)).isEqualTo(0);
 		assertThat(finishedStoryPoints.get(FeatureScope.FUTURE)).isEqualTo(0);
-		assertThat(finishedStoryPointsCount).isEqualTo(58);
+		assertThat(finishedStoryPointsCount).isEqualTo(55);
 	}
 
 	/**
@@ -200,11 +200,11 @@ class StoriesTest {
 		// Get finished story points count
 		int finishedStoryPointsCount = Stories.summarizeStoryPoints(finishedStoryPoints);
 
-		assertThat(finishedStoryPoints.get(FeatureScope.BASIC)).isEqualTo(43);
+		assertThat(finishedStoryPoints.get(FeatureScope.BASIC)).isEqualTo(40);
 		assertThat(finishedStoryPoints.get(FeatureScope.ADVANCED)).isEqualTo(6);
 		assertThat(finishedStoryPoints.get(FeatureScope.COMMERCIAL)).isEqualTo(6);
 		assertThat(finishedStoryPoints.get(FeatureScope.FUTURE)).isEqualTo(3);
-		assertThat(finishedStoryPointsCount).isEqualTo(58);
+		assertThat(finishedStoryPointsCount).isEqualTo(55);
 	}
 
 	/**
@@ -306,7 +306,7 @@ class StoriesTest {
 		// Summarize not closed high prior stories count
 		int count = Stories.summarizeNotClosedHighPriorStoriesCount(stories);
 
-		assertThat(count).isEqualTo(3);
+		assertThat(count).isEqualTo(2);
 	}
 
 	/**
@@ -341,7 +341,7 @@ class StoriesTest {
 		// Summarize story points from finished bugfix stories
 		int count = Teams.countFinishedBugsSPSum(stories);
 
-		assertThat(count).isEqualTo(17);
+		assertThat(count).isEqualTo(15);
 	}
 
 	/**
@@ -379,7 +379,7 @@ class StoriesTest {
 		// Summarize time estimation within stories repo
 		long count = Teams.summarizeTimeEstimation(stories);
 
-		assertThat(count).isEqualTo(404);
+		assertThat(count).isEqualTo(384);
 	}
 
 	/**
