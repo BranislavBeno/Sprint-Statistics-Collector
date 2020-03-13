@@ -43,12 +43,12 @@ public enum StoriesCounter implements Countable {
 					String teamName = "";
 
 					// Search for particular string inside query
-					Pattern pattern = Pattern.compile("Sprint\\s+\\d+\\s+(\\w+)");
+					Pattern pattern = Pattern.compile(Stories.SPRINT_LABEL_PATTERN);
 					Matcher matcher = pattern.matcher(notFinishedInSprintJql);
 
 					if (matcher.find()) {
 						// Get team
-						teamName = matcher.group(1);
+						teamName = matcher.group(2);
 						Team team = teamsRepo.getAll().get(teamName);
 
 						// Set story points count from stories not finished within sprint(s)
@@ -149,7 +149,7 @@ public enum StoriesCounter implements Countable {
 					String teamName = "";
 
 					// Search for particular string inside query
-					Pattern pattern = Pattern.compile("(Sprint\\s+\\d+)\\s+(\\w+)");
+					Pattern pattern = Pattern.compile(Stories.SPRINT_LABEL_PATTERN);
 					Matcher matcher = pattern.matcher(addedAfterSprintStartJql);
 
 					if (matcher.find()) {
@@ -165,8 +165,9 @@ public enum StoriesCounter implements Countable {
 
 						// Set story points count planned at sprint start
 						// subtract story points count for stories added after sprint start
-						// add story points count for stories removed after sprint start
 						addedAfterSprintStart = Stories.summarizeStoryPoints(stories);
+	
+						// summarize story points count for stories removed after sprint start
 						removedAfterSprintStart = countStoryPointsFromStoriesRemovedAfterSprintStart(globalParams,
 								sprintId);
 
@@ -201,5 +202,5 @@ public enum StoriesCounter implements Countable {
 	};
 
 	/** The logger. */
-	static Logger logger = LogManager.getLogger(StoriesCounter.class);
+	private static Logger logger = LogManager.getLogger(StoriesCounter.class);
 }

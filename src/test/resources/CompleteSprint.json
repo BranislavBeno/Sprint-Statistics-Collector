@@ -45,7 +45,8 @@
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
      "self": "http://jira/rest/api/2/status/5",
      "name": "Resolved"
-    }
+    },
+    "aggregatetimespent": 100800
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
    "id": "1552966",
@@ -93,7 +94,8 @@
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
      "self": "http://jira/rest/api/2/status/5",
      "name": "Resolved"
-    }
+    },
+    "aggregatetimespent": 64800
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
    "id": "1552956",
@@ -141,7 +143,8 @@
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
      "self": "http://jira/rest/api/2/status/5",
      "name": "Resolved"
-    }
+    },
+    "aggregatetimespent": 28800
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
    "id": "1552953",
@@ -175,7 +178,8 @@
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
      "self": "http://jira/rest/api/2/status/5",
      "name": "Resolved"
-    }
+    },
+    "aggregatetimespent": 46800
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
    "id": "1552950",
@@ -223,7 +227,8 @@
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
      "self": "http://jira/rest/api/2/status/5",
      "name": "Resolved"
-    }
+    },
+    "aggregatetimespent": 10800
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
    "id": "1552886",
@@ -266,7 +271,8 @@
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
      "self": "http://jira/rest/api/2/status/5",
      "name": "Resolved"
-    }
+    },
+    "aggregatetimespent": 144000
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
    "id": "1480456",
@@ -314,7 +320,8 @@
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
      "self": "http://jira/rest/api/2/status/5",
      "name": "Resolved"
-    }
+    },
+    "aggregatetimespent": 72000
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
    "id": "1480355",
@@ -363,7 +370,8 @@
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
      "self": "http://jira/rest/api/2/status/5",
      "name": "Resolved"
-    }
+    },
+    "aggregatetimespent": 43200
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
    "id": "1362736",
@@ -407,7 +415,8 @@
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
      "self": "http://jira/rest/api/2/status/5",
      "name": "Resolved"
-    }
+    },
+    "aggregatetimespent": 104400
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
    "id": "1342178",
@@ -455,7 +464,8 @@
      "id": "5",
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
      "self": "http://jira/rest/api/2/status/5"
-    }
+    },
+    "aggregatetimespent": 25200
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
    "id": "1342176",
@@ -491,7 +501,8 @@
      "id": "17240",
      "self": "http://jira/rest/api/2/customFieldOption/17240"
     },
-    "customfield_10002": 3
+    "customfield_10002": 3,
+    "aggregatetimespent": 57600
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
    "id": "1341914",
@@ -540,7 +551,8 @@
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
      "self": "http://jira/rest/api/2/status/5",
      "name": "Resolved"
-    }
+    },
+    "aggregatetimespent": 43200
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
    "id": "1341913",
@@ -588,7 +600,8 @@
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
      "self": "http://jira/rest/api/2/status/5",
      "name": "Resolved"
-    }
+    },
+    "aggregatetimespent": 50400
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
    "id": "1341367",
@@ -637,7 +650,8 @@
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
      "self": "http://jira/rest/api/2/status/5",
      "name": "Resolved"
-    }
+    },
+    "aggregatetimespent": 216000
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
    "id": "1340950",
@@ -686,7 +700,8 @@
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
      "self": "http://jira/rest/api/2/status/5",
      "name": "Resolved"
-    }
+    },
+    "aggregatetimespent": 140400
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
    "id": "1340882",
@@ -735,7 +750,8 @@
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
      "self": "http://jira/rest/api/2/status/5",
      "name": "Resolved"
-    }
+    },
+    "aggregatetimespent": 194400
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
    "id": "1339464",
@@ -784,7 +800,8 @@
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
      "self": "http://jira/rest/api/2/status/5",
      "name": "Resolved"
-    }
+    },
+    "aggregatetimespent": 86400
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
    "id": "431819",

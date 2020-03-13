@@ -35,7 +35,7 @@ import com.issue.repository.StoryDaoImpl;
 public class Stories {
 
 	/** The logger. */
-	static Logger logger = LogManager.getLogger(Stories.class);
+	private static Logger logger = LogManager.getLogger(Stories.class);
 
 	/** The Constant STORY_POINTS_FIELD_ID. */
 	private static final String STORY_POINTS_FIELD_ID = "customfield_10002";
@@ -48,6 +48,9 @@ public class Stories {
 
 	/** The Constant STORY_OWNER_FIELD_ID. */
 	private static final String STORY_OWNER_FIELD_ID = "customfield_16040";
+
+	/** The Constant SPRINT_LABEL_PATTERN. */
+	public static final String SPRINT_LABEL_PATTERN = "(Sprint\\s+\\d+)\\s+(\\w+)";
 
 	/**
 	 * Utility classes should not have public constructors.
@@ -92,8 +95,10 @@ public class Stories {
 	}
 
 	/**
-	 * @param issueFields
-	 * @return
+	 * Parses the story points.
+	 *
+	 * @param issueFields the issue fields
+	 * @return the int
 	 */
 	private static int parseStoryPoints(JsonNode issueFields) {
 		// Get json node story points
@@ -103,8 +108,10 @@ public class Stories {
 	}
 
 	/**
-	 * @param issueFields
-	 * @return
+	 * Parses the time estimation.
+	 *
+	 * @param issueFields the issue fields
+	 * @return the int
 	 */
 	private static int parseTimeEstimation(JsonNode issueFields) {
 		// Get json node aggregate time original estimate
@@ -115,8 +122,23 @@ public class Stories {
 	}
 
 	/**
-	 * @param issueFields
-	 * @return
+	 * Parses the time spent.
+	 *
+	 * @param issueFields the issue fields
+	 * @return the int
+	 */
+	private static int parseTimeSpent(JsonNode issueFields) {
+		// Get json node aggregate time spent
+		JsonNode timeSpent = Optional.ofNullable(issueFields.get("aggregatetimespent")).orElse(new ObjectNode(null));
+
+		return timeSpent.asInt(0);
+	}
+
+	/**
+	 * Parses the epic link.
+	 *
+	 * @param issueFields the issue fields
+	 * @return the string
 	 */
 	private static String parseEpicLink(JsonNode issueFields) {
 		// Initialize epic link text
@@ -131,8 +153,10 @@ public class Stories {
 	}
 
 	/**
-	 * @param issueFields
-	 * @return
+	 * Parses the story owner.
+	 *
+	 * @param issueFields the issue fields
+	 * @return the string
 	 */
 	private static String parseStoryOwner(JsonNode issueFields) {
 		// Initialize story owner name
@@ -151,8 +175,10 @@ public class Stories {
 	}
 
 	/**
-	 * @param issueFields
-	 * @return
+	 * Parses the story priority.
+	 *
+	 * @param issueFields the issue fields
+	 * @return the string
 	 */
 	private static String parseStoryPriority(JsonNode issueFields) {
 		// Initialize priority name json node
@@ -169,8 +195,10 @@ public class Stories {
 	}
 
 	/**
-	 * @param issueFields
-	 * @return
+	 * Parses the story type.
+	 *
+	 * @param issueFields the issue fields
+	 * @return the string
 	 */
 	private static String parseStoryType(JsonNode issueFields) {
 		// Initialize story type name json node
@@ -187,8 +215,10 @@ public class Stories {
 	}
 
 	/**
-	 * @param issueFields
-	 * @return
+	 * Parses the story status.
+	 *
+	 * @param issueFields the issue fields
+	 * @return the string
 	 */
 	private static String parseStoryStatus(JsonNode issueFields) {
 		// Initialize status name json node
@@ -233,6 +263,9 @@ public class Stories {
 				// Get aggregate time original estimate
 				int timeEstimation = parseTimeEstimation(issueFields);
 
+				// Get aggregate time spent
+				int timeSpent = parseTimeSpent(issueFields);
+
 				// Get epic link
 				String epic = parseEpicLink(issueFields);
 
@@ -250,7 +283,8 @@ public class Stories {
 
 				// Add new story into list
 				stories.save(new Story.Builder().epic(epic).storyPoints(sp).storyOwner(storyOwner).priority(priority)
-						.timeEstimation(timeEstimation).storyType(storyType).status(status).build());
+						.timeEstimation(timeEstimation).timeSpent(timeSpent).storyType(storyType).status(status)
+						.build());
 			}
 		}));
 
@@ -372,7 +406,7 @@ public class Stories {
 			for (String finishedOutsideSprintJql : globalParams.getCompletedOutsideSprints()) {
 				if (finishedOutsideSprintJql.contains(sprintId)) {
 					// Create stories repository
-					StoryDao<Story> additionalStories = Stories.createStoriesRepo(globalParams.getUsername(),
+					StoryDao<Story> additionalStories = createStoriesRepo(globalParams.getUsername(),
 							globalParams.getPassword(), globalParams.getIssueTrackerUri(), finishedOutsideSprintJql);
 					stories.saveAll(additionalStories.getAll());
 					break;
@@ -399,13 +433,13 @@ public class Stories {
 			for (String finishedInSprintJql : globalParams.getCompletedSprints()) {
 
 				// Create stories repository
-				StoryDao<Story> stories = Stories.createStoriesRepo(globalParams.getUsername(),
-						globalParams.getPassword(), globalParams.getIssueTrackerUri(), finishedInSprintJql);
+				StoryDao<Story> stories = createStoriesRepo(globalParams.getUsername(), globalParams.getPassword(),
+						globalParams.getIssueTrackerUri(), finishedInSprintJql);
 
 				String teamName = "";
 
 				// Search for particular string inside query
-				Pattern pattern = Pattern.compile("(Sprint\\s+\\d+)\\s+(\\w+)");
+				Pattern pattern = Pattern.compile(SPRINT_LABEL_PATTERN);
 				Matcher matcher = pattern.matcher(finishedInSprintJql);
 
 				if (matcher.find()) {

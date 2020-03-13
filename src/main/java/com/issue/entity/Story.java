@@ -30,6 +30,9 @@ public class Story {
 	/** The time estimation. */
 	private Integer timeEstimation;
 
+	/** The time spent. */
+	private Integer timeSpent;
+
 	/** The status. */
 	private String status;
 
@@ -45,6 +48,7 @@ public class Story {
 		this.priority = builder.priority;
 		this.storyType = builder.storyType;
 		this.timeEstimation = builder.timeEstimation;
+		this.timeSpent = builder.timeSpent;
 		this.status = builder.status;
 	}
 
@@ -103,6 +107,15 @@ public class Story {
 	}
 
 	/**
+	 * Gets the time spent.
+	 *
+	 * @return the timeSpent
+	 */
+	public Optional<Integer> getTimeSpent() {
+		return Optional.ofNullable(timeSpent);
+	}
+
+	/**
 	 * Gets the status.
 	 *
 	 * @return the status
@@ -133,6 +146,9 @@ public class Story {
 
 		/** The time estimation. */
 		private Integer timeEstimation;
+
+		/** The time spent. */
+		private Integer timeSpent;
 
 		/** The status. */
 		private String status;
@@ -200,6 +216,17 @@ public class Story {
 		 */
 		public Builder timeEstimation(int theTimeEstimation) {
 			this.timeEstimation = theTimeEstimation;
+			return this;
+		}
+
+		/**
+		 * Time spent.
+		 *
+		 * @param theTimeSpent the the time spent
+		 * @return the builder
+		 */
+		public Builder timeSpent(int theTimeSpent) {
+			this.timeSpent = theTimeSpent;
 			return this;
 		}
 
