@@ -270,8 +270,7 @@ class StoriesTest {
 	@Test
 	void testStoriesExtractionFromNonExistingFile() throws IOException {
 		// Assert non existing file
-		assertThrows(FileNotFoundException.class,
-				() -> readFileContent("src/test/resources/CompleteInSprint.json"));
+		assertThrows(FileNotFoundException.class, () -> readFileContent("src/test/resources/CompleteInSprint.json"));
 	}
 
 	/**
@@ -397,6 +396,44 @@ class StoriesTest {
 
 		// Summarize time estimation within stories repo
 		long count = Teams.summarizeTimeEstimation(stories);
+
+		assertThat(count).isEqualTo(0);
+	}
+
+	/**
+	 * Test time spent summing.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	@Test
+	void testTimeSpentSumming() throws IOException {
+		// Get Json string
+		String jsonString = readFileContent("src/test/resources/CompleteSprint.json");
+
+		// Extract stories from json
+		StoryDao<Story> stories = Stories.extractStories(jsonString);
+
+		// Summarize time spent within stories repository
+		long count = Teams.summarizeTimeSpent(stories);
+
+		assertThat(count).isEqualTo(397);
+	}
+
+	/**
+	 * Test time spent summing from null json.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	@Test
+	void testTimeSpentSummingFromNullJson() throws IOException {
+		// Get stories from null json
+		String jsonString = readFileContent(null);
+
+		// Extract stories from json
+		StoryDao<Story> stories = Stories.extractStories(jsonString);
+
+		// Summarize time estimation within stories repo
+		long count = Teams.summarizeTimeSpent(stories);
 
 		assertThat(count).isEqualTo(0);
 	}

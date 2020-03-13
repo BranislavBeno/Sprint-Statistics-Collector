@@ -61,32 +61,35 @@ public enum StoriesCounter implements Countable {
 						team.setToDoStoryPointsSum(
 								team.getNotFinishedStoryPointsSum() - team.getInProgressStoryPointsSum());
 
-						// Count story points planned for sprint on begin of sprint
+						// Summarize story points planned for sprint on begin of sprint
 						team.setOnBeginPlannedStoryPointsSum(
 								team.getFinishedStoryPointsSum() + team.getNotFinishedStoryPointsSum());
 
-						// Count story points planned for sprint on end of sprint
+						// Summarize story points planned for sprint on end of sprint
 						team.setOnEndPlannedStoryPointsSum(team.getOnBeginPlannedStoryPointsSum());
 
-						// Set delta number of story points start vs. close
+						// Calculate delta number of story points start vs. close
 						team.setDeltaStoryPoints(Stories.calculateDelta(team.getOnBeginPlannedStoryPointsSum(),
 								team.getOnEndPlannedStoryPointsSum()));
 
-						// Set planned story points closed
+						// Count planned story points closed
 						team.setPlannedStoryPointsClosed(Stories.plannedStoryPointsClosed(
 								team.getFinishedStoryPointsSum(), team.getOnBeginPlannedStoryPointsSum()));
 
-						// Set count of not finished high prior stories within sprint(s)
+						// Count count of not finished high prior stories within sprint(s)
 						team.setNotClosedHighPriorStoriesCount(
 								Stories.summarizeNotClosedHighPriorStoriesCount(stories));
 
-						// Count time estimation
+						// Summarize time estimation
 						team.setTimeEstimation(team.getTimeEstimation() + Teams.summarizeTimeEstimation(stories));
 
-						// Count team members participating on sprint(s)
+						// Summarize time spent
+						team.setTimeSpent(team.getTimeSpent() + Teams.summarizeTimeSpent(stories));
+
+						// Collect team members participating on sprint(s)
 						Teams.collectTeamMembers(stories, team);
 
-						// Save particular team into repo
+						// Save particular team into repository
 						teamsRepo.save(team);
 					}
 
@@ -166,31 +169,31 @@ public enum StoriesCounter implements Countable {
 						// Set story points count planned at sprint start
 						// subtract story points count for stories added after sprint start
 						addedAfterSprintStart = Stories.summarizeStoryPoints(stories);
-	
-						// summarize story points count for stories removed after sprint start
+
+						// Summarize story points count for stories removed after sprint start
 						removedAfterSprintStart = countStoryPointsFromStoriesRemovedAfterSprintStart(globalParams,
 								sprintId);
 
-						// Count story points planned for sprint on begin of sprint
+						// Summarize story points planned for sprint on begin of sprint
 						team.setOnBeginPlannedStoryPointsSum(team.getOnBeginPlannedStoryPointsSum()
 								- addedAfterSprintStart + removedAfterSprintStart);
 
-						// Set delta number of story points start vs. close
+						// Calculate delta number of story points start vs. close
 						team.setDeltaStoryPoints(Stories.calculateDelta(team.getOnBeginPlannedStoryPointsSum(),
 								team.getOnEndPlannedStoryPointsSum()));
 
-						// Set planned story points closed
+						// Summarize planned story points closed
 						team.setPlannedStoryPointsClosed(Stories.plannedStoryPointsClosed(
 								team.getFinishedStoryPointsSum(), team.getOnBeginPlannedStoryPointsSum()));
 
-						// Count time estimation
+						// Summarize time estimation
 						team.setTimeEstimation(team.getTimeEstimation() - Teams.summarizeTimeEstimation(stories)
 								+ countTimeEstimationFromStoriesRemovedAfterSprintStart(globalParams, sprintId));
 
-						// Count team members participating on sprint(s)
+						// Collect team members participating on sprint(s)
 						Teams.collectTeamMembers(stories, team);
 
-						// Save particular team into repo
+						// Save particular team into repository
 						teamsRepo.save(team);
 					}
 

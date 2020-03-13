@@ -456,20 +456,20 @@ public class Stories {
 					// Add issues finished outside of the sprint which are related to sprint id
 					addStoriesFinishedOutOfSprint(globalParams, sprintId, stories);
 
-					// Count story points from stories finished within sprint(s)
+					// Summarize story points from stories finished within sprint(s)
 					team.setFinishedStoryPoints(Utils.countFeatureFocus(features, stories));
 
-					// Count story points from bug fixes finished within sprint(s)
+					// Summarize story points from bug fixes finished within sprint(s)
 					team.setFinishedBugsSPSum(Teams.countFinishedBugsSPSum(stories));
 
 					// Set story points from pure stories (without bug fixes) finished within
 					// sprint(s)
 					team.setFinishedStoriesSPSum(team.getFinishedStoryPointsSum() - team.getFinishedBugsSPSum());
 
-					// Count story points planned for sprint on begin of sprint
+					// Summarize story points planned for sprint on begin of sprint
 					team.setOnBeginPlannedStoryPointsSum(team.getFinishedStoryPointsSum());
 
-					// Count story points planned for sprint on end of sprint
+					// Summarize story points planned for sprint on end of sprint
 					team.setOnEndPlannedStoryPointsSum(team.getOnBeginPlannedStoryPointsSum());
 
 					// Set delta number of story points start vs. close
@@ -480,13 +480,16 @@ public class Stories {
 					team.setPlannedStoryPointsClosed(Stories.plannedStoryPointsClosed(team.getFinishedStoryPointsSum(),
 							team.getOnBeginPlannedStoryPointsSum()));
 
-					// Count time estimation
+					// Summarize time estimation
 					team.setTimeEstimation(Teams.summarizeTimeEstimation(stories));
 
-					// Count team members participating on sprint(s)
+					// Summarize time spent
+					team.setTimeSpent(Teams.summarizeTimeSpent(stories));
+
+					// Collect team members participating on sprint(s)
 					Teams.collectTeamMembers(stories, team);
 
-					// Save particular team into repo
+					// Save particular team into repository
 					teamsRepo.save(team);
 				}
 

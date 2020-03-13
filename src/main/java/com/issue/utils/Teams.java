@@ -39,7 +39,7 @@ public class Teams {
 	 * Collect team members.
 	 *
 	 * @param stories the stories
-	 * @param team the team
+	 * @param team    the team
 	 */
 	public static void collectTeamMembers(final StoryDao<Story> stories, Team team) {
 		team.addTeamMembers(stories.getAll().stream().filter(s -> !s.getStoryOwner().orElse("").isBlank())
@@ -168,6 +168,17 @@ public class Teams {
 	 */
 	public static long summarizeTimeEstimation(StoryDao<Story> stories) {
 		return stories.getAll().stream().map(s -> s.getTimeEstimation().orElse(0)).collect(Collectors.toList()).stream()
+				.collect(Collectors.summingInt(Integer::intValue)).longValue() / 3600;
+	}
+
+	/**
+	 * Summarize time spent.
+	 *
+	 * @param stories the stories
+	 * @return the long
+	 */
+	public static long summarizeTimeSpent(StoryDao<Story> stories) {
+		return stories.getAll().stream().map(s -> s.getTimeSpent().orElse(0)).collect(Collectors.toList()).stream()
 				.collect(Collectors.summingInt(Integer::intValue)).longValue() / 3600;
 	}
 }
