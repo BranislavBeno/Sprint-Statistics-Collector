@@ -416,7 +416,7 @@ class StoriesTest {
 		// Summarize time spent within stories repository
 		long count = Teams.summarizeTimeSpent(stories);
 
-		assertThat(count).isEqualTo(397);
+		assertThat(count).isEqualTo(369);
 	}
 
 	/**

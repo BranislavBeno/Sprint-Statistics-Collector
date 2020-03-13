@@ -67,8 +67,11 @@ public class Team {
 	/** The time estimation. */
 	private long timeEstimation = 0L;
 
+	/** The time planned. */
+	private long timePlanned = 0L;
+
 	/** The time spent. */
-	private long timeSpent;
+	private long timeSpent = 0L;
 
 	/**
 	 * Instantiates a new team impl.
@@ -344,6 +347,24 @@ public class Team {
 	 */
 	public void setTimeEstimation(long timeEstimation) {
 		this.timeEstimation = timeEstimation;
+	}
+
+	/**
+	 * Gets the time planned.
+	 *
+	 * @return the timePlanned
+	 */
+	public long getTimePlanned() {
+		return timePlanned;
+	}
+
+	/**
+	 * Sets the time planned.
+	 *
+	 * @param timePlanned the timePlanned to set
+	 */
+	public void setTimePlanned(long timePlanned) {
+		this.timePlanned = timePlanned;
 	}
 
 	/**

@@ -483,6 +483,9 @@ public class Stories {
 					// Summarize time estimation
 					team.setTimeEstimation(Teams.summarizeTimeEstimation(stories));
 
+					// Summarize planned time
+					team.setTimePlanned(team.getTimeEstimation());
+
 					// Summarize time spent
 					team.setTimeSpent(Teams.summarizeTimeSpent(stories));
 

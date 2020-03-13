@@ -83,6 +83,9 @@ public enum StoriesCounter implements Countable {
 						// Summarize time estimation
 						team.setTimeEstimation(team.getTimeEstimation() + Teams.summarizeTimeEstimation(stories));
 
+						// Summarize planned time
+						team.setTimePlanned(team.getTimeEstimation());
+
 						// Summarize time spent
 						team.setTimeSpent(team.getTimeSpent() + Teams.summarizeTimeSpent(stories));
 
