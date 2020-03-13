@@ -88,7 +88,7 @@ public class Stories {
 	private static String askIssueTracker(String username, String password, String issueTrackerUri, String query)
 			throws IOException, InterruptedException {
 		String request = createRequestUri(issueTrackerUri, query,
-				"status,priority,aggregatetimeoriginalestimate," + STORY_POINTS_FIELD_ID + "," + EPIC_LINK_FIELD_ID
+				"status,priority,aggregatetimeoriginalestimate,aggregatetimespent," + STORY_POINTS_FIELD_ID + "," + EPIC_LINK_FIELD_ID
 						+ "," + STORY_OWNER_FIELD_ID + "," + STORY_TYPE_FIELD_ID);
 
 		return Utils.gatherJsonString(username, password, request);

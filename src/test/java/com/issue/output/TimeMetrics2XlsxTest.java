@@ -11,11 +11,11 @@ import java.lang.reflect.InvocationTargetException;
 import org.junit.jupiter.api.Test;
 
 /**
- * The Class Capacity2XlsxTest.
+ * The Class TimeMetrics2XlsxTest.
  *
  * @author branislav.beno
  */
-class Capacity2XlsxTest {
+class TimeMetrics2XlsxTest {
 
 	/**
 	 * Test private constructors for code coverage.
@@ -24,7 +24,7 @@ class Capacity2XlsxTest {
 	 */
 	@Test
 	void testPrivateConstructorsForCodeCoverage() throws NoSuchMethodException {
-		Class<Capacity2Xlsx> clazz = Capacity2Xlsx.class;
+		Class<TimeMetrics2Xlsx> clazz = TimeMetrics2Xlsx.class;
 		Constructor<?>[] constructors = clazz.getDeclaredConstructors();
 		for (Constructor<?> constructor : constructors) {
 			constructor.setAccessible(true);

@@ -99,8 +99,8 @@ public class TeamDao2Xlsx implements Dao2Output {
 			// Create work proportion worksheet
 			WorkProportion2Xlsx.createWorksheet(workbook, teamDao, 4);
 
-			// Create capacity worksheet
-			Capacity2Xlsx.createWorksheet(workbook, teamDao, 5);
+			// Create time metrics worksheet
+			TimeMetrics2Xlsx.createWorksheet(workbook, teamDao, 5);
 
 			// Create feature scope focus worksheet for planned sprints
 			RefinementFeatureScope2Xlsx.createWorksheet(workbook, sprintDao, 6);
