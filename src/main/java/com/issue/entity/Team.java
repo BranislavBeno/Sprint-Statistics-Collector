@@ -9,6 +9,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.issue.enums.FeatureScope;
 import com.issue.utils.Stories;
 
@@ -80,6 +82,30 @@ public class Team {
 	 */
 	public Team(String teamName) {
 		this.teamName = Optional.ofNullable(teamName).orElseThrow();
+	}
+
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append(teamMemberCount).append(", ").append(onBeginPlannedStoryPointsSum).append(", ")
+				.append(onEndPlannedStoryPointsSum).append(", ").append(finishedStoryPointsSum);
+
+		String json = "";
+		try {
+			json = new ObjectMapper().writeValueAsString(finishedStoryPoints);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println(json);
+
+		return sb.toString();
 	}
 
 	/**

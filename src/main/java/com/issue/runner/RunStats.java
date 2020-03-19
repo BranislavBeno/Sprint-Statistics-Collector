@@ -45,6 +45,7 @@ public class RunStats implements Runnable {
 		if (user != null && password != null) {
 			try {
 				Utils.runStats(user, password);
+
 			} catch (IOException | InterruptedException e) {
 				logger.error("Processing interrupted with exception.");
 				logger.error(
