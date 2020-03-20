@@ -7,7 +7,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +24,9 @@ import com.issue.utils.Stories;
  * @author benito
  */
 public class Team {
+
+	/** The logger. */
+	private static Logger logger = LogManager.getLogger(Team.class);
 
 	/** The team name. */
 	private String teamName;
@@ -91,21 +98,33 @@ public class Team {
 	 */
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(teamMemberCount).append(", ").append(onBeginPlannedStoryPointsSum).append(", ")
-				.append(onEndPlannedStoryPointsSum).append(", ").append(finishedStoryPointsSum);
-
-		String json = "";
+		String finishedSP = "";
 		try {
-			json = new ObjectMapper().writeValueAsString(finishedStoryPoints);
+			finishedSP = new ObjectMapper().writeValueAsString(finishedStoryPoints);
 		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+			logger.error("Json processing interrupted with exception.");
 		}
 
-		System.out.println(json);
+		StringJoiner sj = new StringJoiner(", ");
+		sj.add("'" + teamName + "'");
+		sj.add(String.valueOf(teamMemberCount));
+		sj.add(String.valueOf(onBeginPlannedStoryPointsSum));
+		sj.add(String.valueOf(onEndPlannedStoryPointsSum));
+		sj.add(String.valueOf(finishedStoryPointsSum));
+		sj.add(String.valueOf(notFinishedStoryPointsSum));
+		sj.add(String.valueOf(toDoStoryPointsSum));
+		sj.add(String.valueOf(inProgressStoryPointsSum));
+		sj.add(String.valueOf(finishedStoriesSPSum));
+		sj.add(String.valueOf(finishedBugsSPSum));
+		sj.add(String.valueOf(timeEstimation));
+		sj.add(String.valueOf(timePlanned));
+		sj.add(String.valueOf(timeSpent));
+		sj.add(String.valueOf(notClosedHighPriorStoriesCount));
+		sj.add(String.valueOf(deltaStoryPoints));
+		sj.add(String.valueOf(plannedStoryPointsClosed));
+		sj.add("'" + finishedSP + "'");
 
-		return sb.toString();
+		return sj.toString();
 	}
 
 	/**

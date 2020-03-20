@@ -4,7 +4,7 @@ use sprint_stats;
 
 drop table if exists red_team;
 
-CREATE TABLE `red_team` (
+CREATE TABLE `team_red` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `sprint` VARCHAR(64) DEFAULT NULL,
   `team_name` VARCHAR(64) DEFAULT NULL,
@@ -25,7 +25,5 @@ CREATE TABLE `red_team` (
   `planned_sp_closed` DOUBLE(5,2) DEFAULT 0,
   `finished_sp` JSON DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
-
-	private Map<FeatureScope, Integer> finishedStoryPoints;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
