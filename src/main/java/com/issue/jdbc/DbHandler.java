@@ -62,7 +62,7 @@ public class DbHandler {
 	 * @param team the team
 	 * @throws SQLException the SQL exception
 	 */
-	public static void insertIntoDB(String table, String sprint, Team team) throws SQLException {
+	public static void insertIntoDB(final String table, final String sprint, final Team team) throws SQLException {
 		String dbUrl = "jdbc:mysql://127.0.0.1:3306/sprint_stats?useSSL=false";
 
 		String user = "benito";
