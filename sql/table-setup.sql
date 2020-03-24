@@ -2,7 +2,7 @@ create database if not exists sprint_stats;
 
 use sprint_stats;
 
-drop table if exists red_team;
+drop table if exists team_red;
 
 CREATE TABLE `team_red` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,

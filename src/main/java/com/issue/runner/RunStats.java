@@ -106,12 +106,12 @@ public class RunStats implements Runnable {
 		// Create empty features list
 		FeatureDao<String, Feature> features = new FeatureDaoImpl();
 		// Get Json string
-		String featuresJson = readFileContent("src/test/resources/features.json");
+		String featuresJson = readFileContent("features.json");
 		// Extract features from json
 		features.saveAll(Features.extractFeatures(featuresJson).getAll());
 
 		// Get Json string
-		String storiesJson = readFileContent("src/test/resources/CompleteSprint.json");
+		String storiesJson = readFileContent("CompleteSprint.json");
 		// Extract stories from json
 		StoryDao<Story> stories = Stories.extractStories(storiesJson);
 
@@ -165,7 +165,7 @@ public class RunStats implements Runnable {
 
 		String tableName = "team_" + team.getTeamName().orElse("");
 
-		String sprintLabel = "Sprint 3";
+		String sprintLabel = "Sprint 4";
 
 		DbHandler.insertIntoDB(tableName.toLowerCase(), sprintLabel, team);
 	}
