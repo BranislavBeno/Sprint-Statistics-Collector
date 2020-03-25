@@ -55,19 +55,14 @@ public class DbHandler {
 	}
 
 	/**
-	 * Insert into DB.
+	 * Prepare insertion str.
 	 *
 	 * @param table the table
 	 * @param sprint the sprint
 	 * @param team the team
-	 * @throws SQLException the SQL exception
+	 * @return the string
 	 */
-	public static void insertIntoDB(final String table, final String sprint, final Team team) throws SQLException {
-		String dbUrl = "jdbc:mysql://127.0.0.1:3306/sprint_stats?useSSL=false";
-
-		String user = "benito";
-		String pass = "benito";
-
+	private static String prepareInsertionStr(final String table, final String sprint, final Team team) {
 		StringJoiner sj = new StringJoiner(", ", " (", ") ");
 		sj.add("sprint");
 		sj.add("team_name");
@@ -87,37 +82,79 @@ public class DbHandler {
 		sj.add("delta_sp");
 		sj.add("planned_sp_closed");
 		sj.add("finished_sp");
-		String fields = sj.toString();
 
-		String updateStr = "insert into " + table + fields + "values " + "('" + sprint + "', " + team.toString() + ")";
-		String sqlQuery = "select * from " + table + " order by sprint";
+		return "insert into " + table + sj.toString() + "values " + "('" + sprint + "', " + team.toString() + ")";
+	}
 
-		ResultSet myRs = null;
+	/**
+	 * Prepare table creation.
+	 *
+	 * @param table the table
+	 * @return the string
+	 */
+	private static String prepareTableCreation(final String table) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("create table if not exists ").append(table).append(" ( `id` INT(11) NOT NULL AUTO_INCREMENT, ")
+				.append("`sprint` VARCHAR(64) DEFAULT NULL, ").append("`team_name` VARCHAR(64) DEFAULT NULL, ")
+				.append("`team_member_count` DECIMAL(2) DEFAULT 0, ")
+				.append("`on_begin_planned_sp_sum` DECIMAL(3) DEFAULT 0, ")
+				.append("`on_end_planned_sp_sum` DECIMAL(3) DEFAULT 0, ")
+				.append("`finished_sp_sum` DECIMAL(3) DEFAULT 0, ")
+				.append("`not_finished_sp_sum` DECIMAL(3) DEFAULT 0, ").append("`to_do_sp_sum` DECIMAL(3) DEFAULT 0, ")
+				.append("`in_progress_sp_sum` DECIMAL(3) DEFAULT 0, ")
+				.append("`finished_stories_sp_sum` DECIMAL(3) DEFAULT 0, ")
+				.append("`finished_bugs_sp_sum` DECIMAL(3) DEFAULT 0, ")
+				.append("`time_estimation` DECIMAL(3) DEFAULT 0, ").append("`time_planned` DECIMAL(3) DEFAULT 0, ")
+				.append("`time_spent` DECIMAL(3) DEFAULT 0, ")
+				.append("`not_closed_high_prior_stories` DECIMAL(3) DEFAULT 0, ")
+				.append("`delta_sp` DOUBLE(5,2) DEFAULT 0, ").append("`planned_sp_closed` DOUBLE(5,2) DEFAULT 0, ")
+				.append("`finished_sp` JSON DEFAULT NULL, ")
+				.append("PRIMARY KEY (`id`)) " + "ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;");
 
-		// 1. Get a connection to database
-		// 2. Create a statement
-		// 3. Execute SQL query
+		return sb.toString();
+	}
+
+	/**
+	 * Insert into DB.
+	 *
+	 * @param table  the table
+	 * @param sprint the sprint
+	 * @param team   the team
+	 * @throws SQLException the SQL exception
+	 */
+	public static void insertIntoDB(final String table, final String sprint, final Team team) throws SQLException {
+		// Prepare database connection
+		String dbUrl = "jdbc:mysql://127.0.0.1:3306/sprints?useSSL=false";
+		String user = "sprints";
+		String pass = "sprints";
+
+		// Get a connection to database
 		try (Connection myConn = DriverManager.getConnection(dbUrl, user, pass);
 				Statement myStmt = myConn.createStatement();) {
 
+			// Announce connection result
 			logger.info("Database connection successful.");
 
-			// 3. Insert a new employee
-			logger.info("Inserting a new data for '{}' into database.", sprint);
+			// Create table if doesn't exists
+			logger.info("Creating new database table '{}' if doesn't exists.", table);
+			// Create statement for table creation
+			String createTable = prepareTableCreation(table);
+			// Execute SQL query for table creation
+			myStmt.executeUpdate(createTable);
 
-			int rowsAffected = myStmt.executeUpdate(updateStr);
-
-			// 4. Verify this by getting a list of employees
-			myRs = myStmt.executeQuery(sqlQuery);
-
-			// 5. Announce the result
+			// Insert a new sprint data
+			logger.info("Inserting a new sprint data for '{}' into database table '{}'.", sprint, table);
+			// Create statement for data insertion
+			String insertData = prepareInsertionStr(table, sprint, team);
+			// Execute SQL query for data insertion
+			int rowsAffected = myStmt.executeUpdate(insertData);
 			logger.info("Rows affected by DB update: {}", rowsAffected);
-			logger.info("New data insertion for '{}' into database finished successfuly.", sprint);
+
+			// 7. Announce the result
+			logger.info("New data insertion finished successfuly.");
 
 		} catch (SQLException e) {
 			logger.error("DB insertion failed!");
-		} finally {
-			myRs.close();
 		}
 	}
 }

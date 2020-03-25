@@ -1,10 +1,4 @@
-create database if not exists sprint_stats;
-
-use sprint_stats;
-
-drop table if exists team_red;
-
-CREATE TABLE `team_red` (
+create table if not exists `team_red` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
   `sprint` VARCHAR(64) DEFAULT NULL,
   `team_name` VARCHAR(64) DEFAULT NULL,
