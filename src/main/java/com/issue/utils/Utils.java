@@ -12,6 +12,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.sql.SQLException;
 import java.util.Base64;
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -107,6 +108,11 @@ public class Utils {
 
 		// Get properties
 		Properties props = provideProperties(propFile);
+
+		// Get content from database properties
+		globalParams.setDbUri(props.getProperty("dbUri", ""));
+		globalParams.setDbUsername(props.getProperty("dbUser", ""));
+		globalParams.setDbPassword(props.getProperty("dbPassword", ""));
 
 		// Get content from properties
 		globalParams.setIssueTrackerUri(props.getProperty("issueTrackerUri", ""));
@@ -255,8 +261,10 @@ public class Utils {
 	 * @param passwd the passwd
 	 * @throws IOException          Signals that an I/O exception has occurred.
 	 * @throws InterruptedException the interrupted exception
+	 * @throws SQLException
 	 */
-	public static void runStats(String user, String passwd) throws IOException, InterruptedException {
+	public static void runStats(String user, String passwd, boolean write2DB)
+			throws IOException, InterruptedException, SQLException {
 		// Start processing.
 		logger.info("Processing started.");
 
@@ -280,6 +288,11 @@ public class Utils {
 		// Get sprints repository
 		SprintDao<String, Sprint> sprints = Sprints.createSprintRepo(globalParams);
 		Optional.ofNullable(sprints).ifPresent(s -> logger.info("{} sprint refinements processed.", s.getAll().size()));
+
+		// Write into DB
+		if (write2DB) {
+			DbHandlers.sendStats2DB(teams, globalParams);
+		}
 
 		// Create XLSX output
 		try {

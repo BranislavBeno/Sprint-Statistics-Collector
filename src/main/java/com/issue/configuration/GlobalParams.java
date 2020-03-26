@@ -16,6 +16,15 @@ public class GlobalParams {
 	/** The instance. */
 	private static GlobalParams instance;
 
+	/** The db uri. */
+	private String dbUri;
+
+	/** The db username. */
+	private String dbUsername;
+
+	/** The db password. */
+	private String dbPassword;
+
 	/** The issue tracker uri. */
 	private String issueTrackerUri;
 
@@ -66,6 +75,60 @@ public class GlobalParams {
 			instance = new GlobalParams();
 		}
 		return instance;
+	}
+
+	/**
+	 * Gets the db uri.
+	 *
+	 * @return the db uri
+	 */
+	public String getDbUri() {
+		return dbUri;
+	}
+
+	/**
+	 * Sets the db uri.
+	 *
+	 * @param dbUri the new db uri
+	 */
+	public void setDbUri(String dbUri) {
+		this.dbUri = dbUri;
+	}
+
+	/**
+	 * Gets the db username.
+	 *
+	 * @return the db username
+	 */
+	public String getDbUsername() {
+		return dbUsername;
+	}
+
+	/**
+	 * Sets the db username.
+	 *
+	 * @param dbUsername the new db username
+	 */
+	public void setDbUsername(String dbUsername) {
+		this.dbUsername = dbUsername;
+	}
+
+	/**
+	 * Gets the db password.
+	 *
+	 * @return the db password
+	 */
+	public String getDbPassword() {
+		return dbPassword;
+	}
+
+	/**
+	 * Sets the db password.
+	 *
+	 * @param dbPassword the new db password
+	 */
+	public void setDbPassword(String dbPassword) {
+		this.dbPassword = dbPassword;
 	}
 
 	/**

@@ -69,7 +69,7 @@ class UtilsTest {
 	@Test
 	void testFullStatsRunWithNoConnectionException() {
 		// Start main routine
-		assertThrows(ConnectException.class, () -> Utils.runStats("usr", "passwd"));
+		assertThrows(ConnectException.class, () -> Utils.runStats("usr", "passwd", false));
 
 	}
 }

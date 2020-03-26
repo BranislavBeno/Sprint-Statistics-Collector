@@ -12,13 +12,16 @@ import java.sql.SQLException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.issue.configuration.GlobalParams;
 import com.issue.entity.Feature;
 import com.issue.entity.Story;
 import com.issue.entity.Team;
 import com.issue.iface.FeatureDao;
 import com.issue.iface.StoryDao;
-import com.issue.jdbc.DbHandler;
+import com.issue.iface.TeamDao;
 import com.issue.repository.FeatureDaoImpl;
+import com.issue.repository.TeamDaoImpl;
+import com.issue.utils.DbHandlers;
 import com.issue.utils.Features;
 import com.issue.utils.Stories;
 import com.issue.utils.Teams;
@@ -27,7 +30,6 @@ import com.issue.utils.Utils;
 import picocli.CommandLine;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
-import picocli.CommandLine.ParameterException;
 import picocli.CommandLine.Spec;
 
 /**
@@ -36,6 +38,8 @@ import picocli.CommandLine.Spec;
  * @author branislav.beno
  */
 public class RunStats implements Runnable {
+
+	private static final String PROCESSING_INTERRUPTED_WITH_EXCEPTION = "Processing interrupted with exception.";
 
 	/** The logger. */
 	private static Logger logger = LogManager.getLogger(RunStats.class);
@@ -99,9 +103,9 @@ public class RunStats implements Runnable {
 	 * @return the team
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	private static Team provideTeam() throws IOException {
+	private static Team provideTeam(String teamName) throws IOException {
 		// Create new team
-		Team team = new Team("Red");
+		Team team = new Team(teamName);
 
 		// Create empty features list
 		FeatureDao<String, Feature> features = new FeatureDaoImpl();
@@ -155,44 +159,46 @@ public class RunStats implements Runnable {
 	}
 
 	/**
-	 * Insert into DB.
-	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws SQLException the SQL exception
-	 */
-	private static void insertIntoDB() throws IOException, SQLException {
-		Team team = provideTeam();
-
-		String tableName = "team_" + team.getTeamName().orElse("");
-
-		String sprintLabel = "Sprint 4";
-
-		DbHandler.insertIntoDB(tableName.toLowerCase(), sprintLabel, team);
-	}
-
-	/**
 	 * Run.
 	 */
 	public void run() {
+		// Write into DB
+		if (dbConnect) {
+			try {
+				GlobalParams globalParams = Utils.provideGlobalParams("application.properties");
+
+				TeamDao<String, Team> teamsRepo = new TeamDaoImpl();
+				teamsRepo.save(provideTeam("Banana"));
+				teamsRepo.save(provideTeam("Apple"));
+				teamsRepo.save(provideTeam("Plum"));
+
+				DbHandlers.sendStats2DB(teamsRepo, globalParams);
+			} catch (IOException e) {
+				logger.error("Check whether database connection is established.");
+			}
+		}
+
+		// Run statistics gathering
 		if (user != null && password != null) {
 			try {
-				Utils.runStats(user, password);
+				Utils.runStats(user, password, dbConnect);
 
-			} catch (IOException | InterruptedException e) {
-				logger.error("Processing interrupted with exception.");
-				logger.error(
-						"Check whether application.properties file is available, or whether connection to issue tracker server is established.");
+			} catch (IOException e) {
+				logger.error(PROCESSING_INTERRUPTED_WITH_EXCEPTION);
+				logger.error("Check whether application.properties file is available.");
+				// Restore interrupted state...
+				Thread.currentThread().interrupt();
+			} catch (InterruptedException e) {
+				logger.error(PROCESSING_INTERRUPTED_WITH_EXCEPTION);
+				logger.error("Check whether connection to issue tracker server is established.");
+				// Restore interrupted state...
+				Thread.currentThread().interrupt();
+			} catch (SQLException e) {
+				logger.error(PROCESSING_INTERRUPTED_WITH_EXCEPTION);
+				logger.error("Check whether database connection is established.");
 				// Restore interrupted state...
 				Thread.currentThread().interrupt();
 			}
-		} else if (dbConnect) {
-			try {
-				insertIntoDB();
-			} catch (IOException | SQLException e) {
-				logger.error("DB insertion failed!");
-			}
-		} else {
-			throw new ParameterException(spec.commandLine(), "Password required");
 		}
 	}
 
