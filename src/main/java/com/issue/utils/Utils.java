@@ -12,7 +12,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
-import java.sql.SQLException;
 import java.util.Base64;
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -259,12 +258,12 @@ public class Utils {
 	 *
 	 * @param user   the user
 	 * @param passwd the passwd
+	 * @param write2DB the write 2 DB
 	 * @throws IOException          Signals that an I/O exception has occurred.
 	 * @throws InterruptedException the interrupted exception
-	 * @throws SQLException
 	 */
 	public static void runStats(String user, String passwd, boolean write2DB)
-			throws IOException, InterruptedException, SQLException {
+			throws IOException, InterruptedException {
 		// Start processing.
 		logger.info("Processing started.");
 

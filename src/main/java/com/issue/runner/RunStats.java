@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.sql.SQLException;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,6 +38,7 @@ import picocli.CommandLine.Spec;
  */
 public class RunStats implements Runnable {
 
+	/** The Constant PROCESSING_INTERRUPTED_WITH_EXCEPTION. */
 	private static final String PROCESSING_INTERRUPTED_WITH_EXCEPTION = "Processing interrupted with exception.";
 
 	/** The logger. */
@@ -100,6 +100,7 @@ public class RunStats implements Runnable {
 	/**
 	 * Provide team.
 	 *
+	 * @param teamName the team name
 	 * @return the team
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
@@ -190,11 +191,6 @@ public class RunStats implements Runnable {
 			} catch (InterruptedException e) {
 				logger.error(PROCESSING_INTERRUPTED_WITH_EXCEPTION);
 				logger.error("Check whether connection to issue tracker server is established.");
-				// Restore interrupted state...
-				Thread.currentThread().interrupt();
-			} catch (SQLException e) {
-				logger.error(PROCESSING_INTERRUPTED_WITH_EXCEPTION);
-				logger.error("Check whether database connection is established.");
 				// Restore interrupted state...
 				Thread.currentThread().interrupt();
 			}

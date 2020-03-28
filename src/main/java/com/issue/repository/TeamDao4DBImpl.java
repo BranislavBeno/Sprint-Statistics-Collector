@@ -100,13 +100,13 @@ public class TeamDao4DBImpl implements Dao4DB {
 	private Team team;
 
 	/** The connection. */
-	private Connection connection;
+	private final Connection connection;
 
 	/** The table. */
-	private String table;
+	private final String table;
 
 	/** The sprint. */
-	private String sprint;
+	private final String sprint;
 
 	/**
 	 * Instantiates a new team dao 4 DB impl.
@@ -123,54 +123,80 @@ public class TeamDao4DBImpl implements Dao4DB {
 	}
 
 	/**
-	 * Compose column.
+	 * Column 4 creation.
 	 *
 	 * @param name        the name
 	 * @param declaration the declaration
 	 * @return the string
 	 */
-	private static final String composeColumn(final String name, final String declaration) {
+	private static final String column4Creation(final String name, final String declaration) {
 		return new StringBuilder("`").append(name).append("` ").append(declaration).append(", ").toString();
 	}
 
 	/**
-	 * Prepare table creation.
+	 * Column 4 update.
+	 *
+	 * @param name the name
+	 * @return the string
+	 */
+	private static final String column4Update(final String name) {
+		return new StringBuilder(name).append(" = ?").toString();
+	}
+
+	/**
+	 * Finished SP 2 json.
 	 *
 	 * @return the string
 	 */
-	private String prepareTableCreation() {
+	private String finishedSP2Json() {
+		String finishedSP = "";
+		try {
+			finishedSP = new ObjectMapper()
+					.writeValueAsString(team.getFinishedStoryPoints().orElse(new EnumMap<>(FeatureScope.class)));
+		} catch (JsonProcessingException e) {
+			logger.error("Json processing interrupted with exception.");
+		}
+		return finishedSP;
+	}
+
+	/**
+	 * Statement 4 table creation.
+	 *
+	 * @return the string
+	 */
+	private String statement4TableCreation() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("create table if not exists ").append(table).append(" ( ")
-				.append(composeColumn("id", "INT(11) NOT NULL AUTO_INCREMENT"))
-				.append(composeColumn(SPRINT_COLUMN, VARCHAR_64_DEFAULT_NULL))
-				.append(composeColumn(TEAM_NAME_COLUMN, VARCHAR_64_DEFAULT_NULL))
-				.append(composeColumn(TEAM_MEMBER_COUNT_COLUMN, DECIMAL_2_DEFAULT_0))
-				.append(composeColumn(ON_BEGIN_PLANNED_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
-				.append(composeColumn(ON_END_PLANNED_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
-				.append(composeColumn(FINISHED_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
-				.append(composeColumn(NOT_FINISHED_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
-				.append(composeColumn(TO_DO_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
-				.append(composeColumn(IN_PROGRESS_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
-				.append(composeColumn(FINISHED_STORIES_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
-				.append(composeColumn(FINISHED_BUGS_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
-				.append(composeColumn(TIME_ESTIMATION_COLUMN, DECIMAL_3_DEFAULT_0))
-				.append(composeColumn(TIME_PLANNED_COLUMN, DECIMAL_3_DEFAULT_0))
-				.append(composeColumn(TIME_SPENT_COLUMN, DECIMAL_3_DEFAULT_0))
-				.append(composeColumn(NOT_CLOSED_HIGH_PRIOR_STORIES_COLUMN, DECIMAL_3_DEFAULT_0))
-				.append(composeColumn(DELTA_SP_COLUMN, DOUBLE_5_2_DEFAULT_0))
-				.append(composeColumn(PLANNED_SP_CLOSED_COLUMN, DOUBLE_5_2_DEFAULT_0))
-				.append(composeColumn(FINISHED_SP_COLUMN, "JSON DEFAULT NULL")).append("PRIMARY KEY (`id`)) ")
+				.append(column4Creation("id", "INT(11) NOT NULL AUTO_INCREMENT"))
+				.append(column4Creation(SPRINT_COLUMN, VARCHAR_64_DEFAULT_NULL))
+				.append(column4Creation(TEAM_NAME_COLUMN, VARCHAR_64_DEFAULT_NULL))
+				.append(column4Creation(TEAM_MEMBER_COUNT_COLUMN, DECIMAL_2_DEFAULT_0))
+				.append(column4Creation(ON_BEGIN_PLANNED_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
+				.append(column4Creation(ON_END_PLANNED_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
+				.append(column4Creation(FINISHED_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
+				.append(column4Creation(NOT_FINISHED_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
+				.append(column4Creation(TO_DO_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
+				.append(column4Creation(IN_PROGRESS_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
+				.append(column4Creation(FINISHED_STORIES_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
+				.append(column4Creation(FINISHED_BUGS_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
+				.append(column4Creation(TIME_ESTIMATION_COLUMN, DECIMAL_3_DEFAULT_0))
+				.append(column4Creation(TIME_PLANNED_COLUMN, DECIMAL_3_DEFAULT_0))
+				.append(column4Creation(TIME_SPENT_COLUMN, DECIMAL_3_DEFAULT_0))
+				.append(column4Creation(NOT_CLOSED_HIGH_PRIOR_STORIES_COLUMN, DECIMAL_3_DEFAULT_0))
+				.append(column4Creation(DELTA_SP_COLUMN, DOUBLE_5_2_DEFAULT_0))
+				.append(column4Creation(PLANNED_SP_CLOSED_COLUMN, DOUBLE_5_2_DEFAULT_0))
+				.append(column4Creation(FINISHED_SP_COLUMN, "JSON DEFAULT NULL")).append("PRIMARY KEY (`id`)) ")
 				.append("ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;");
 
 		return sb.toString();
 	}
 
 	/**
-	 * Prepare insertion.
+	 * Statment 4 insertion.
 	 *
 	 * @return the string
 	 */
-	private String prepareInsertion() {
+	private String statment4Insertion() {
 		StringJoiner sj = new StringJoiner(", ", " (", ") ");
 		sj.add(SPRINT_COLUMN);
 		sj.add(TEAM_NAME_COLUMN);
@@ -195,42 +221,94 @@ public class TeamDao4DBImpl implements Dao4DB {
 	}
 
 	/**
-	 * Finished SP 2 json.
+	 * Statement 4 update.
 	 *
 	 * @return the string
 	 */
-	private String finishedSP2Json() {
-		String finishedSP = "";
-		try {
-			finishedSP = new ObjectMapper()
-					.writeValueAsString(team.getFinishedStoryPoints().orElse(new EnumMap<>(FeatureScope.class)));
-		} catch (JsonProcessingException e) {
-			logger.error("Json processing interrupted with exception.");
-		}
-		return finishedSP;
+	private String statement4Update() {
+		StringJoiner sj = new StringJoiner(", ");
+		sj.add(column4Update(TEAM_NAME_COLUMN));
+		sj.add(column4Update(TEAM_MEMBER_COUNT_COLUMN));
+		sj.add(column4Update(ON_BEGIN_PLANNED_SP_SUM_COLUMN));
+		sj.add(column4Update(ON_END_PLANNED_SP_SUM_COLUMN));
+		sj.add(column4Update(FINISHED_SP_SUM_COLUMN));
+		sj.add(column4Update(NOT_FINISHED_SP_SUM_COLUMN));
+		sj.add(column4Update(TO_DO_SP_SUM_COLUMN));
+		sj.add(column4Update(IN_PROGRESS_SP_SUM_COLUMN));
+		sj.add(column4Update(FINISHED_STORIES_SP_SUM_COLUMN));
+		sj.add(column4Update(FINISHED_BUGS_SP_SUM_COLUMN));
+		sj.add(column4Update(TIME_ESTIMATION_COLUMN));
+		sj.add(column4Update(TIME_PLANNED_COLUMN));
+		sj.add(column4Update(TIME_SPENT_COLUMN));
+		sj.add(column4Update(NOT_CLOSED_HIGH_PRIOR_STORIES_COLUMN));
+		sj.add(column4Update(DELTA_SP_COLUMN));
+		sj.add(column4Update(PLANNED_SP_CLOSED_COLUMN));
+		sj.add(column4Update(FINISHED_SP_COLUMN));
+
+		return "update " + table + " set " + sj.toString() + " where " + SPRINT_COLUMN + "= ?";
 	}
 
 	/**
-	 * Creates the table.
+	 * Params 4 insertion.
+	 *
+	 * @param stmt the stmt
+	 * @throws SQLException the SQL exception
 	 */
-	private void createTable() {
-		// Create table if doesn't exists
-		logger.info("Creating new table '{}' if doesn't exists.", table);
-
-		// Create statement for table creation
-		String createTableQuery = prepareTableCreation();
-
-		// Execute SQL query for table creation
-		try (Statement statement = connection.createStatement()) {
-			// Execute SQL query
-			statement.executeUpdate(createTableQuery);
-			logger.info("Table '{}' exists or created successfully.", table);
-
-		} catch (SQLException e) {
-			logger.error("DB table {} creation failed!", table);
-		}
+	private void params4Insertion(PreparedStatement stmt) throws SQLException {
+		stmt.setString(1, sprint);
+		stmt.setString(2, team.getTeamName().orElse(""));
+		stmt.setInt(3, team.getTeamMemberCount());
+		stmt.setInt(4, team.getOnBeginPlannedStoryPointsSum());
+		stmt.setInt(5, team.getOnEndPlannedStoryPointsSum());
+		stmt.setInt(6, team.getFinishedStoryPointsSum());
+		stmt.setInt(7, team.getNotFinishedStoryPointsSum());
+		stmt.setInt(8, team.getToDoStoryPointsSum());
+		stmt.setInt(9, team.getInProgressStoryPointsSum());
+		stmt.setInt(10, team.getFinishedStoriesSPSum());
+		stmt.setInt(11, team.getFinishedBugsSPSum());
+		stmt.setLong(12, team.getTimeEstimation());
+		stmt.setLong(13, team.getTimePlanned());
+		stmt.setLong(14, team.getTimeSpent());
+		stmt.setInt(15, team.getNotClosedHighPriorStoriesCount());
+		stmt.setDouble(16, team.getDeltaStoryPoints());
+		stmt.setDouble(17, team.getPlannedStoryPointsClosed());
+		stmt.setString(18, finishedSP2Json());
+		stmt.addBatch();
 	}
 
+	/**
+	 * Params 4 update.
+	 *
+	 * @param stmt the stmt
+	 * @throws SQLException the SQL exception
+	 */
+	private void params4Update(PreparedStatement stmt) throws SQLException {
+		stmt.setString(1, team.getTeamName().orElse(""));
+		stmt.setInt(2, team.getTeamMemberCount());
+		stmt.setInt(3, team.getOnBeginPlannedStoryPointsSum());
+		stmt.setInt(4, team.getOnEndPlannedStoryPointsSum());
+		stmt.setInt(5, team.getFinishedStoryPointsSum());
+		stmt.setInt(6, team.getNotFinishedStoryPointsSum());
+		stmt.setInt(7, team.getToDoStoryPointsSum());
+		stmt.setInt(8, team.getInProgressStoryPointsSum());
+		stmt.setInt(9, team.getFinishedStoriesSPSum());
+		stmt.setInt(10, team.getFinishedBugsSPSum());
+		stmt.setLong(11, team.getTimeEstimation());
+		stmt.setLong(12, team.getTimePlanned());
+		stmt.setLong(13, team.getTimeSpent());
+		stmt.setInt(14, team.getNotClosedHighPriorStoriesCount());
+		stmt.setDouble(15, team.getDeltaStoryPoints());
+		stmt.setDouble(16, team.getPlannedStoryPointsClosed());
+		stmt.setString(17, finishedSP2Json());
+		stmt.setString(18, sprint);
+		stmt.addBatch();
+	}
+
+	/**
+	 * Checks if is table row available.
+	 *
+	 * @return true, if is table row available
+	 */
 	private boolean isTableRowAvailable() {
 		logger.info("Checking data availbility for sprint '{}' in table '{}'.", sprint, table);
 
@@ -257,6 +335,27 @@ public class TeamDao4DBImpl implements Dao4DB {
 	}
 
 	/**
+	 * Creates the table.
+	 */
+	private void createTable() {
+		// Create table if doesn't exists
+		logger.info("Creating new table '{}' if doesn't exists.", table);
+
+		// Create statement for table creation
+		String createTableQuery = statement4TableCreation();
+
+		// Execute SQL query for table creation
+		try (Statement statement = connection.createStatement()) {
+			// Execute SQL query
+			statement.executeUpdate(createTableQuery);
+			logger.info("Table '{}' exists or created successfully.", table);
+
+		} catch (SQLException e) {
+			logger.error("DB table {} creation failed!", table);
+		}
+	}
+
+	/**
 	 * Insert entity.
 	 */
 	private void insertEntity() {
@@ -264,11 +363,11 @@ public class TeamDao4DBImpl implements Dao4DB {
 		logger.info("Inserting a new sprint data for '{}' into table '{}'.", sprint, table);
 
 		// Create statement for data insertion
-		String insertDataQuery = prepareInsertion();
+		String insertDataQuery = statment4Insertion();
 
 		try (PreparedStatement statement = connection.prepareStatement(insertDataQuery);) {
 			// Prepare statement for data insertion
-			params4Statement(statement);
+			params4Insertion(statement);
 
 			// Execute SQL query for data insertion
 			statement.executeBatch();
@@ -287,31 +386,33 @@ public class TeamDao4DBImpl implements Dao4DB {
 	}
 
 	/**
-	 * Prepare statement.
-	 *
-	 * @param stmt the stmt
-	 * @throws SQLException the SQL exception
+	 * Update entity.
 	 */
-	private void params4Statement(PreparedStatement stmt) throws SQLException {
-		stmt.setString(1, sprint);
-		stmt.setString(2, team.getTeamName().orElse(""));
-		stmt.setInt(3, team.getTeamMemberCount());
-		stmt.setInt(4, team.getOnBeginPlannedStoryPointsSum());
-		stmt.setInt(5, team.getOnEndPlannedStoryPointsSum());
-		stmt.setInt(6, team.getFinishedStoryPointsSum());
-		stmt.setInt(7, team.getNotFinishedStoryPointsSum());
-		stmt.setInt(8, team.getToDoStoryPointsSum());
-		stmt.setInt(9, team.getInProgressStoryPointsSum());
-		stmt.setInt(10, team.getFinishedStoriesSPSum());
-		stmt.setInt(11, team.getFinishedBugsSPSum());
-		stmt.setLong(12, team.getTimeEstimation());
-		stmt.setLong(13, team.getTimePlanned());
-		stmt.setLong(14, team.getTimeSpent());
-		stmt.setInt(15, team.getNotClosedHighPriorStoriesCount());
-		stmt.setDouble(16, team.getDeltaStoryPoints());
-		stmt.setDouble(17, team.getPlannedStoryPointsClosed());
-		stmt.setString(18, finishedSP2Json());
-		stmt.addBatch();
+	private void updateEntity() {
+		// Update existing sprint data
+		logger.info("Updating existing data for '{}' in table '{}'.", sprint, table);
+
+		// Create statement for data updating
+		String updateDataQuery = statement4Update();
+
+		try (PreparedStatement statement = connection.prepareStatement(updateDataQuery);) {
+			// Prepare statement for data update
+			params4Update(statement);
+
+			// Execute SQL query for data update
+			statement.executeBatch();
+			logger.info("Existing sprint data update successfull.");
+
+			connection.commit();
+
+		} catch (Exception e) {
+			try {
+				connection.rollback();
+			} catch (SQLException ex) {
+				logger.error("Error during rollback");
+			}
+			logger.error("Data update in table '{}' failed!", table);
+		}
 	}
 
 	/**
@@ -321,6 +422,7 @@ public class TeamDao4DBImpl implements Dao4DB {
 	public void saveOrUpdate() {
 		if (isTableRowAvailable()) {
 			// Update existing data record
+			updateEntity();
 		} else {
 			// Create new data record
 			createTable();
