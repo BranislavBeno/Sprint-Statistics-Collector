@@ -5,8 +5,10 @@ package com.issue.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.EnumMap;
 import java.util.StringJoiner;
 
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +17,7 @@ import org.apache.logging.log4j.Logger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.issue.entity.Team;
+import com.issue.enums.FeatureScope;
 import com.issue.iface.Dao4DB;
 
 /**
@@ -199,7 +202,8 @@ public class TeamDao4DBImpl implements Dao4DB {
 	private String finishedSP2Json() {
 		String finishedSP = "";
 		try {
-			finishedSP = new ObjectMapper().writeValueAsString(team.getFinishedStoryPoints());
+			finishedSP = new ObjectMapper()
+					.writeValueAsString(team.getFinishedStoryPoints().orElse(new EnumMap<>(FeatureScope.class)));
 		} catch (JsonProcessingException e) {
 			logger.error("Json processing interrupted with exception.");
 		}
@@ -211,19 +215,45 @@ public class TeamDao4DBImpl implements Dao4DB {
 	 */
 	private void createTable() {
 		// Create table if doesn't exists
-		logger.info("Creating new database table '{}' if doesn't exists.", table);
+		logger.info("Creating new table '{}' if doesn't exists.", table);
 
 		// Create statement for table creation
 		String createTableQuery = prepareTableCreation();
 
 		// Execute SQL query for table creation
 		try (Statement statement = connection.createStatement()) {
-
+			// Execute SQL query
 			statement.executeUpdate(createTableQuery);
+			logger.info("Table '{}' exists or created successfully.", table);
 
 		} catch (SQLException e) {
-			logger.error("DB table creation failed!");
+			logger.error("DB table {} creation failed!", table);
 		}
+	}
+
+	private boolean isTableRowAvailable() {
+		logger.info("Checking data availbility for sprint '{}' in table '{}'.", sprint, table);
+
+		// Check particular data availability
+		String checkQuery = "select sprint from " + table + " where sprint='" + sprint + "'";
+
+		// Execute checking query
+		try (Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(checkQuery);) {
+
+			if (resultSet.first()) {
+				logger.info("Data for sprint '{}' in table '{}' are available.", sprint, table);
+				return true;
+			} else {
+				logger.info("No data for sprint '{}' in table '{}' found.", sprint, table);
+				return false;
+			}
+
+		} catch (SQLException e) {
+			logger.error("Data availbility check in table '{}' failed!", table);
+		}
+
+		return false;
 	}
 
 	/**
@@ -231,38 +261,18 @@ public class TeamDao4DBImpl implements Dao4DB {
 	 */
 	private void insertEntity() {
 		// Insert a new sprint data
-		logger.info("Inserting a new sprint data for '{}' into database table '{}'.", sprint, table);
+		logger.info("Inserting a new sprint data for '{}' into table '{}'.", sprint, table);
 
 		// Create statement for data insertion
 		String insertDataQuery = prepareInsertion();
 
-		try (PreparedStatement stmt = connection.prepareStatement(insertDataQuery);) {
-			String finishedSP = finishedSP2Json();
-
-			// Process statement
-			stmt.setString(1, sprint);
-			stmt.setString(2, team.getTeamName().orElse(""));
-			stmt.setInt(3, team.getTeamMemberCount());
-			stmt.setInt(4, team.getOnBeginPlannedStoryPointsSum());
-			stmt.setInt(5, team.getOnEndPlannedStoryPointsSum());
-			stmt.setInt(6, team.getFinishedStoryPointsSum());
-			stmt.setInt(7, team.getNotFinishedStoryPointsSum());
-			stmt.setInt(8, team.getToDoStoryPointsSum());
-			stmt.setInt(9, team.getInProgressStoryPointsSum());
-			stmt.setInt(10, team.getFinishedStoriesSPSum());
-			stmt.setInt(11, team.getFinishedBugsSPSum());
-			stmt.setLong(12, team.getTimeEstimation());
-			stmt.setLong(13, team.getTimePlanned());
-			stmt.setLong(14, team.getTimeSpent());
-			stmt.setInt(15, team.getNotClosedHighPriorStoriesCount());
-			stmt.setDouble(16, team.getDeltaStoryPoints());
-			stmt.setDouble(17, team.getPlannedStoryPointsClosed());
-			stmt.setString(18, finishedSP);
-			stmt.addBatch();
+		try (PreparedStatement statement = connection.prepareStatement(insertDataQuery);) {
+			// Prepare statement for data insertion
+			params4Statement(statement);
 
 			// Execute SQL query for data insertion
-			int[] rowsAffected = stmt.executeBatch();
-			logger.info("Rows affected by DB update: {}", rowsAffected.length);
+			statement.executeBatch();
+			logger.info("New sprint data insertion successfull.");
 
 			connection.commit();
 
@@ -272,8 +282,36 @@ public class TeamDao4DBImpl implements Dao4DB {
 			} catch (SQLException ex) {
 				logger.error("Error during rollback");
 			}
-			logger.error("DB table insertion failed!");
+			logger.error("Data insertion into table '{}' failed!", table);
 		}
+	}
+
+	/**
+	 * Prepare statement.
+	 *
+	 * @param stmt the stmt
+	 * @throws SQLException the SQL exception
+	 */
+	private void params4Statement(PreparedStatement stmt) throws SQLException {
+		stmt.setString(1, sprint);
+		stmt.setString(2, team.getTeamName().orElse(""));
+		stmt.setInt(3, team.getTeamMemberCount());
+		stmt.setInt(4, team.getOnBeginPlannedStoryPointsSum());
+		stmt.setInt(5, team.getOnEndPlannedStoryPointsSum());
+		stmt.setInt(6, team.getFinishedStoryPointsSum());
+		stmt.setInt(7, team.getNotFinishedStoryPointsSum());
+		stmt.setInt(8, team.getToDoStoryPointsSum());
+		stmt.setInt(9, team.getInProgressStoryPointsSum());
+		stmt.setInt(10, team.getFinishedStoriesSPSum());
+		stmt.setInt(11, team.getFinishedBugsSPSum());
+		stmt.setLong(12, team.getTimeEstimation());
+		stmt.setLong(13, team.getTimePlanned());
+		stmt.setLong(14, team.getTimeSpent());
+		stmt.setInt(15, team.getNotClosedHighPriorStoriesCount());
+		stmt.setDouble(16, team.getDeltaStoryPoints());
+		stmt.setDouble(17, team.getPlannedStoryPointsClosed());
+		stmt.setString(18, finishedSP2Json());
+		stmt.addBatch();
 	}
 
 	/**
@@ -281,7 +319,12 @@ public class TeamDao4DBImpl implements Dao4DB {
 	 */
 	@Override
 	public void saveOrUpdate() {
-		createTable();
-		insertEntity();
+		if (isTableRowAvailable()) {
+			// Update existing data record
+		} else {
+			// Create new data record
+			createTable();
+			insertEntity();
+		}
 	}
 }

@@ -170,7 +170,6 @@ public class RunStats implements Runnable {
 				TeamDao<String, Team> teamsRepo = new TeamDaoImpl();
 				teamsRepo.save(provideTeam("Banana"));
 				teamsRepo.save(provideTeam("Apple"));
-				teamsRepo.save(provideTeam("Plum"));
 
 				DbHandlers.sendStats2DB(teamsRepo, globalParams);
 			} catch (IOException e) {
