@@ -14,30 +14,28 @@ import com.issue.iface.TeamDao;
 import com.issue.repository.TeamDao4DBImpl;
 
 /**
- * The Class DbHandlers.
+ * The Class Teams2DB.
  */
-public class DbHandlers {
+public class Teams2DB {
 
 	/** The logger. */
-	static Logger logger = LogManager.getLogger(DbHandlers.class);
+	static Logger logger = LogManager.getLogger(Teams2DB.class);
 
 	/**
 	 * Utility classes should not have public constructors.
 	 */
-	private DbHandlers() {
+	private Teams2DB() {
 		throw new IllegalStateException("Utility class");
 	}
 
 	/**
 	 * Save or update.
 	 *
-	 * @param tableName the table name
-	 * @param team the team
+	 * @param tableName    the table name
+	 * @param team         the team
 	 * @param globalParams the global params
-	 * @throws SQLException the SQL exception
 	 */
-	private static void saveOrUpdate(final String tableName, final Team team, GlobalParams globalParams)
-			throws SQLException {
+	private static void saveOrUpdate(final String tableName, final Team team, GlobalParams globalParams) {
 		// Get a connection to database
 		try (Connection conn = DriverManager.getConnection(globalParams.getDbUri(), globalParams.getDbUsername(),
 				globalParams.getDbPassword());) {
@@ -47,38 +45,34 @@ public class DbHandlers {
 
 			// Save or update team's database
 			dao.saveOrUpdate();
-
 		} catch (SQLException e) {
-			logger.error("DB update failed!");
+			logger.error("Data sending to table {} failed!", tableName);
+			logger.error("Check whether database is connected.");
 		}
 	}
 
 	/**
-	 * Send stats 4 one team.
+	 * Send stats.
 	 *
+	 * @param team the team
 	 * @param globalParams the global params
-	 * @param team         the team
 	 */
-	private static void sendStats4OneTeam(final GlobalParams globalParams, Team team) {
+	private static void sendStats(final Team team, final GlobalParams globalParams) {
 		// Set database table name
 		String tableName = "team_" + team.getTeamName().orElse("unknown").toLowerCase();
 
-		try {
-			// Save sprint data for particular team
-			saveOrUpdate(tableName, team, globalParams);
-		} catch (SQLException e) {
-			logger.error("Data sending to table {} failed!", tableName);
-		}
+		// Save sprint data for particular team
+		saveOrUpdate(tableName, team, globalParams);
 	}
 
 	/**
-	 * Send stats 2 DB.
+	 * Send stats.
 	 *
 	 * @param teams        the teams
 	 * @param globalParams the global params
 	 */
-	public static void sendStats2DB(final TeamDao<String, Team> teams, final GlobalParams globalParams) {
+	public static void sendStats(final TeamDao<String, Team> teams, final GlobalParams globalParams) {
 		// Run over all team related sprint data
-		teams.getAll().values().stream().forEach(team -> sendStats4OneTeam(globalParams, team));
+		teams.getAll().values().stream().forEach(team -> sendStats(team, globalParams));
 	}
 }

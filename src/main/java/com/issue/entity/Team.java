@@ -7,14 +7,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.issue.enums.FeatureScope;
 import com.issue.utils.Stories;
 
@@ -24,9 +18,6 @@ import com.issue.utils.Stories;
  * @author benito
  */
 public class Team {
-
-	/** The logger. */
-	private static Logger logger = LogManager.getLogger(Team.class);
 
 	/** The team name. */
 	private String teamName;
@@ -89,42 +80,6 @@ public class Team {
 	 */
 	public Team(String teamName) {
 		this.teamName = Optional.ofNullable(teamName).orElseThrow();
-	}
-
-	/**
-	 * To string.
-	 *
-	 * @return the string
-	 */
-	@Override
-	public String toString() {
-		String finishedSP = "";
-		try {
-			finishedSP = new ObjectMapper().writeValueAsString(finishedStoryPoints);
-		} catch (JsonProcessingException e) {
-			logger.error("Json processing interrupted with exception.");
-		}
-
-		StringJoiner sj = new StringJoiner(", ");
-		sj.add("'" + teamName + "'");
-		sj.add(String.valueOf(teamMemberCount));
-		sj.add(String.valueOf(onBeginPlannedStoryPointsSum));
-		sj.add(String.valueOf(onEndPlannedStoryPointsSum));
-		sj.add(String.valueOf(finishedStoryPointsSum));
-		sj.add(String.valueOf(notFinishedStoryPointsSum));
-		sj.add(String.valueOf(toDoStoryPointsSum));
-		sj.add(String.valueOf(inProgressStoryPointsSum));
-		sj.add(String.valueOf(finishedStoriesSPSum));
-		sj.add(String.valueOf(finishedBugsSPSum));
-		sj.add(String.valueOf(timeEstimation));
-		sj.add(String.valueOf(timePlanned));
-		sj.add(String.valueOf(timeSpent));
-		sj.add(String.valueOf(notClosedHighPriorStoriesCount));
-		sj.add(String.valueOf(deltaStoryPoints));
-		sj.add(String.valueOf(plannedStoryPointsClosed));
-		sj.add("'" + finishedSP + "'");
-
-		return sj.toString();
 	}
 
 	/**

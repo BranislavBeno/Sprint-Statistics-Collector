@@ -295,7 +295,7 @@ public class Utils {
 
 		// Write into DB
 		if (write2DB) {
-			DbHandlers.sendStats2DB(teams, globalParams);
+			Teams2DB.sendStats(teams, globalParams);
 		}
 
 		// Create XLSX output
