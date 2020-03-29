@@ -96,11 +96,11 @@ public class TeamDao4DBImpl implements Dao4DB {
 	/** The logger. */
 	static Logger logger = LogManager.getLogger(TeamDao4DBImpl.class);
 
-	/** The team. */
-	private Team team;
-
 	/** The connection. */
 	private final Connection connection;
+
+	/** The team. */
+	private Team team;
 
 	/** The table. */
 	private final String table;
@@ -112,14 +112,15 @@ public class TeamDao4DBImpl implements Dao4DB {
 	 * Instantiates a new team dao 4 DB impl.
 	 *
 	 * @param connection the connection
-	 * @param sprint     the sprint
-	 * @param team       the team
+	 * @param team the team
+	 * @param table the table
+	 * @param sprint the sprint
 	 */
-	public TeamDao4DBImpl(final Connection connection, final String sprint, final Team team) {
+	public TeamDao4DBImpl(final Connection connection, final Team team, final String table, final String sprint) {
 		this.connection = connection;
 		this.sprint = sprint;
 		this.team = team;
-		this.table = "team_" + team.getTeamName().orElse("").toLowerCase();
+		this.table = table;
 	}
 
 	/**

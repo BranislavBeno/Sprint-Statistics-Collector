@@ -108,14 +108,20 @@ public class Utils {
 		// Get properties
 		Properties props = provideProperties(propFile);
 
+		// Get content from general properties
+		globalParams.setSprintLabel(props.getProperty("sprintLabel", null));
+
 		// Get content from database properties
 		globalParams.setDbUri(props.getProperty("dbUri", ""));
 		globalParams.setDbUsername(props.getProperty("dbUser", ""));
 		globalParams.setDbPassword(props.getProperty("dbPassword", ""));
 
-		// Get content from properties
+		// Get content from file output properties
+		globalParams.setXlsxOutput(Boolean.valueOf(props.getProperty("xlsxOutput", "false")));
+		globalParams.setOutputFileName4Xlsx(globalParams.getSprintLabel() + ".xlsx");
+
+		// Get content from issue tracker properties
 		globalParams.setIssueTrackerUri(props.getProperty("issueTrackerUri", ""));
-		globalParams.setOutputFileName4Xlsx(props.getProperty("xlsxOutputFile", null));
 		globalParams.setFeaturesJql(props.getProperty("featuresJql", "issuetype = Feature"));
 
 		// Get set of requests for issues finished within sprint
@@ -256,14 +262,13 @@ public class Utils {
 	/**
 	 * Run stats.
 	 *
-	 * @param user   the user
-	 * @param passwd the passwd
+	 * @param user     the user
+	 * @param passwd   the passwd
 	 * @param write2DB the write 2 DB
 	 * @throws IOException          Signals that an I/O exception has occurred.
 	 * @throws InterruptedException the interrupted exception
 	 */
-	public static void runStats(String user, String passwd, boolean write2DB)
-			throws IOException, InterruptedException {
+	public static void runStats(String user, String passwd, boolean write2DB) throws IOException, InterruptedException {
 		// Start processing.
 		logger.info("Processing started.");
 
@@ -294,12 +299,13 @@ public class Utils {
 		}
 
 		// Create XLSX output
-		try {
-			OutputCreators.createXlsxOutput(globalParams, teams, sprints, engineers);
-			logger.info("File {} with XLSX content created successfully.", globalParams.getOutputFileName4Xlsx());
-		} catch (IllegalArgumentException e) {
-			logger.info("No file name for XLSX output in properties file defined.");
-		}
+		if (globalParams.isXlsxOutput())
+			try {
+				OutputCreators.createXlsxOutput(globalParams, teams, sprints, engineers);
+				logger.info("File {} with XLSX content created successfully.", globalParams.getOutputFileName4Xlsx());
+			} catch (IllegalArgumentException e) {
+				logger.info("No file name for XLSX output in properties file defined.");
+			}
 
 		// Processing finished.
 		logger.info("Processing finished.");

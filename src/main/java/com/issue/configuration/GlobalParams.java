@@ -16,6 +16,9 @@ public class GlobalParams {
 	/** The instance. */
 	private static GlobalParams instance;
 
+	/** The sprint label. */
+	private String sprintLabel;
+
 	/** The db uri. */
 	private String dbUri;
 
@@ -33,6 +36,9 @@ public class GlobalParams {
 
 	/** The password. */
 	private String password;
+
+	/** The xlsx output. */
+	private boolean xlsxOutput;
 
 	/** The output file name 4 xlsx. */
 	private String outputFileName4Xlsx;
@@ -75,6 +81,24 @@ public class GlobalParams {
 			instance = new GlobalParams();
 		}
 		return instance;
+	}
+
+	/**
+	 * Gets the sprint label.
+	 *
+	 * @return the sprint label
+	 */
+	public String getSprintLabel() {
+		return sprintLabel;
+	}
+
+	/**
+	 * Sets the sprint label.
+	 *
+	 * @param sprintLabel the new sprint label
+	 */
+	public void setSprintLabel(String sprintLabel) {
+		this.sprintLabel = sprintLabel;
 	}
 
 	/**
@@ -183,6 +207,24 @@ public class GlobalParams {
 	 */
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	/**
+	 * Checks if is xlsx output.
+	 *
+	 * @return true, if is xlsx output
+	 */
+	public boolean isXlsxOutput() {
+		return xlsxOutput;
+	}
+
+	/**
+	 * Sets the xlsx output.
+	 *
+	 * @param xlsxOutput the new xlsx output
+	 */
+	public void setXlsxOutput(boolean xlsxOutput) {
+		this.xlsxOutput = xlsxOutput;
 	}
 
 	/**

@@ -31,19 +31,19 @@ public class DbHandlers {
 	/**
 	 * Save or update.
 	 *
-	 * @param sprint       the sprint
-	 * @param team         the team
+	 * @param tableName the table name
+	 * @param team the team
 	 * @param globalParams the global params
 	 * @throws SQLException the SQL exception
 	 */
-	private static void saveOrUpdate(final String sprint, final Team team, GlobalParams globalParams)
+	private static void saveOrUpdate(final String tableName, final Team team, GlobalParams globalParams)
 			throws SQLException {
 		// Get a connection to database
 		try (Connection conn = DriverManager.getConnection(globalParams.getDbUri(), globalParams.getDbUsername(),
 				globalParams.getDbPassword());) {
 
 			// Create new team's database repository object
-			Dao4DB dao = new TeamDao4DBImpl(conn, sprint, team);
+			Dao4DB dao = new TeamDao4DBImpl(conn, team, tableName, globalParams.getSprintLabel());
 
 			// Save or update team's database
 			dao.saveOrUpdate();
@@ -57,14 +57,17 @@ public class DbHandlers {
 	 * Send stats 4 one team.
 	 *
 	 * @param globalParams the global params
-	 * @param sprint       the sprint
 	 * @param team         the team
 	 */
-	private static void sendStats4OneTeam(final GlobalParams globalParams, final String sprint, Team team) {
+	private static void sendStats4OneTeam(final GlobalParams globalParams, Team team) {
+		// Set database table name
+		String tableName = "team_" + team.getTeamName().orElse("unknown").toLowerCase();
+
 		try {
-			saveOrUpdate(sprint, team, globalParams);
+			// Save sprint data for particular team
+			saveOrUpdate(tableName, team, globalParams);
 		} catch (SQLException e) {
-			logger.error("Data sending into table {} failed!", "team_" + team.getTeamName().orElse("").toLowerCase());
+			logger.error("Data sending to table {} failed!", tableName);
 		}
 	}
 
@@ -75,10 +78,7 @@ public class DbHandlers {
 	 * @param globalParams the global params
 	 */
 	public static void sendStats2DB(final TeamDao<String, Team> teams, final GlobalParams globalParams) {
-
-		final String sprint = globalParams.getOutputFileName4Xlsx().substring(0,
-				globalParams.getOutputFileName4Xlsx().length() - 5);
-
-		teams.getAll().values().stream().forEach(team -> sendStats4OneTeam(globalParams, sprint, team));
+		// Run over all team related sprint data
+		teams.getAll().values().stream().forEach(team -> sendStats4OneTeam(globalParams, team));
 	}
 }
