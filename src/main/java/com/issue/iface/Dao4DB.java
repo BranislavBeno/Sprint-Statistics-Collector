@@ -9,7 +9,7 @@ package com.issue.iface;
 public interface Dao4DB {
 
 	/**
-	 * Save or update.
+	 * Send stats.
 	 */
-	void saveOrUpdate();
+	void sendStats();
 }

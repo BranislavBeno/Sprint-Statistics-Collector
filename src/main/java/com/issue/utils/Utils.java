@@ -12,6 +12,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Base64;
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -30,11 +33,13 @@ import com.issue.entity.Sprint;
 import com.issue.entity.Story;
 import com.issue.entity.Team;
 import com.issue.enums.FeatureScope;
+import com.issue.iface.Dao4DB;
 import com.issue.iface.EngineerDao;
 import com.issue.iface.FeatureDao;
 import com.issue.iface.SprintDao;
 import com.issue.iface.StoryDao;
 import com.issue.iface.TeamDao;
+import com.issue.repository.TeamDao4DBImpl;
 
 /**
  * The Class Utils.
@@ -295,7 +300,8 @@ public class Utils {
 
 		// Write into DB
 		if (write2DB) {
-			Teams2DB.sendStats(teams, globalParams);
+			// Send gathered statistics to data base
+			sendStats2DB(teams, sprints, engineers, globalParams);
 		}
 
 		// Create XLSX output
@@ -309,5 +315,35 @@ public class Utils {
 
 		// Processing finished.
 		logger.info("Processing finished.");
+	}
+
+	/**
+	 * Send stats 2 DB.
+	 *
+	 * @param teams the teams
+	 * @param sprints the sprints
+	 * @param engineers the engineers
+	 * @param globalParams the global params
+	 */
+	private static void sendStats2DB(TeamDao<String, Team> teams, SprintDao<String, Sprint> sprints,
+			EngineerDao<String, Engineer> engineers, GlobalParams globalParams) {
+
+		// Get a connection to database
+		try (Connection conn = DriverManager.getConnection(globalParams.getDbUri(), globalParams.getDbUsername(),
+				globalParams.getDbPassword());) {
+
+			// Create new team's database repository object
+			Dao4DB teamsDao = new TeamDao4DBImpl(conn, teams, globalParams.getSprintLabel());
+			// Send teams repository to data base
+			teamsDao.sendStats();
+
+			// Send sprints repository to data base
+
+			// Send engineers repository to data base
+
+		} catch (SQLException e) {
+			logger.error("Sending data to database failed!");
+			logger.error("Check whether database is connected.");
+		}
 	}
 }

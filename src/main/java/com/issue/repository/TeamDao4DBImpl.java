@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.issue.entity.Team;
 import com.issue.enums.FeatureScope;
 import com.issue.iface.Dao4DB;
+import com.issue.iface.TeamDao;
 
 /**
  * The Class TeamDao4DBImpl.
@@ -99,28 +100,26 @@ public class TeamDao4DBImpl implements Dao4DB {
 	/** The connection. */
 	private final Connection connection;
 
-	/** The team. */
-	private Team team;
-
-	/** The table. */
-	private final String table;
+	/** The teams. */
+	private final TeamDao<String, Team> teams;
 
 	/** The sprint. */
 	private final String sprint;
+
+	/** The table. */
+	private String table = null;
 
 	/**
 	 * Instantiates a new team dao 4 DB impl.
 	 *
 	 * @param connection the connection
-	 * @param team the team
-	 * @param table the table
-	 * @param sprint the sprint
+	 * @param teams the teams
+	 * @param sprint     the sprint
 	 */
-	public TeamDao4DBImpl(final Connection connection, final Team team, final String table, final String sprint) {
+	public TeamDao4DBImpl(final Connection connection, final TeamDao<String, Team> teams, final String sprint) {
 		this.connection = connection;
 		this.sprint = sprint;
-		this.team = team;
-		this.table = table;
+		this.teams = teams;
 	}
 
 	/**
@@ -147,9 +146,10 @@ public class TeamDao4DBImpl implements Dao4DB {
 	/**
 	 * Finished SP 2 json.
 	 *
+	 * @param team the team
 	 * @return the string
 	 */
-	private String finishedSP2Json() {
+	private String finishedSP2Json(Team team) {
 		String finishedSP = "";
 		try {
 			finishedSP = new ObjectMapper()
@@ -253,9 +253,10 @@ public class TeamDao4DBImpl implements Dao4DB {
 	 * Params 4 insertion.
 	 *
 	 * @param stmt the stmt
+	 * @param team the team
 	 * @throws SQLException the SQL exception
 	 */
-	private void params4Insertion(PreparedStatement stmt) throws SQLException {
+	private void params4Insertion(PreparedStatement stmt, Team team) throws SQLException {
 		stmt.setString(1, sprint);
 		stmt.setString(2, team.getTeamName().orElse(""));
 		stmt.setInt(3, team.getTeamMemberCount());
@@ -273,7 +274,7 @@ public class TeamDao4DBImpl implements Dao4DB {
 		stmt.setInt(15, team.getNotClosedHighPriorStoriesCount());
 		stmt.setDouble(16, team.getDeltaStoryPoints());
 		stmt.setDouble(17, team.getPlannedStoryPointsClosed());
-		stmt.setString(18, finishedSP2Json());
+		stmt.setString(18, finishedSP2Json(team));
 		stmt.addBatch();
 	}
 
@@ -281,9 +282,10 @@ public class TeamDao4DBImpl implements Dao4DB {
 	 * Params 4 update.
 	 *
 	 * @param stmt the stmt
+	 * @param team the team
 	 * @throws SQLException the SQL exception
 	 */
-	private void params4Update(PreparedStatement stmt) throws SQLException {
+	private void params4Update(PreparedStatement stmt, Team team) throws SQLException {
 		stmt.setString(1, team.getTeamName().orElse(""));
 		stmt.setInt(2, team.getTeamMemberCount());
 		stmt.setInt(3, team.getOnBeginPlannedStoryPointsSum());
@@ -300,7 +302,7 @@ public class TeamDao4DBImpl implements Dao4DB {
 		stmt.setInt(14, team.getNotClosedHighPriorStoriesCount());
 		stmt.setDouble(15, team.getDeltaStoryPoints());
 		stmt.setDouble(16, team.getPlannedStoryPointsClosed());
-		stmt.setString(17, finishedSP2Json());
+		stmt.setString(17, finishedSP2Json(team));
 		stmt.setString(18, sprint);
 		stmt.addBatch();
 	}
@@ -358,8 +360,10 @@ public class TeamDao4DBImpl implements Dao4DB {
 
 	/**
 	 * Insert entity.
+	 *
+	 * @param team the team
 	 */
-	private void insertEntity() {
+	private void insertEntity(final Team team) {
 		// Insert a new sprint data
 		logger.info("Inserting a new sprint data for '{}' into table '{}'.", sprint, table);
 
@@ -368,7 +372,7 @@ public class TeamDao4DBImpl implements Dao4DB {
 
 		try (PreparedStatement statement = connection.prepareStatement(insertDataQuery);) {
 			// Prepare statement for data insertion
-			params4Insertion(statement);
+			params4Insertion(statement, team);
 
 			// Execute SQL query for data insertion
 			statement.executeBatch();
@@ -388,8 +392,10 @@ public class TeamDao4DBImpl implements Dao4DB {
 
 	/**
 	 * Update entity.
+	 *
+	 * @param team the team
 	 */
-	private void updateEntity() {
+	private void updateEntity(final Team team) {
 		// Update existing sprint data
 		logger.info("Updating existing data for '{}' in table '{}'.", sprint, table);
 
@@ -398,7 +404,7 @@ public class TeamDao4DBImpl implements Dao4DB {
 
 		try (PreparedStatement statement = connection.prepareStatement(updateDataQuery);) {
 			// Prepare statement for data update
-			params4Update(statement);
+			params4Update(statement, team);
 
 			// Execute SQL query for data update
 			statement.executeBatch();
@@ -417,17 +423,32 @@ public class TeamDao4DBImpl implements Dao4DB {
 	}
 
 	/**
-	 * Save or update.
+	 * Send stats.
+	 *
+	 * @param team the team
 	 */
-	@Override
-	public void saveOrUpdate() {
+	private void sendStats(final Team team) {
+		// Set database table name
+		this.table = "team_" + team.getTeamName().orElse("unknown").toLowerCase();
+
+		// Save sprint data for particular team
 		if (isTableRowAvailable()) {
 			// Update existing data record
-			updateEntity();
+			updateEntity(team);
 		} else {
 			// Create new data record
 			createTable();
-			insertEntity();
+			insertEntity(team);
 		}
 	}
+
+	/**
+	 * Send stats.
+	 */
+	@Override
+	public void sendStats() {
+		// Run over all team related sprint data
+		teams.getAll().values().stream().forEach(this::sendStats);
+	}
+
 }

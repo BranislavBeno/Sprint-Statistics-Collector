@@ -3,15 +3,15 @@
  */
 package com.issue.utils;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import org.junit.jupiter.api.Test;
 
@@ -19,10 +19,12 @@ import com.issue.configuration.GlobalParams;
 import com.issue.entity.Feature;
 import com.issue.entity.Story;
 import com.issue.entity.Team;
+import com.issue.iface.Dao4DB;
 import com.issue.iface.FeatureDao;
 import com.issue.iface.StoryDao;
 import com.issue.iface.TeamDao;
 import com.issue.repository.FeatureDaoImpl;
+import com.issue.repository.TeamDao4DBImpl;
 import com.issue.repository.TeamDaoImpl;
 
 /**
@@ -131,8 +133,13 @@ class Teams2DBTest {
 		return team;
 	}
 
-	@Test
-	void testPositiveTeamRepoSending() throws IOException {
+	/**
+	 * Send 2 DB.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws SQLException the SQL exception
+	 */
+	private void send2DB() throws IOException, SQLException {
 		// Write into DB
 		GlobalParams globalParams = Utils
 				.provideGlobalParams("src/test/resources/test_positive_application.properties");
@@ -140,18 +147,26 @@ class Teams2DBTest {
 		TeamDao<String, Team> teamsRepo = new TeamDaoImpl();
 		teamsRepo.save(provideTeam("Banana"));
 		teamsRepo.save(provideTeam("Apple"));
-		Teams2DB.sendStats(teamsRepo, globalParams);
 
-		assertThat(teamsRepo.getAll().size()).isEqualTo(2);
+		// Get a connection to database
+		try (Connection conn = DriverManager.getConnection(globalParams.getDbUri(), globalParams.getDbUsername(),
+				globalParams.getDbPassword());) {
+
+			// Create new team's database repository object
+			Dao4DB teamsDao = new TeamDao4DBImpl(conn, teamsRepo, globalParams.getSprintLabel());
+			// Send teams repository to data base
+			teamsDao.sendStats();
+		}
 	}
 
+	/**
+	 * Test positive team repo sending.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws SQLException the SQL exception
+	 */
 	@Test
-	void testPrivateConstructorsForCodeCoverage() throws NoSuchMethodException {
-		Class<Teams2DB> clazz = Teams2DB.class;
-		Constructor<?>[] constructors = clazz.getDeclaredConstructors();
-		for (Constructor<?> constructor : constructors) {
-			constructor.setAccessible(true);
-			assertThrows(InvocationTargetException.class, constructor::newInstance);
-		}
+	void testPositiveTeamRepoSending() throws IOException, SQLException {
+		assertThrows(SQLException.class, () -> send2DB());
 	}
 }
