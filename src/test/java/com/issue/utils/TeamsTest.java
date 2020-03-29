@@ -77,7 +77,7 @@ class TeamsTest {
 		// Get teams
 		TeamDao<String, Team> teams = Teams.createTeamRepo(globalParams);
 
-		assertThat(globalParams.getOutputFileName4Xlsx()).isNull();
+		assertThat(globalParams.getOutputFileName4Xlsx()).isEqualTo("null.xlsx");
 		assertThat(teams).isNull();
 	}
 
@@ -95,7 +95,7 @@ class TeamsTest {
 		// Get teams
 		TeamDao<String, Team> teams = Teams.createTeamRepo(globalParams);
 
-		assertThat(globalParams.getOutputFileName4Xlsx()).isBlank();
+		assertThat(globalParams.getOutputFileName4Xlsx()).isEqualTo("null.xlsx");
 		assertThat(teams.getAll().size()).isEqualTo(0);
 	}
 
@@ -114,7 +114,7 @@ class TeamsTest {
 		// Get teams
 		TeamDao<String, Team> teams = Teams.createTeamRepo(globalParams);
 
-		assertThat(globalParams.getOutputFileName4Xlsx()).isEqualTo("test.xlsx");
+		assertThat(globalParams.getOutputFileName4Xlsx()).isEqualTo("Test.xlsx");
 		assertThat(teams.getAll().size()).isEqualTo(2);
 	}
 

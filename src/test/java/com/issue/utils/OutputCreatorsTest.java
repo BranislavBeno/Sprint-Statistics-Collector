@@ -41,22 +41,6 @@ class OutputCreatorsTest {
 	}
 
 	/**
-	 * Test negative xlsx output not defined file.
-	 *
-	 * @throws IOException          Signals that an I/O exception has occurred.
-	 * @throws InterruptedException the interrupted exception
-	 */
-	@Test
-	void testNegativeXlsxOutputNotDefinedFile() throws IOException, InterruptedException {
-		// Provide global parameters
-		GlobalParams globalParams = Utils
-				.provideGlobalParams("src/test/resources/test_negative1_application.properties");
-
-		assertThrows(IllegalArgumentException.class, () -> OutputCreators.createXlsxOutput(globalParams,
-				new TeamDaoImpl(), new SprintDaoImpl(), new EngineerDaoImpl()));
-	}
-
-	/**
 	 * Test negative xlsx output empty file name.
 	 *
 	 * @throws IOException          Signals that an I/O exception has occurred.
