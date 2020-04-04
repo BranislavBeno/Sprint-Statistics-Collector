@@ -22,6 +22,9 @@ public class Team {
 	/** The team name. */
 	private String teamName;
 
+	/** The sprint label. */
+	private String sprintLabel;
+
 	/** The team members. */
 	private Set<String> teamMembers;
 
@@ -77,9 +80,11 @@ public class Team {
 	 * Instantiates a new team impl.
 	 *
 	 * @param teamName the team name
+	 * @param sprintLabel the sprint label
 	 */
-	public Team(String teamName) {
+	public Team(final String teamName, final String sprintLabel) {
 		this.teamName = Optional.ofNullable(teamName).orElseThrow();
+		this.sprintLabel = Optional.ofNullable(sprintLabel).orElseThrow();
 	}
 
 	/**
@@ -87,8 +92,17 @@ public class Team {
 	 *
 	 * @return the team name
 	 */
-	public Optional<String> getTeamName() {
-		return Optional.ofNullable(teamName);
+	public String getTeamName() {
+		return teamName;
+	}
+
+	/**
+	 * Gets the sprint label.
+	 *
+	 * @return the sprint label
+	 */
+	public String getSprintLabel() {
+		return sprintLabel;
 	}
 
 	/**

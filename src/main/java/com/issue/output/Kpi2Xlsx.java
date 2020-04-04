@@ -46,22 +46,25 @@ public class Kpi2Xlsx {
 
 		// Create column with captions
 		OutputCreators.createCaptionColumn(workbook, sheetIdx,
-				List.of("", "Delta number SP", "Finished SP percentage", "Not closed high prior stories"));
+				List.of("", "Sprint", "Delta number SP", "Finished SP percentage", "Not closed high prior stories"));
 
 		// Initialize column
 		int colIdx = 1;
 		for (Team team : dao.getAll().values()) {
 			// Row 0 - Team name
-			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, 0, team.getTeamName().orElse(""));
+			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, 0, team.getTeamName());
 
-			// Row 1 - Delta number SP
-			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 1, team.getDeltaStoryPoints());
+			// Row 1 - Sprint label
+			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, 1, team.getSprintLabel());
 
-			// Row 2 - Finished SP percentage
-			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 2, team.getPlannedStoryPointsClosed());
+			// Row 2 - Delta number SP
+			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 2, team.getDeltaStoryPoints());
 
-			// Row 3 - Not closed high prior stories
-			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 3, team.getNotClosedHighPriorStoriesCount());
+			// Row 3 - Finished SP percentage
+			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 3, team.getPlannedStoryPointsClosed());
+
+			// Row 4 - Not closed high prior stories
+			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 4, team.getNotClosedHighPriorStoriesCount());
 
 			colIdx++;
 		}

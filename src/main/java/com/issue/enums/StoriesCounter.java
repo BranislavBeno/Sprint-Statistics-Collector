@@ -167,7 +167,7 @@ public enum StoriesCounter implements Countable {
 						Team team = teamsRepo.getAll().get(teamName);
 
 						// Set sprint id for query pairing
-						String sprintId = sprintLabel + " " + team.getTeamName().orElse("");
+						String sprintId = sprintLabel + " " + team.getTeamName();
 
 						// Set story points count planned at sprint start
 						// subtract story points count for stories added after sprint start

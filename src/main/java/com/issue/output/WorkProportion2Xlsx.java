@@ -34,7 +34,7 @@ public class WorkProportion2Xlsx {
 	 * Creates the worksheet.
 	 *
 	 * @param workbook the workbook
-	 * @param dao the dao
+	 * @param dao      the dao
 	 * @param sheetIdx the sheet idx
 	 */
 	public static void createWorksheet(Workbook workbook, final TeamDao<String, Team> dao, final int sheetIdx) {
@@ -45,19 +45,22 @@ public class WorkProportion2Xlsx {
 		Sheet sheet = workbook.createSheet(sheetName);
 
 		// Create column with captions
-		OutputCreators.createCaptionColumn(workbook, sheetIdx, List.of("", "Stories SP", "Bugs SP"));
+		OutputCreators.createCaptionColumn(workbook, sheetIdx, List.of("", "Sprint", "Stories SP", "Bugs SP"));
 
 		// Initialize column
 		int colIdx = 1;
 		for (Team team : dao.getAll().values()) {
 			// Row 0 - Team name
-			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, 0, team.getTeamName().orElse(""));
+			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, 0, team.getTeamName());
 
-			// Row 1 - Stories SP
-			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 1, team.getFinishedStoriesSPSum());
+			// Row 1 - Sprint label
+			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, 1, team.getSprintLabel());
 
-			// Row 2 - Bugs SP
-			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 2, team.getFinishedBugsSPSum());
+			// Row 2 - Stories SP
+			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 2, team.getFinishedStoriesSPSum());
+
+			// Row 3 - Bugs SP
+			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 3, team.getFinishedBugsSPSum());
 
 			colIdx++;
 		}

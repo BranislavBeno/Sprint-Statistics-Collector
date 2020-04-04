@@ -45,22 +45,26 @@ public class SprintProgress2Xlsx {
 		Sheet sheet = workbook.createSheet(sheetName);
 
 		// Create column with captions
-		OutputCreators.createCaptionColumn(workbook, sheetIdx, List.of("", "ToDo SP", "In progress SP", "Done SP"));
+		OutputCreators.createCaptionColumn(workbook, sheetIdx,
+				List.of("", "Sprint", "ToDo SP", "In progress SP", "Done SP"));
 
 		// Initialize column
 		int colIdx = 1;
 		for (Team team : dao.getAll().values()) {
 			// Row 0 - Team name
-			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, 0, team.getTeamName().orElse(""));
+			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, 0, team.getTeamName());
 
-			// Row 1 - Delta number SP
-			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 1, team.getToDoStoryPointsSum());
+			// Row 1 - Team name
+			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, 1, team.getSprintLabel());
 
-			// Row 2 - Finished SP percentage
-			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 2, team.getInProgressStoryPointsSum());
+			// Row 2 - Delta number SP
+			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 2, team.getToDoStoryPointsSum());
 
-			// Row 3 - Finished story points
-			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 3, team.getFinishedStoryPointsSum());
+			// Row 3 - Finished SP percentage
+			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 3, team.getInProgressStoryPointsSum());
+
+			// Row 4 - Finished story points
+			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 4, team.getFinishedStoryPointsSum());
 
 			colIdx++;
 		}

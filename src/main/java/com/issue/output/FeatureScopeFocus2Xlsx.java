@@ -46,8 +46,8 @@ public class FeatureScopeFocus2Xlsx {
 		Sheet sheet = workbook.createSheet(sheetName);
 
 		// Create column with captions
-		OutputCreators.createCaptionColumn(workbook, sheetIdx, List.of("", "Finished Basic SP", "Finished Advanced SP",
-				"Finished Comercial SP", "Finished Future SP"));
+		OutputCreators.createCaptionColumn(workbook, sheetIdx, List.of("", "Sprint", "Finished Basic SP",
+				"Finished Advanced SP", "Finished Comercial SP", "Finished Future SP"));
 
 		// Initialize column
 		int colIdx = 1;
@@ -56,9 +56,12 @@ public class FeatureScopeFocus2Xlsx {
 			int rowIdx = 0;
 
 			// Row 0 - Team name
-			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, rowIdx++, team.getTeamName().orElse(""));
+			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, rowIdx++, team.getTeamName());
 
-			// Rows 1 - 4
+			// Row 1 - Sprint label
+			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, rowIdx++, team.getSprintLabel());
+
+			// Rows 2 - 5
 			final int cIdx = colIdx;
 			final int rIdx = rowIdx;
 			team.getFinishedStoryPoints().ifPresent(points -> {

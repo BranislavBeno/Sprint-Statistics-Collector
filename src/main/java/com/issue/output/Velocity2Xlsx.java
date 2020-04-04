@@ -46,25 +46,28 @@ public class Velocity2Xlsx {
 
 		// Create column with captions
 		OutputCreators.createCaptionColumn(workbook, sheetIdx,
-				List.of("", "Dev #", "Sprint begin SP", "Planned SP", "Finished SP"));
+				List.of("", "Sprint", "Dev #", "Sprint begin SP", "Planned SP", "Finished SP"));
 
 		// Initialize column
 		int colIdx = 1;
 		for (Team team : dao.getAll().values()) {
 			// Row 0 - Team name
-			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, 0, team.getTeamName().orElse(""));
+			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, 0, team.getTeamName());
 
-			// Row 1 - Team member count
-			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 1, team.getTeamMemberCount());
+			// Row 1 - Sprint label
+			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, 1, team.getSprintLabel());
 
-			// Row 2 - Story points planned on sprint begin
-			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 2, team.getOnBeginPlannedStoryPointsSum());
+			// Row 2 - Team member count
+			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 2, team.getTeamMemberCount());
 
-			// Row 3 - Story points planned on sprint end
-			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 3, team.getOnEndPlannedStoryPointsSum());
+			// Row 3 - Story points planned on sprint begin
+			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 3, team.getOnBeginPlannedStoryPointsSum());
 
-			// Row 4 - Finished story points
-			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 4, team.getFinishedStoryPointsSum());
+			// Row 4 - Story points planned on sprint end
+			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 4, team.getOnEndPlannedStoryPointsSum());
+
+			// Row 5 - Finished story points
+			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 5, team.getFinishedStoryPointsSum());
 
 			colIdx++;
 		}

@@ -46,25 +46,28 @@ public class TimeMetrics2Xlsx {
 
 		// Create column with captions
 		OutputCreators.createCaptionColumn(workbook, sheetIdx,
-				List.of("", "Capacity", "Estimation", "Planned", "Spent"));
+				List.of("", "Sprint", "Capacity", "Estimation", "Planned", "Spent"));
 
 		// Initialize column
 		int colIdx = 1;
 		for (Team team : dao.getAll().values()) {
 			// Row 0 - Team name
-			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, 0, team.getTeamName().orElse(""));
+			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, 0, team.getTeamName());
 
-			// Row 1 - Capacity (always zero)
-			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 1, 0);
+			// Row 1 - Sprint label
+			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, 1, team.getSprintLabel());
 
-			// Row 2 - Time estimation
-			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 2, team.getTimeEstimation());
+			// Row 2 - Capacity (always zero)
+			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 2, 0);
 
-			// Row 3 - Time plan
-			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 3, team.getTimePlanned());
+			// Row 3 - Time estimation
+			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 3, team.getTimeEstimation());
 
-			// Row 4 - Time spent
-			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 4, team.getTimeSpent());
+			// Row 4 - Time plan
+			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 4, team.getTimePlanned());
+
+			// Row 5 - Time spent
+			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 5, team.getTimeSpent());
 
 			colIdx++;
 		}

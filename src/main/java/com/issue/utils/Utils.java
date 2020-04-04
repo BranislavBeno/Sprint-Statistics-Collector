@@ -320,9 +320,9 @@ public class Utils {
 	/**
 	 * Send stats 2 DB.
 	 *
-	 * @param teams the teams
-	 * @param sprints the sprints
-	 * @param engineers the engineers
+	 * @param teams        the teams
+	 * @param sprints      the sprints
+	 * @param engineers    the engineers
 	 * @param globalParams the global params
 	 */
 	private static void sendStats2DB(TeamDao<String, Team> teams, SprintDao<String, Sprint> sprints,
@@ -333,7 +333,7 @@ public class Utils {
 				globalParams.getDbPassword());) {
 
 			// Create new team's database repository object
-			Dao4DB teamsDao = new TeamDao4DBImpl(conn, teams, globalParams.getSprintLabel());
+			Dao4DB teamsDao = new TeamDao4DBImpl(conn, teams);
 			// Send teams repository to data base
 			teamsDao.sendStats();
 

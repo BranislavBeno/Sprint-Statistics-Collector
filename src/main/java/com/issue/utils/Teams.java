@@ -49,10 +49,12 @@ public class Teams {
 	/**
 	 * Creates the from querires.
 	 *
+	 * @param sprinLabel the sprin label
 	 * @param setOfQuries the set of quries
 	 * @param teamsRepo   the teams repo
 	 */
-	private static void createFromQuerires(final Set<String> setOfQuries, TeamDao<String, Team> teamsRepo) {
+	private static void createFromQuerires(final String sprinLabel, final Set<String> setOfQuries,
+			TeamDao<String, Team> teamsRepo) {
 		// Run through queries for finished sprint(s)
 		for (String query : setOfQuries) {
 
@@ -62,7 +64,7 @@ public class Teams {
 
 			if (matcher.find()) {
 				// Set team name
-				Team team = new Team(matcher.group(1));
+				Team team = new Team(matcher.group(1), sprinLabel);
 
 				// Save particular team into repo
 				teamsRepo.save(team);
@@ -73,17 +75,19 @@ public class Teams {
 	/**
 	 * Creates the empty team repo.
 	 *
+	 * @param sprinLabel the sprin label
 	 * @param setOfQuries the set of quries
 	 * @param repo        the repo
 	 * @return the team dao
 	 */
-	public static TeamDao<String, Team> createEmptyTeamRepo(final Set<String> setOfQuries, TeamDao<String, Team> repo) {
+	public static TeamDao<String, Team> createEmptyTeamRepo(final String sprinLabel, final Set<String> setOfQuries,
+			TeamDao<String, Team> repo) {
 		if (setOfQuries != null) {
 			// Create new repo for teams
 			TeamDao<String, Team> teamsRepo = new TeamDaoImpl();
 
 			// Create team repo from queries
-			createFromQuerires(setOfQuries, teamsRepo);
+			createFromQuerires(sprinLabel, setOfQuries, teamsRepo);
 
 			// Enhance new repo with existing teams
 			Optional.ofNullable(repo).ifPresent(r -> r.getAll().values().forEach(teamsRepo::save));
@@ -101,20 +105,23 @@ public class Teams {
 	 * @return the team dao
 	 */
 	public static TeamDao<String, Team> initializeTeamRepo(final GlobalParams globalParams) {
+		// Set sprint label
+		String sprintLabel = globalParams.getSprintLabel();
+
 		// Create empty repo for teams from completed stories queries
-		TeamDao<String, Team> teamsRepo = createEmptyTeamRepo(globalParams.getCompletedSprints(), null);
+		TeamDao<String, Team> teamsRepo = createEmptyTeamRepo(sprintLabel, globalParams.getCompletedSprints(), null);
 
 		// Create empty repo for teams from not completed stories queries
-		teamsRepo = createEmptyTeamRepo(globalParams.getNotCompletedSprints(), teamsRepo);
+		teamsRepo = createEmptyTeamRepo(sprintLabel, globalParams.getNotCompletedSprints(), teamsRepo);
 
 		// Create empty repo for teams from stories completed outside sprint queries
-		teamsRepo = createEmptyTeamRepo(globalParams.getCompletedOutsideSprints(), teamsRepo);
+		teamsRepo = createEmptyTeamRepo(sprintLabel, globalParams.getCompletedOutsideSprints(), teamsRepo);
 
 		// Create empty repo for teams from stories added after sprint started queries
-		teamsRepo = createEmptyTeamRepo(globalParams.getAddedAfterSprintStart(), teamsRepo);
+		teamsRepo = createEmptyTeamRepo(sprintLabel, globalParams.getAddedAfterSprintStart(), teamsRepo);
 
 		// Create empty repo for teams from stories removed after sprint started queries
-		teamsRepo = createEmptyTeamRepo(globalParams.getRemovedAfterSprintStart(), teamsRepo);
+		teamsRepo = createEmptyTeamRepo(sprintLabel, globalParams.getRemovedAfterSprintStart(), teamsRepo);
 
 		return teamsRepo;
 	}

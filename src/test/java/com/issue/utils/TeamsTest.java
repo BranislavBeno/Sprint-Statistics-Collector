@@ -132,7 +132,7 @@ class TeamsTest {
 
 		globalParams.setOutputFileName4Xlsx("teams.xlsx");
 
-		Team team = new Team("Pear");
+		Team team = new Team("Pear", globalParams.getSprintLabel());
 		team.addTeamMembers(Set.of("John Doe"));
 		Map<FeatureScope, Integer> storyPoints = new EnumMap<>(FeatureScope.class);
 		for (FeatureScope scope : FeatureScope.values())

@@ -221,7 +221,7 @@ class StoriesTest {
 		StoryDao<Story> stories = Stories.extractStories(storiesJson);
 
 		// Create new team
-		Team team = new Team("Banana");
+		Team team = new Team("Banana", "Test");
 
 		// Get team member count
 		Teams.collectTeamMembers(stories, team);

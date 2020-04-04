@@ -103,9 +103,6 @@ public class TeamDao4DBImpl implements Dao4DB {
 	/** The teams. */
 	private final TeamDao<String, Team> teams;
 
-	/** The sprint. */
-	private final String sprint;
-
 	/** The table. */
 	private String table = null;
 
@@ -113,12 +110,10 @@ public class TeamDao4DBImpl implements Dao4DB {
 	 * Instantiates a new team dao 4 DB impl.
 	 *
 	 * @param connection the connection
-	 * @param teams the teams
-	 * @param sprint     the sprint
+	 * @param teams      the teams
 	 */
-	public TeamDao4DBImpl(final Connection connection, final TeamDao<String, Team> teams, final String sprint) {
+	public TeamDao4DBImpl(final Connection connection, final TeamDao<String, Team> teams) {
 		this.connection = connection;
-		this.sprint = sprint;
 		this.teams = teams;
 	}
 
@@ -257,8 +252,8 @@ public class TeamDao4DBImpl implements Dao4DB {
 	 * @throws SQLException the SQL exception
 	 */
 	private void params4Insertion(PreparedStatement stmt, Team team) throws SQLException {
-		stmt.setString(1, sprint);
-		stmt.setString(2, team.getTeamName().orElse(""));
+		stmt.setString(1, team.getSprintLabel());
+		stmt.setString(2, team.getTeamName());
 		stmt.setInt(3, team.getTeamMemberCount());
 		stmt.setInt(4, team.getOnBeginPlannedStoryPointsSum());
 		stmt.setInt(5, team.getOnEndPlannedStoryPointsSum());
@@ -285,8 +280,8 @@ public class TeamDao4DBImpl implements Dao4DB {
 	 * @param team the team
 	 * @throws SQLException the SQL exception
 	 */
-	private void params4Update(PreparedStatement stmt, Team team) throws SQLException {
-		stmt.setString(1, team.getTeamName().orElse(""));
+	private void params4Update(PreparedStatement stmt, final Team team) throws SQLException {
+		stmt.setString(1, team.getTeamName());
 		stmt.setInt(2, team.getTeamMemberCount());
 		stmt.setInt(3, team.getOnBeginPlannedStoryPointsSum());
 		stmt.setInt(4, team.getOnEndPlannedStoryPointsSum());
@@ -303,16 +298,17 @@ public class TeamDao4DBImpl implements Dao4DB {
 		stmt.setDouble(15, team.getDeltaStoryPoints());
 		stmt.setDouble(16, team.getPlannedStoryPointsClosed());
 		stmt.setString(17, finishedSP2Json(team));
-		stmt.setString(18, sprint);
+		stmt.setString(18, team.getSprintLabel());
 		stmt.addBatch();
 	}
 
 	/**
 	 * Checks if is table row available.
 	 *
+	 * @param sprint the sprint
 	 * @return true, if is table row available
 	 */
-	private boolean isTableRowAvailable() {
+	private boolean isTableRowAvailable(final String sprint) {
 		logger.info("Checking data availbility for sprint '{}' in table '{}'.", sprint, table);
 
 		// Check particular data availability
@@ -365,7 +361,7 @@ public class TeamDao4DBImpl implements Dao4DB {
 	 */
 	private void insertEntity(final Team team) {
 		// Insert a new sprint data
-		logger.info("Inserting a new sprint data for '{}' into table '{}'.", sprint, table);
+		logger.info("Inserting a new sprint data for '{}' into table '{}'.", team.getSprintLabel(), table);
 
 		// Create statement for data insertion
 		String insertDataQuery = statment4Insertion();
@@ -397,7 +393,7 @@ public class TeamDao4DBImpl implements Dao4DB {
 	 */
 	private void updateEntity(final Team team) {
 		// Update existing sprint data
-		logger.info("Updating existing data for '{}' in table '{}'.", sprint, table);
+		logger.info("Updating existing data for '{}' in table '{}'.", team.getSprintLabel(), table);
 
 		// Create statement for data updating
 		String updateDataQuery = statement4Update();
@@ -429,10 +425,10 @@ public class TeamDao4DBImpl implements Dao4DB {
 	 */
 	private void sendStats(final Team team) {
 		// Set database table name
-		this.table = "team_" + team.getTeamName().orElse("unknown").toLowerCase();
+		this.table = "team_" + team.getTeamName().toLowerCase();
 
 		// Save sprint data for particular team
-		if (isTableRowAvailable()) {
+		if (isTableRowAvailable(team.getSprintLabel())) {
 			// Update existing data record
 			updateEntity(team);
 		} else {

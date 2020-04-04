@@ -33,6 +33,6 @@ public class TeamDaoImpl implements TeamDao<String, Team> {
 	 */
 	@Override
 	public void save(Team theTeam) {
-		teams.put(theTeam.getTeamName().orElseThrow(), theTeam);
+		teams.put(theTeam.getTeamName(), theTeam);
 	}
 }
