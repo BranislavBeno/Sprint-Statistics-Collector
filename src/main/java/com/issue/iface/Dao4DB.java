@@ -5,11 +5,15 @@ package com.issue.iface;
 
 /**
  * The Interface Dao4DB.
+ *
+ * @param <T> the generic type
  */
-public interface Dao4DB {
+public interface Dao4DB<T> {
 
 	/**
 	 * Send stats.
+	 *
+	 * @param t the t
 	 */
-	void sendStats();
+	void saveOrUpdate(final T t);
 }

@@ -78,7 +78,7 @@ class UtilsTest {
 	/**
 	 * Provide team.
 	 *
-	 * @param teamName the team name
+	 * @param teamName    the team name
 	 * @param sprintLabel the sprint label
 	 * @return the team
 	 * @throws IOException Signals that an I/O exception has occurred.
@@ -139,6 +139,20 @@ class UtilsTest {
 	}
 
 	/**
+	 * Prepare teams.
+	 *
+	 * @param globalParams the global params
+	 * @return the team dao
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	private TeamDao<String, Team> prepareTeams(GlobalParams globalParams) throws IOException {
+		TeamDao<String, Team> teamsRepo = new TeamDaoImpl();
+		teamsRepo.save(provideTeam("Banana", globalParams.getSprintLabel()));
+		teamsRepo.save(provideTeam("Apple", globalParams.getSprintLabel()));
+		return teamsRepo;
+	}
+
+	/**
 	 * Send to persistent database.
 	 *
 	 * @throws IOException  Signals that an I/O exception has occurred.
@@ -148,25 +162,37 @@ class UtilsTest {
 		// Write into DB
 		GlobalParams globalParams = Utils.provideGlobalParams("src/test/resources/test_real_application.properties");
 
-		TeamDao<String, Team> teamsRepo = new TeamDaoImpl();
-		teamsRepo.save(provideTeam("Banana", globalParams.getSprintLabel()));
-		teamsRepo.save(provideTeam("Apple", globalParams.getSprintLabel()));
+		// Prepare teams
+		TeamDao<String, Team> teams = prepareTeams(globalParams);
 
 		// Get a connection to database
 		try (Connection conn = DriverManager.getConnection(globalParams.getDbUri(), globalParams.getDbUsername(),
 				globalParams.getDbPassword());) {
 
-			// Create new team's database repository object
-			Dao4DB teamsDao = new TeamDao4DBImpl(conn, teamsRepo);
-			// Send teams repository to data base
-			teamsDao.sendStats();
+			sendTeams2DB(teams, conn);
 		}
+	}
+
+	/**
+	 * Send teams 2 DB.
+	 *
+	 * @param teams the teams
+	 * @param conn the conn
+	 */
+	private void sendTeams2DB(TeamDao<String, Team> teams, Connection conn) {
+		teams.getAll().values().stream().forEach(team -> {
+			// Create new team's database repository object
+			Dao4DB<Team> teamDao = new TeamDao4DBImpl(conn);
+
+			// Send team repository to data base
+			teamDao.saveOrUpdate(team);
+		});
 	}
 
 	/**
 	 * Send 2 in memory DB.
 	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException  Signals that an I/O exception has occurred.
 	 * @throws SQLException the SQL exception
 	 */
 	private void send2InMemoryDB() throws IOException, SQLException {
@@ -174,18 +200,13 @@ class UtilsTest {
 		GlobalParams globalParams = Utils
 				.provideGlobalParams("src/test/resources/test_positive_application.properties");
 
-		TeamDao<String, Team> teamsRepo = new TeamDaoImpl();
-		teamsRepo.save(provideTeam("Banana", globalParams.getSprintLabel()));
-		teamsRepo.save(provideTeam("Apple", globalParams.getSprintLabel()));
+		TeamDao<String, Team> teams = prepareTeams(globalParams);
 
 		// Get a connection to database
 		try (Connection conn = DriverManager.getConnection(globalParams.getDbUri(), globalParams.getDbUsername(),
 				globalParams.getDbPassword());) {
 
-			// Create new team's database repository object
-			Dao4DB teamsDao = new TeamDao4DBImpl(conn, teamsRepo);
-			// Send teams repository to data base
-			teamsDao.sendStats();
+			sendTeams2DB(teams, conn);
 		}
 	}
 
@@ -203,7 +224,7 @@ class UtilsTest {
 	/**
 	 * Test positive team repo sending 2 in memory DB.
 	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException  Signals that an I/O exception has occurred.
 	 * @throws SQLException the SQL exception
 	 */
 	@Test

@@ -19,14 +19,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.issue.entity.Team;
 import com.issue.enums.FeatureScope;
 import com.issue.iface.Dao4DB;
-import com.issue.iface.TeamDao;
 
 /**
  * The Class TeamDao4DBImpl.
  *
  * @author benito
  */
-public class TeamDao4DBImpl implements Dao4DB {
+public class TeamDao4DBImpl implements Dao4DB<Team> {
 
 	/** The Constant DOUBLE_5_2_DEFAULT_0. */
 	private static final String DOUBLE_5_2_DEFAULT_0 = "DOUBLE(5,2) DEFAULT 0";
@@ -100,9 +99,6 @@ public class TeamDao4DBImpl implements Dao4DB {
 	/** The connection. */
 	private final Connection connection;
 
-	/** The teams. */
-	private final TeamDao<String, Team> teams;
-
 	/** The table. */
 	private String table = null;
 
@@ -110,11 +106,9 @@ public class TeamDao4DBImpl implements Dao4DB {
 	 * Instantiates a new team dao 4 DB impl.
 	 *
 	 * @param connection the connection
-	 * @param teams      the teams
 	 */
-	public TeamDao4DBImpl(final Connection connection, final TeamDao<String, Team> teams) {
+	public TeamDao4DBImpl(final Connection connection) {
 		this.connection = connection;
-		this.teams = teams;
 	}
 
 	/**
@@ -419,11 +413,11 @@ public class TeamDao4DBImpl implements Dao4DB {
 	}
 
 	/**
-	 * Send stats.
+	 * Save or update.
 	 *
 	 * @param team the team
 	 */
-	private void sendStats(final Team team) {
+	public void saveOrUpdate(final Team team) {
 		// Set database table name
 		this.table = "team_" + team.getTeamName().toLowerCase();
 
@@ -437,14 +431,4 @@ public class TeamDao4DBImpl implements Dao4DB {
 			insertEntity(team);
 		}
 	}
-
-	/**
-	 * Send stats.
-	 */
-	@Override
-	public void sendStats() {
-		// Run over all team related sprint data
-		teams.getAll().values().stream().forEach(this::sendStats);
-	}
-
 }
