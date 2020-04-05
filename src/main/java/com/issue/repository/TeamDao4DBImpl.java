@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.EnumMap;
+import java.util.Optional;
 import java.util.StringJoiner;
 
 import org.apache.logging.log4j.LogManager;
@@ -108,7 +109,7 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 	 * @param connection the connection
 	 */
 	public TeamDao4DBImpl(final Connection connection) {
-		this.connection = connection;
+		this.connection = Optional.ofNullable(connection).orElseThrow(IllegalArgumentException::new);
 	}
 
 	/**

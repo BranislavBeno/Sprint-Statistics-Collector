@@ -12,9 +12,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Base64;
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -33,13 +30,12 @@ import com.issue.entity.Sprint;
 import com.issue.entity.Story;
 import com.issue.entity.Team;
 import com.issue.enums.FeatureScope;
-import com.issue.iface.Dao4DB;
 import com.issue.iface.EngineerDao;
 import com.issue.iface.FeatureDao;
 import com.issue.iface.SprintDao;
 import com.issue.iface.StoryDao;
 import com.issue.iface.TeamDao;
-import com.issue.repository.TeamDao4DBImpl;
+import com.issue.jdbc.Send2DB;
 
 /**
  * The Class Utils.
@@ -301,7 +297,8 @@ public class Utils {
 		// Write into DB
 		if (write2DB) {
 			// Send gathered statistics to data base
-			sendStats2DB(teams, sprints, engineers, globalParams);
+			Send2DB send2DB = new Send2DB(globalParams, teams, sprints, engineers);
+			send2DB.sendStats2DB();
 		}
 
 		// Create XLSX output
@@ -315,71 +312,5 @@ public class Utils {
 
 		// Processing finished.
 		logger.info("Processing finished.");
-	}
-
-	/**
-	 * Send teams 2 DB.
-	 *
-	 * @param teams the teams
-	 * @param conn  the conn
-	 */
-	private static void sendTeams2DB(TeamDao<String, Team> teams, Connection conn) {
-		teams.getAll().values().stream().forEach(team -> {
-			// Create new team's database repository object
-			Dao4DB<Team> teamDao = new TeamDao4DBImpl(conn);
-
-			// Send team repository to data base
-			teamDao.saveOrUpdate(team);
-		});
-	}
-
-	/**
-	 * Send sprints 2 DB.
-	 *
-	 * @param sprints the sprints
-	 * @param conn    the conn
-	 */
-	private static void sendSprints2DB(SprintDao<String, Sprint> sprints, Connection conn) {
-		logger.warn("Sending sprints to database not yet implemented.");
-	}
-
-	/**
-	 * Send engineers 2 DB.
-	 *
-	 * @param engineers the engineers
-	 * @param conn      the conn
-	 */
-	private static void sendEngineers2DB(EngineerDao<String, Engineer> engineers, Connection conn) {
-		logger.warn("Sending engineers to database not yet implemented.");
-	}
-
-	/**
-	 * Send stats 2 DB.
-	 *
-	 * @param teams        the teams
-	 * @param sprints      the sprints
-	 * @param engineers    the engineers
-	 * @param globalParams the global params
-	 */
-	private static void sendStats2DB(TeamDao<String, Team> teams, SprintDao<String, Sprint> sprints,
-			EngineerDao<String, Engineer> engineers, GlobalParams globalParams) {
-
-		// Get a connection to database
-		try (Connection conn = DriverManager.getConnection(globalParams.getDbUri(), globalParams.getDbUsername(),
-				globalParams.getDbPassword());) {
-
-			// Send teams repository to data base
-			sendTeams2DB(teams, conn);
-
-			// Send sprints repository to data base
-			sendSprints2DB(sprints, conn);
-
-			// Send engineers repository to data base
-			sendEngineers2DB(engineers, conn);
-
-		} catch (SQLException e) {
-			logger.error("Sending data to database failed!");
-			logger.error("Check whether database is connected.");
-		}
 	}
 }

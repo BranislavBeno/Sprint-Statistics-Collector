@@ -93,27 +93,6 @@ class UtilsTest {
 	}
 
 	/**
-	 * Send 2 in memory DB.
-	 *
-	 * @throws IOException  Signals that an I/O exception has occurred.
-	 * @throws SQLException the SQL exception
-	 */
-	private void send2InMemoryDB() throws IOException, SQLException {
-		// Write into DB
-		GlobalParams globalParams = Utils
-				.provideGlobalParams("src/test/resources/test_positive_application.properties");
-
-		TeamDao<String, Team> teams = prepareTeams(globalParams);
-
-		// Get a connection to database
-		try (Connection conn = DriverManager.getConnection(globalParams.getDbUri(), globalParams.getDbUsername(),
-				globalParams.getDbPassword());) {
-
-			sendTeams2DB(teams, conn);
-		}
-	}
-
-	/**
 	 * Test negative team repo sending to not connected DB.
 	 *
 	 * @throws IOException  Signals that an I/O exception has occurred.
@@ -127,12 +106,25 @@ class UtilsTest {
 	/**
 	 * Test positive team repo sending 2 in memory DB.
 	 *
-	 * @throws IOException  Signals that an I/O exception has occurred.
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws SQLException the SQL exception
 	 */
 	@Test
 	void testPositiveTeamRepoSending2InMemoryDB() throws IOException, SQLException {
-		send2InMemoryDB();
+		// Write into DB
+		GlobalParams globalParams = Utils
+				.provideGlobalParams("src/test/resources/test_positive_application.properties");
+
+		TeamDao<String, Team> teams = prepareTeams(globalParams);
+
+		// Get a connection to database
+		try (Connection conn = DriverManager.getConnection(globalParams.getDbUri(), globalParams.getDbUsername(),
+				globalParams.getDbPassword());) {
+
+			sendTeams2DB(teams, conn);
+		}
+
+		assertThat(teams.getAll().size()).isGreaterThan(0);
 	}
 
 	/**
