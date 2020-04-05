@@ -3,7 +3,6 @@
  */
 package com.issue.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.sql.Connection;
@@ -41,9 +40,9 @@ class TeamDao4DBImplTest {
 	@Mock
 	private PreparedStatement mockedPreparedStatement;
 
-	/** The rs. */
+	/** The mocked result set. */
 	@Mock
-	private ResultSet rs;
+	private ResultSet mockedResultSet;
 
 	/** The team. */
 	private Team team;
@@ -73,7 +72,8 @@ class TeamDao4DBImplTest {
 	}
 
 	/**
-	 * Test negative non existing prepared statement hence no new table row creation.
+	 * Test negative non existing prepared statement hence no new table row
+	 * creation.
 	 *
 	 * @throws SQLException the SQL exception
 	 */
@@ -81,8 +81,8 @@ class TeamDao4DBImplTest {
 	@DisplayName("Test whether non existing prepared statement for database row insertion will be properly handled")
 	public void testNegativeNonExistingPreparedStatementHenceNoNewTableRowCreation() throws SQLException {
 		Mockito.when(mockedConnection.createStatement()).thenReturn(mockedStatement);
-		Mockito.when(mockedStatement.executeQuery(Mockito.anyString())).thenReturn(rs);
-		Mockito.when(rs.first()).thenReturn(false);
+		Mockito.when(mockedStatement.executeQuery(Mockito.anyString())).thenReturn(mockedResultSet);
+		Mockito.when(mockedResultSet.first()).thenReturn(false);
 
 		// Create new team
 		team = new Team("Apple", "First");
@@ -91,11 +91,12 @@ class TeamDao4DBImplTest {
 		dao = new TeamDao4DBImpl(mockedConnection);
 		dao.saveOrUpdate(team);
 
-		assertThat(dao).isNotNull();
+		Mockito.verify(mockedStatement).executeQuery(Mockito.anyString());
 	}
 
 	/**
-	 * Test negative non existing prepared statement hence no existing table row update.
+	 * Test negative non existing prepared statement hence no existing table row
+	 * update.
 	 *
 	 * @throws SQLException the SQL exception
 	 */
@@ -103,8 +104,8 @@ class TeamDao4DBImplTest {
 	@DisplayName("Test whether non existing prepared statement for database row update will be properly handled")
 	public void testNegativeNonExistingPreparedStatementHenceNoExistingTableRowUpdate() throws SQLException {
 		Mockito.when(mockedConnection.createStatement()).thenReturn(mockedStatement);
-		Mockito.when(mockedStatement.executeQuery(Mockito.anyString())).thenReturn(rs);
-		Mockito.when(rs.first()).thenReturn(true);
+		Mockito.when(mockedStatement.executeQuery(Mockito.anyString())).thenReturn(mockedResultSet);
+		Mockito.when(mockedResultSet.first()).thenReturn(true);
 
 		// Create new team
 		team = new Team("Apple", "First");
@@ -113,7 +114,7 @@ class TeamDao4DBImplTest {
 		dao = new TeamDao4DBImpl(mockedConnection);
 		dao.saveOrUpdate(team);
 
-		assertThat(dao).isNotNull();
+		Mockito.verify(mockedStatement).executeQuery(Mockito.anyString());
 	}
 
 	/**
@@ -125,8 +126,8 @@ class TeamDao4DBImplTest {
 	@DisplayName("Test whether database new row insertion will be successfull")
 	public void testPositiveNewTableRowCreation() throws SQLException {
 		Mockito.when(mockedConnection.createStatement()).thenReturn(mockedStatement);
-		Mockito.when(mockedStatement.executeQuery(Mockito.anyString())).thenReturn(rs);
-		Mockito.when(rs.first()).thenReturn(false);
+		Mockito.when(mockedStatement.executeQuery(Mockito.anyString())).thenReturn(mockedResultSet);
+		Mockito.when(mockedResultSet.first()).thenReturn(false);
 
 		Mockito.when(mockedConnection.prepareStatement(Mockito.anyString())).thenReturn(mockedPreparedStatement);
 		Mockito.when(mockedPreparedStatement.executeBatch()).thenReturn(new int[] { 1 });
@@ -138,7 +139,7 @@ class TeamDao4DBImplTest {
 		dao = new TeamDao4DBImpl(mockedConnection);
 		dao.saveOrUpdate(team);
 
-		assertThat(dao).isNotNull();
+		Mockito.verify(mockedPreparedStatement).executeBatch();
 	}
 
 	/**
@@ -150,21 +151,21 @@ class TeamDao4DBImplTest {
 	@DisplayName("Test whether database existing row update will be successfull")
 	public void testPositiveExistingTableRowUpdate() throws SQLException {
 		Mockito.when(mockedConnection.createStatement()).thenReturn(mockedStatement);
-		Mockito.when(mockedStatement.executeQuery(Mockito.anyString())).thenReturn(rs);
-		Mockito.when(rs.first()).thenReturn(true);
+		Mockito.when(mockedStatement.executeQuery(Mockito.anyString())).thenReturn(mockedResultSet);
+		Mockito.when(mockedResultSet.first()).thenReturn(true);
 
 		// Create new team
 		team = new Team("Apple", "First");
 
-		Mockito.when(rs.getString(1)).thenReturn(team.getSprintLabel());
+		Mockito.when(mockedResultSet.getString(1)).thenReturn(team.getSprintLabel());
 
 		Mockito.when(mockedConnection.prepareStatement(Mockito.anyString())).thenReturn(mockedPreparedStatement);
-		Mockito.when(mockedPreparedStatement.executeBatch()).thenReturn(new int[] { 1 });
+		Mockito.when(mockedPreparedStatement.executeBatch()).thenReturn(null);
 
 		// Create new team repo
 		dao = new TeamDao4DBImpl(mockedConnection);
 		dao.saveOrUpdate(team);
 
-		assertThat(dao).isNotNull();
+		Mockito.verify(mockedPreparedStatement).executeBatch();
 	}
 }
