@@ -61,9 +61,9 @@ dependencies {
   testCompileOnly "org.apiguardian:apiguardian-api:1.0.0"
 }
 
-def versionMajor = 1
+def versionMajor = 2
 def versionMinor = 0
-def versionPatch = 1
+def versionPatch = 0
 def versionBuild = 2
 version = "R${versionMajor}.${versionMinor}.${versionPatch}"
 
