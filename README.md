@@ -1,8 +1,8 @@
 # Sprint statistics
 
-| GitLab-CI | Test coverage |
-| --- | --- |
-| [![pipeline status](https://gitlab.websupport.sk/biea/sprint-statistics/badges/master/pipeline.svg)](https://gitlab.websupport.sk/biea/sprint-statistics/commits/master) | [![coverage report](https://gitlab.websupport.sk/biea/sprint-statistics/badges/master/coverage.svg)](https://gitlab.websupport.sk/biea/sprint-statistics/commits/master) |
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![pipeline status](https://gitlab.websupport.sk/biea/sprint-statistics/badges/master/pipeline.svg)](https://gitlab.websupport.sk/biea/sprint-statistics/commits/master)
+[![coverage report](https://gitlab.websupport.sk/biea/sprint-statistics/badges/master/coverage.svg)](https://gitlab.websupport.sk/biea/sprint-statistics/commits/master)
 
 
 Abstract
