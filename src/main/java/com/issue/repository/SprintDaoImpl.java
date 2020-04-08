@@ -33,6 +33,6 @@ public class SprintDaoImpl implements SprintDao<String, Sprint> {
 	 */
 	@Override
 	public void save(Sprint theSprint) {
-		sprints.put(theSprint.getSprintLabel().orElseThrow(), theSprint);
+		sprints.put(theSprint.getSprintLabel(), theSprint);
 	}
 }

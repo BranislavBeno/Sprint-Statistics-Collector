@@ -44,7 +44,7 @@ public class RefinementFeatureScope2Xlsx {
 		List<Sprint> values = dao.getAll().values().stream().collect(Collectors.toList());
 
 		// Sort sprints according to sprint label
-		Collections.sort(values, (a, b) -> a.getSprintLabel().orElse("").compareTo(b.getSprintLabel().orElse("")));
+		Collections.sort(values, (a, b) -> a.getSprintLabel().compareTo(b.getSprintLabel()));
 
 		return List.copyOf(values);
 	}
@@ -77,7 +77,7 @@ public class RefinementFeatureScope2Xlsx {
 			int rowIdx = 0;
 
 			// Row 0 - Sprint label
-			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, rowIdx++, sprint.getSprintLabel().orElse(""));
+			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, rowIdx++, sprint.getSprintLabel());
 
 			// Rows 1 - 4
 			final int cIdx = colIdx;

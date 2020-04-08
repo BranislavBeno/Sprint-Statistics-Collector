@@ -33,8 +33,8 @@ public class Sprint {
 	 *
 	 * @return the sprintLabel
 	 */
-	public Optional<String> getSprintLabel() {
-		return Optional.ofNullable(sprintLabel);
+	public String getSprintLabel() {
+		return sprintLabel;
 	}
 
 	/**
