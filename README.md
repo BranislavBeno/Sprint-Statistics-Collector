@@ -1,8 +1,9 @@
 # Sprint statistics
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![pipeline status](https://gitlab.websupport.sk/biea/sprint-statistics/badges/master/pipeline.svg)](https://gitlab.websupport.sk/biea/sprint-statistics/commits/master)
 [![coverage report](https://gitlab.websupport.sk/biea/sprint-statistics/badges/master/coverage.svg)](https://gitlab.websupport.sk/biea/sprint-statistics/commits/master)
+[![Gradle](https://img.shields.io/badge/gradle-v6.3-blue)](https://img.shields.io/badge/gradle-v6.3-blue)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 
 Abstract
