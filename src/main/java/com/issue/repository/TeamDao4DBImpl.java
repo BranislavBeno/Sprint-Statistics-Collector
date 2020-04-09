@@ -246,7 +246,7 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 	 * @param team the team
 	 * @throws SQLException the SQL exception
 	 */
-	private void params4Insertion(PreparedStatement stmt, Team team) throws SQLException {
+	private void params4Insertion(PreparedStatement stmt, final Team team) throws SQLException {
 		stmt.setString(1, team.getSprintLabel());
 		stmt.setString(2, team.getTeamName());
 		stmt.setInt(3, team.getTeamMemberCount());
