@@ -1,7 +1,7 @@
 package com.issue.repository;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.issue.entity.Sprint;
 import com.issue.iface.SprintDao;
@@ -14,7 +14,7 @@ import com.issue.iface.SprintDao;
 public class SprintDaoImpl implements SprintDao<String, Sprint> {
 
 	/** The sprints. */
-	private Map<String, Sprint> sprints = new HashMap<>();
+	private Map<String, Sprint> sprints = new TreeMap<>();
 
 	/**
 	 * Gets the all.

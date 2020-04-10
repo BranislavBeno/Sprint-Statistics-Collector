@@ -19,6 +19,7 @@ import com.issue.iface.Dao4DB;
 import com.issue.iface.EngineerDao;
 import com.issue.iface.SprintDao;
 import com.issue.iface.TeamDao;
+import com.issue.repository.SprintDao4DBImpl;
 import com.issue.repository.TeamDao4DBImpl;
 
 /**
@@ -78,7 +79,13 @@ public class Send2DB {
 	 * @param conn the conn
 	 */
 	private void sendSprints2DB(Connection conn) {
-		logger.warn("Sending sprints to database not yet implemented.");
+		sprints.getAll().values().stream().forEach(sprint -> {
+			// Create new sprint's database repository object
+			Dao4DB<Sprint> sprintDao = new SprintDao4DBImpl(conn);
+
+			// Send team repository to data base
+			sprintDao.saveOrUpdate(sprint);
+		});
 	}
 
 	/**
