@@ -20,10 +20,10 @@ import com.issue.utils.Stories;
 public class Team {
 
 	/** The team name. */
-	private String teamName;
+	private final String teamName;
 
 	/** The sprint label. */
-	private String sprintLabel;
+	private final String sprintLabel;
 
 	/** The team members. */
 	private Set<String> teamMembers;
@@ -79,7 +79,7 @@ public class Team {
 	/**
 	 * Instantiates a new team impl.
 	 *
-	 * @param teamName the team name
+	 * @param teamName    the team name
 	 * @param sprintLabel the sprint label
 	 */
 	public Team(final String teamName, final String sprintLabel) {

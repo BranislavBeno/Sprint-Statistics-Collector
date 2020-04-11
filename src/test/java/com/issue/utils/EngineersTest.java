@@ -48,7 +48,7 @@ class EngineersTest {
 	/**
 	 * Test negative engineer list extraction with false properties.
 	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException          Signals that an I/O exception has occurred.
 	 * @throws InterruptedException the interrupted exception
 	 */
 	@Test
@@ -66,7 +66,7 @@ class EngineersTest {
 	/**
 	 * Test negative engineer list extraction with false authentication.
 	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException          Signals that an I/O exception has occurred.
 	 * @throws InterruptedException the interrupted exception
 	 */
 	@Test
@@ -84,7 +84,7 @@ class EngineersTest {
 	/**
 	 * Test positive engineer list extraction.
 	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException          Signals that an I/O exception has occurred.
 	 * @throws InterruptedException the interrupted exception
 	 */
 	@Test
@@ -102,7 +102,7 @@ class EngineersTest {
 	/**
 	 * Test positive xlsx output file exists.
 	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException          Signals that an I/O exception has occurred.
 	 * @throws InterruptedException the interrupted exception
 	 */
 	@Test
@@ -120,10 +120,11 @@ class EngineersTest {
 		StoryDao<Story> stories = Stories.extractStories(jsonString);
 
 		// Collect engineers with their finished story points
-		EngineerDao<String, Engineer> engineers = Engineers.collectFinished4Engineers(stories);
+		EngineerDao<String, Engineer> engineers = Engineers.collectFinished4Engineers(stories,
+				globalParams.getSprintLabel());
 
 		// Add engineers with their not finished story points
-		engineers.saveAll(Engineers.collectNotFinished4Engineers(stories).getAll());
+		engineers.saveAll(Engineers.collectNotFinished4Engineers(stories, globalParams.getSprintLabel()).getAll());
 
 		// Create XLSX output
 		Dao2Output xlsxOutput = OutputCreators.createXlsxOutput(globalParams, new TeamDaoImpl(), new SprintDaoImpl(),

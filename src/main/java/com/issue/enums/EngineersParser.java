@@ -54,7 +54,8 @@ public enum EngineersParser implements Parseable {
 					}
 
 					// Collect engineers with their finished story points
-					EngineerDao<String, Engineer> eRepo = Engineers.collectFinished4Engineers(stories);
+					EngineerDao<String, Engineer> eRepo = Engineers.collectFinished4Engineers(stories,
+							globalParams.getSprintLabel());
 
 					if (eRepo != null) {
 						engineerRepo.saveAll(eRepo.getAll());
@@ -85,7 +86,8 @@ public enum EngineersParser implements Parseable {
 							globalParams.getPassword(), globalParams.getIssueTrackerUri(), notFinishedInSprintJql);
 
 					// Collect engineers with their not finished story points
-					EngineerDao<String, Engineer> eRepo = Engineers.collectNotFinished4Engineers(stories);
+					EngineerDao<String, Engineer> eRepo = Engineers.collectNotFinished4Engineers(stories,
+							globalParams.getSprintLabel());
 
 					if (eRepo != null) {
 						engineerRepo.saveAll(eRepo.getAll());

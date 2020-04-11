@@ -11,7 +11,10 @@ import java.util.Optional;
 public class Engineer {
 
 	/** The name. */
-	private String name;
+	private final String name;
+
+	/** The sprint label. */
+	private final String sprintLabel;
 
 	/** The finished story points. */
 	private Integer finishedStoryPoints = 0;
@@ -22,10 +25,12 @@ public class Engineer {
 	/**
 	 * Instantiates a new engineer.
 	 *
-	 * @param name        the name
+	 * @param name the name
+	 * @param sprintLabel the sprint label
 	 */
-	public Engineer(String name) {
+	public Engineer(final String name, final String sprintLabel) {
 		this.name = Optional.ofNullable(name).orElseThrow();
+		this.sprintLabel = Optional.ofNullable(sprintLabel).orElseThrow();
 	}
 
 	/**
@@ -35,6 +40,15 @@ public class Engineer {
 	 */
 	public String getName() {
 		return name;
+	}
+
+	/**
+	 * Gets the sprint label.
+	 *
+	 * @return the sprintLabel
+	 */
+	public String getSprintLabel() {
+		return sprintLabel;
 	}
 
 	/**

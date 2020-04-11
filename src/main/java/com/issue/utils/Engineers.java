@@ -52,9 +52,11 @@ public class Engineers {
 	 * Collect finished 4 engineers.
 	 *
 	 * @param stories the stories
+	 * @param sprintLabel the sprint label
 	 * @return the engineer dao
 	 */
-	public static EngineerDao<String, Engineer> collectFinished4Engineers(final StoryDao<Story> stories) {
+	public static EngineerDao<String, Engineer> collectFinished4Engineers(final StoryDao<Story> stories,
+			final String sprintLabel) {
 		// Initialize map
 		EngineerDao<String, Engineer> engineers = new EngineerDaoImpl();
 
@@ -78,7 +80,7 @@ public class Engineers {
 				}
 
 				// Prepare new engineer
-				Engineer eng = new Engineer(owner);
+				Engineer eng = new Engineer(owner, sprintLabel);
 				eng.setFinishedStoryPoints(newFinished + oldFinished);
 				eng.setNotFinishedStoryPoints(oldNotFinished);
 
@@ -94,9 +96,11 @@ public class Engineers {
 	 * Collect not finished 4 engineers.
 	 *
 	 * @param stories the stories
+	 * @param sprintLabel the sprint label
 	 * @return the engineer dao
 	 */
-	public static EngineerDao<String, Engineer> collectNotFinished4Engineers(final StoryDao<Story> stories) {
+	public static EngineerDao<String, Engineer> collectNotFinished4Engineers(final StoryDao<Story> stories,
+			final String sprintLabel) {
 		// Initialize map
 		EngineerDao<String, Engineer> engineers = new EngineerDaoImpl();
 
@@ -120,7 +124,7 @@ public class Engineers {
 				}
 
 				// Prepare new engineer
-				Engineer eng = new Engineer(owner);
+				Engineer eng = new Engineer(owner, sprintLabel);
 				eng.setFinishedStoryPoints(oldFinished);
 				eng.setNotFinishedStoryPoints(newNotFinished + oldNotFinished);
 
