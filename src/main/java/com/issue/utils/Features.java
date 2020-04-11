@@ -95,8 +95,10 @@ public class Features {
 	}
 
 	/**
-	 * @param issue
-	 * @return
+	 * Parses the key.
+	 *
+	 * @param issue the issue
+	 * @return the string
 	 */
 	private static String parseKey(JsonNode issue) {
 		// Get json node "summary"
@@ -106,8 +108,10 @@ public class Features {
 	}
 
 	/**
-	 * @param issueFields
-	 * @return
+	 * Parses the summary.
+	 *
+	 * @param issueFields the issue fields
+	 * @return the string
 	 */
 	private static String parseSummary(JsonNode issueFields) {
 		// Get json node "summary"

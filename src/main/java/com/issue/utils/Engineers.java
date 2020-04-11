@@ -77,7 +77,13 @@ public class Engineers {
 					oldNotFinished = engineer.getNotFinishedStoryPoints().orElse(0);
 				}
 
-				engineers.getAll().put(owner, new Engineer(owner, newFinished + oldFinished, oldNotFinished));
+				// Prepare new engineer
+				Engineer eng = new Engineer(owner);
+				eng.setFinishedStoryPoints(newFinished + oldFinished);
+				eng.setNotFinishedStoryPoints(oldNotFinished);
+
+				// Add new engineer into repository
+				engineers.getAll().put(owner, eng);
 			}
 		}
 
@@ -113,7 +119,13 @@ public class Engineers {
 					oldNotFinished = engineer.getNotFinishedStoryPoints().orElse(0);
 				}
 
-				engineers.getAll().put(owner, new Engineer(owner, oldFinished, newNotFinished + oldNotFinished));
+				// Prepare new engineer
+				Engineer eng = new Engineer(owner);
+				eng.setFinishedStoryPoints(oldFinished);
+				eng.setNotFinishedStoryPoints(newNotFinished + oldNotFinished);
+
+				// Add new engineer into repository
+				engineers.getAll().put(owner, eng);
 			}
 		}
 

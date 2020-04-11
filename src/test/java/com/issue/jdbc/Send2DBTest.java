@@ -72,7 +72,7 @@ class Send2DBTest {
 	 */
 	private EngineerDao<String, Engineer> prepareEngineerRepo() {
 		// Prepare one engineer
-		Engineer engineer = new Engineer("John Doe", 0, 0);
+		Engineer engineer = new Engineer("John Doe");
 
 		// Prepare map of engineers
 		Map<String, Engineer> engMap = new HashMap<>();

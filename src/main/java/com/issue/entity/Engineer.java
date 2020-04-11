@@ -14,22 +14,18 @@ public class Engineer {
 	private String name;
 
 	/** The finished story points. */
-	private Integer finishedStoryPoints;
+	private Integer finishedStoryPoints = 0;
 
 	/** The not finished story points. */
-	private Integer notFinishedStoryPoints;
+	private Integer notFinishedStoryPoints = 0;
 
 	/**
 	 * Instantiates a new engineer.
 	 *
-	 * @param name the name
-	 * @param finished the finished
-	 * @param notFinished the not finished
+	 * @param name        the name
 	 */
-	public Engineer(String name, int finished, int notFinished) {
+	public Engineer(String name) {
 		this.name = Optional.ofNullable(name).orElseThrow();
-		this.finishedStoryPoints = finished;
-		this.notFinishedStoryPoints = notFinished;
 	}
 
 	/**
@@ -51,11 +47,29 @@ public class Engineer {
 	}
 
 	/**
+	 * Sets the finished story points.
+	 *
+	 * @param finishedStoryPoints the finishedStoryPoints to set
+	 */
+	public void setFinishedStoryPoints(Integer finishedStoryPoints) {
+		this.finishedStoryPoints = finishedStoryPoints;
+	}
+
+	/**
 	 * Gets the not finished story points.
 	 *
 	 * @return the not finished story points
 	 */
 	public Optional<Integer> getNotFinishedStoryPoints() {
 		return Optional.ofNullable(notFinishedStoryPoints);
+	}
+
+	/**
+	 * Sets the not finished story points.
+	 *
+	 * @param notFinishedStoryPoints the notFinishedStoryPoints to set
+	 */
+	public void setNotFinishedStoryPoints(Integer notFinishedStoryPoints) {
+		this.notFinishedStoryPoints = notFinishedStoryPoints;
 	}
 }
