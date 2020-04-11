@@ -68,7 +68,7 @@ public class SprintDao4DBImpl implements Dao4DB<Sprint> {
 	/**
 	 * Column 4 creation.
 	 *
-	 * @param name the name
+	 * @param name        the name
 	 * @param declaration the declaration
 	 * @return the string
 	 */
@@ -96,7 +96,7 @@ public class SprintDao4DBImpl implements Dao4DB<Sprint> {
 	/**
 	 * Params 4 update.
 	 *
-	 * @param stmt the stmt
+	 * @param stmt   the stmt
 	 * @param sprint the sprint
 	 * @throws SQLException the SQL exception
 	 */
@@ -109,7 +109,7 @@ public class SprintDao4DBImpl implements Dao4DB<Sprint> {
 	/**
 	 * Params 4 insertion.
 	 *
-	 * @param stmt the stmt
+	 * @param stmt   the stmt
 	 * @param sprint the sprint
 	 * @throws SQLException the SQL exception
 	 */
@@ -290,5 +290,4 @@ public class SprintDao4DBImpl implements Dao4DB<Sprint> {
 			insertEntity(sprint);
 		}
 	}
-
 }
