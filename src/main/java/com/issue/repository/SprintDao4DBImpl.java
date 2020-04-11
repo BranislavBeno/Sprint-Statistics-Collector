@@ -29,7 +29,7 @@ import com.issue.iface.Dao4DB;
 public class SprintDao4DBImpl implements Dao4DB<Sprint> {
 
 	/** The Constant DB_TABLE. */
-	private static final String DB_TABLE = "sprints";
+	private static final String DB_TABLE = "sprint";
 
 	/** The Constant REFINED_SP_COLUMN. */
 	private static final String REFINED_SP_COLUMN = "refined_SP";
