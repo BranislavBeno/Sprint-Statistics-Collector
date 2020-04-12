@@ -11,7 +11,56 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Dumping structure for table sprints.sprints
+-- Dumping structure for table sprints.engineer
+CREATE TABLE IF NOT EXISTS sprints.engineer (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `engineer_name` varchar(64) DEFAULT NULL,
+  `sprint` varchar(64) DEFAULT NULL,
+  `finished_sp` decimal(3,0) DEFAULT '0',
+  `not_finished_sp` decimal(3,0) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+
+-- Dumping data for table sprints.engineer: ~34 rows (approximately)
+/*!40000 ALTER TABLE sprints.engineer DISABLE KEYS */;
+INSERT INTO sprints.engineer (`id`, `engineer_name`, `sprint`, `finished_sp`, `not_finished_sp`) VALUES
+	(1, 'Adamik Silvester', 'Sprint 55', 3, 0),
+	(2, 'Bukovy Lubomir', 'Sprint 55', 8, 0),
+	(3, 'Caban Michal', 'Sprint 55', 3, 0),
+	(4, 'Dunda Michal', 'Sprint 55', 3, 0),
+	(5, 'Ehrlich Andrei', 'Sprint 55', 0, 5),
+	(6, 'Fura Martin', 'Sprint 55', 3, 0),
+	(7, 'Fuzik Radoslav', 'Sprint 55', 8, 0),
+	(8, 'Hrdy Radovan', 'Sprint 55', 7, 0),
+	(9, 'Janeckova Miriam', 'Sprint 55', 0, 8),
+	(10, 'Janis Andrej ', 'Sprint 55', 4, 0),
+	(11, 'Janssen Siegfried', 'Sprint 55', 1, 0),
+	(12, 'Kobolka Vladimir', 'Sprint 55', 0, 5),
+	(13, 'Kocvara Lubos', 'Sprint 55', 9, 0),
+	(14, 'Kupriianov Aleksandr', 'Sprint 55', 10, 0),
+	(15, 'Lashini Milad', 'Sprint 55', 5, 0),
+	(16, 'Luliak Milan', 'Sprint 55', 5, 0),
+	(17, 'Lupberger Matthias', 'Sprint 55', 0, 3),
+	(18, 'Mlich Julius', 'Sprint 55', 9, 0),
+	(19, 'Moravcik Michal', 'Sprint 55', 7, 0),
+	(20, 'Obona Jozef', 'Sprint 55', 13, 0),
+	(21, 'Paulen Juraj', 'Sprint 55', 0, 5),
+	(22, 'Pavlik Zdenko', 'Sprint 55', 6, 0),
+	(23, 'Pekar Jakub', 'Sprint 55', 6, 0),
+	(24, 'Schmid Hubert', 'Sprint 55', 0, 3),
+	(25, 'Tyczynski Lukasz', 'Sprint 55', 5, 0),
+	(26, 'Veselovsky Ivan', 'Sprint 55', 1, 0),
+	(27, 'Zucha Vladimir', 'Sprint 55', 5, 0),
+	(28, 'Ehrlich Andrei', 'Sprint 56', 0, 5),
+	(29, 'Janeckova Miriam', 'Sprint 56', 0, 8),
+	(30, 'Kobolka Vladimir', 'Sprint 56', 5, 0),
+	(31, 'Kocvara Lubos', 'Sprint 56', 1, 0),
+	(32, 'Paulen Juraj', 'Sprint 56', 0, 5),
+	(33, 'Schmid Hubert', 'Sprint 56', 0, 3),
+	(34, 'Veselovsky Ivan', 'Sprint 56', 0, 1);
+/*!40000 ALTER TABLE sprints.engineer ENABLE KEYS */;
+
+-- Dumping structure for table sprints.sprint
 CREATE TABLE IF NOT EXISTS sprints.sprint (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `sprint` varchar(64) DEFAULT NULL,
@@ -19,14 +68,14 @@ CREATE TABLE IF NOT EXISTS sprints.sprint (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
--- Dumping data for table sprints.sprints: ~4 rows (approximately)
+-- Dumping data for table sprints.sprint: ~5 rows (approximately)
 /*!40000 ALTER TABLE sprints.sprint DISABLE KEYS */;
 INSERT INTO sprints.sprint (`id`, `sprint`, `refined_SP`) VALUES
-	(1, 'Sprint 56', '{"BASIC": 192, "FUTURE": 0, "ADVANCED": 34, "COMMERCIAL": 0}'),
-	(2, 'Sprint 57', '{"BASIC": 100, "FUTURE": 0, "ADVANCED": 28, "COMMERCIAL": 0}'),
-	(3, 'Sprint 58', '{"BASIC": 74, "FUTURE": 0, "ADVANCED": 16, "COMMERCIAL": 0}'),
-	(4, 'Sprint 59', '{"BASIC": 10, "FUTURE": 0, "ADVANCED": 47, "COMMERCIAL": 0}'),
-	(5, 'Sprint 60', '{"BASIC": 13, "FUTURE": 0, "ADVANCED": 18, "COMMERCIAL": 0}');
+	(1, 'Sprint 57', '{"BASIC": 100, "FUTURE": 0, "ADVANCED": 28, "COMMERCIAL": 0}'),
+	(2, 'Sprint 58', '{"BASIC": 74, "FUTURE": 0, "ADVANCED": 16, "COMMERCIAL": 0}'),
+	(3, 'Sprint 59', '{"BASIC": 10, "FUTURE": 0, "ADVANCED": 47, "COMMERCIAL": 0}'),
+	(4, 'Sprint 60', '{"BASIC": 13, "FUTURE": 0, "ADVANCED": 18, "COMMERCIAL": 0}'),
+	(5, 'Sprint 56', '{"BASIC": 192, "FUTURE": 0, "ADVANCED": 34, "COMMERCIAL": 0}');
 /*!40000 ALTER TABLE sprints.sprint ENABLE KEYS */;
 
 -- Dumping structure for table sprints.team_black
