@@ -48,7 +48,7 @@ class TeamDao4DBImplTest {
 	private Team team;
 
 	/** The dao. */
-	Dao4DB<Team> dao;
+	private Dao4DB<Team> dao;
 
 	/**
 	 * Inits the.

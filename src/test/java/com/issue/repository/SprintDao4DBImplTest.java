@@ -43,7 +43,7 @@ public class SprintDao4DBImplTest {
 	private Sprint sprint;
 
 	/** The dao. */
-	Dao4DB<Sprint> dao;
+	private Dao4DB<Sprint> dao;
 
 	/**
 	 * Inits the.
@@ -67,7 +67,8 @@ public class SprintDao4DBImplTest {
 	}
 
 	/**
-	 * Test negative non existing prepared statement hence no new table row creation.
+	 * Test negative non existing prepared statement hence no new table row
+	 * creation.
 	 *
 	 * @throws SQLException the SQL exception
 	 */
@@ -89,7 +90,8 @@ public class SprintDao4DBImplTest {
 	}
 
 	/**
-	 * Test negative non existing prepared statement hence no existing table row update.
+	 * Test negative non existing prepared statement hence no existing table row
+	 * update.
 	 *
 	 * @throws SQLException the SQL exception
 	 */
