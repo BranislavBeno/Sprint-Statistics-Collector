@@ -19,6 +19,7 @@ import com.issue.iface.Dao4DB;
 import com.issue.iface.EngineerDao;
 import com.issue.iface.SprintDao;
 import com.issue.iface.TeamDao;
+import com.issue.repository.EngineerDao4DBImpl;
 import com.issue.repository.SprintDao4DBImpl;
 import com.issue.repository.TeamDao4DBImpl;
 
@@ -39,13 +40,13 @@ public class Send2DB {
 	/** The engineers. */
 	private EngineerDao<String, Engineer> engineers;
 
-	/** The global params. */
+	/** The global parameters. */
 	private GlobalParams globalParams;
 
 	/**
 	 * Instantiates a new send 2 DB.
 	 *
-	 * @param globalParams the global params
+	 * @param globalParams the global parameters
 	 * @param teams        the teams
 	 * @param sprints      the sprints
 	 * @param engineers    the engineers
@@ -76,14 +77,14 @@ public class Send2DB {
 	/**
 	 * Send sprints 2 DB.
 	 *
-	 * @param conn the conn
+	 * @param conn the connection
 	 */
 	private void sendSprints2DB(Connection conn) {
 		sprints.getAll().values().stream().forEach(sprint -> {
 			// Create new sprint's database repository object
 			Dao4DB<Sprint> sprintDao = new SprintDao4DBImpl(conn);
 
-			// Send team repository to data base
+			// Send sprint repository to data base
 			sprintDao.saveOrUpdate(sprint);
 		});
 	}
@@ -91,14 +92,20 @@ public class Send2DB {
 	/**
 	 * Send engineers 2 DB.
 	 *
-	 * @param conn the conn
+	 * @param conn the connection
 	 */
 	private void sendEngineers2DB(Connection conn) {
-		logger.warn("Sending engineers to database not yet implemented.");
+		engineers.getAll().values().stream().forEach(engineer -> {
+			// Create new engineers's database repository object
+			Dao4DB<Engineer> engineerDao = new EngineerDao4DBImpl(conn);
+
+			// Send engineer repository to data base
+			engineerDao.saveOrUpdate(engineer);
+		});
 	}
 
 	/**
-	 * Send stats 2 DB.
+	 * Send statistics 2 DB.
 	 */
 	public void sendStats2DB() {
 

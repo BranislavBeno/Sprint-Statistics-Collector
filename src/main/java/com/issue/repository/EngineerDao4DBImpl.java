@@ -27,6 +27,12 @@ public class EngineerDao4DBImpl implements Dao4DB<Engineer> {
 	/** The Constant DB_TABLE. */
 	private static final String DB_TABLE = "engineer";
 
+	/** The Constant DECIMAL_3_DEFAULT_0. */
+	private static final String DECIMAL_3_DEFAULT_0 = "DECIMAL(3) DEFAULT 0";
+
+	/** The Constant VARCHAR_64_DEFAULT_NULL. */
+	private static final String VARCHAR_64_DEFAULT_NULL = "VARCHAR(64) DEFAULT NULL";
+
 	/** The Constant ENGINEER_NAME_COLUMN. */
 	private static final String ENGINEER_NAME_COLUMN = "engineer_name";
 
@@ -65,6 +71,17 @@ public class EngineerDao4DBImpl implements Dao4DB<Engineer> {
 	}
 
 	/**
+	 * Column 4 creation.
+	 *
+	 * @param name the name
+	 * @param declaration the declaration
+	 * @return the string
+	 */
+	private static final String column4Creation(final String name, final String declaration) {
+		return new StringBuilder("`").append(name).append("` ").append(declaration).append(", ").toString();
+	}
+
+	/**
 	 * Statement 4 update.
 	 *
 	 * @return the string
@@ -79,9 +96,42 @@ public class EngineerDao4DBImpl implements Dao4DB<Engineer> {
 	}
 
 	/**
+	 * Statement 4 table creation.
+	 *
+	 * @return the string
+	 */
+	private String statement4TableCreation() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("CREATE TABLE IF NOT EXISTS ").append(DB_TABLE).append(" ( ")
+				.append(column4Creation("id", "INT(11) NOT NULL AUTO_INCREMENT"))
+				.append(column4Creation(ENGINEER_NAME_COLUMN, VARCHAR_64_DEFAULT_NULL))
+				.append(column4Creation(SPRINT_COLUMN, VARCHAR_64_DEFAULT_NULL))
+				.append(column4Creation(FINISHED_SP_COLUMN, DECIMAL_3_DEFAULT_0))
+				.append(column4Creation(NOT_FINISHED_SP_COLUMN, DECIMAL_3_DEFAULT_0)).append("PRIMARY KEY (`id`)) ")
+				.append("ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;");
+
+		return sb.toString();
+	}
+
+	/**
+	 * Statment 4 insertion.
+	 *
+	 * @return the string
+	 */
+	private String statment4Insertion() {
+		StringJoiner sj = new StringJoiner(", ", " (", ") ");
+		sj.add(ENGINEER_NAME_COLUMN);
+		sj.add(SPRINT_COLUMN);
+		sj.add(FINISHED_SP_COLUMN);
+		sj.add(NOT_FINISHED_SP_COLUMN);
+
+		return "INSERT INTO " + DB_TABLE + sj.toString() + "VALUES " + "(?,?,?,?)";
+	}
+
+	/**
 	 * Params 4 update.
 	 *
-	 * @param stmt the stmt
+	 * @param stmt     the stmt
 	 * @param engineer the engineer
 	 * @throws SQLException the SQL exception
 	 */
@@ -90,6 +140,21 @@ public class EngineerDao4DBImpl implements Dao4DB<Engineer> {
 		stmt.setInt(2, engineer.getNotFinishedStoryPoints().orElse(0));
 		stmt.setString(3, engineer.getName());
 		stmt.setString(4, engineer.getSprintLabel());
+		stmt.addBatch();
+	}
+
+	/**
+	 * Params 4 insertion.
+	 *
+	 * @param stmt the stmt
+	 * @param engineer the engineer
+	 * @throws SQLException the SQL exception
+	 */
+	private void params4Insertion(PreparedStatement stmt, final Engineer engineer) throws SQLException {
+		stmt.setString(1, engineer.getName());
+		stmt.setString(2, engineer.getSprintLabel());
+		stmt.setInt(3, engineer.getFinishedStoryPoints().orElse(0));
+		stmt.setInt(4, engineer.getNotFinishedStoryPoints().orElse(0));
 		stmt.addBatch();
 	}
 
@@ -129,6 +194,60 @@ public class EngineerDao4DBImpl implements Dao4DB<Engineer> {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Creates the table.
+	 */
+	private void createTable() {
+		// Create table if doesn't exists
+		logger.info("Creating new table '{}' if doesn't exists.", DB_TABLE);
+
+		// Create statement for table creation
+		String createTableQuery = statement4TableCreation();
+
+		// Execute SQL query for table creation
+		try (Statement statement = connection.createStatement()) {
+			// Execute SQL query
+			statement.executeUpdate(createTableQuery);
+			logger.info("Table '{}' exists or created successfully.", DB_TABLE);
+
+		} catch (SQLException e) {
+			logger.error("DB table {} creation failed!", DB_TABLE);
+		}
+	}
+
+	/**
+	 * Insert entity.
+	 *
+	 * @param engineer the engineer
+	 */
+	private void insertEntity(final Engineer engineer) {
+		// Insert a new sprint data
+		logger.info("Inserting a new sprint related engineer data for '{}' and '{}' into table '{}'.",
+				engineer.getName(), engineer.getSprintLabel(), DB_TABLE);
+
+		// Create statement for data insertion
+		String insertDataQuery = statment4Insertion();
+
+		try (PreparedStatement statement = connection.prepareStatement(insertDataQuery);) {
+			// Prepare statement for data insertion
+			params4Insertion(statement, engineer);
+
+			// Execute SQL query for data insertion
+			statement.executeBatch();
+			logger.info("New sprint related engineer data insertion successfull.");
+
+			connection.commit();
+
+		} catch (Exception e) {
+			try {
+				connection.rollback();
+			} catch (SQLException ex) {
+				logger.error("Error during rollback");
+			}
+			logger.error("Data insertion into table '{}' failed!", DB_TABLE);
+		}
 	}
 
 	/**
@@ -177,8 +296,8 @@ public class EngineerDao4DBImpl implements Dao4DB<Engineer> {
 			updateEntity(engineer);
 		} else {
 			// Create new data record
-			// createTable();
-			// insertEntity(engineer);
+			createTable();
+			insertEntity(engineer);
 		}
 	}
 }
