@@ -1,8 +1,12 @@
+Changes against version 2.1.0
+-----------------------------
+- Enabled engineer related data sending to database
+
 Changes against version 2.0.0
 -----------------------------
 - Enabled sprint related data sending to database
 
-Changes against version 1.0.0
+Changes against version 1.1.0
 -----------------------------
-- Enabled team related data sending to database
+- Enabled engineerelated data sending to database
 
