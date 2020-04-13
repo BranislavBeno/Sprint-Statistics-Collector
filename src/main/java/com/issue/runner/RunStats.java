@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import com.issue.utils.Utils;
 
 import picocli.CommandLine;
+import picocli.CommandLine.Command;
 import picocli.CommandLine.Model.CommandSpec;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Spec;
@@ -20,6 +21,10 @@ import picocli.CommandLine.Spec;
  *
  * @author branislav.beno
  */
+@Command(mixinStandardHelpOptions = true, version = "Sprint statistics collector R2.2.0", description = "Console application SprintStats, "
+		+ "is used for automated sprint statistics gathering from issue tracker tool. "
+		+ "Collected results are according to tool settings sent to database and/or to Excel file. "
+		+ "Precondition for automated data gathering is, that issue tracker tool allows communication over REST API.")
 public class RunStats implements Runnable {
 
 	/** The Constant PROCESSING_INTERRUPTED_WITH_EXCEPTION. */
@@ -29,15 +34,16 @@ public class RunStats implements Runnable {
 	private static Logger logger = LogManager.getLogger(RunStats.class);
 
 	/** The user. */
-	@Option(names = { "-u", "--user" })
+	@Option(names = { "-u", "--user" }, description = "Defines user name for connection to issue tracker tool.")
 	private String user;
 
 	/** The password. */
-	@Option(names = { "-p", "--password" })
+	@Option(names = { "-p", "--password" }, description = "Defines password for connection to issue tracker tool.")
 	private String password;
 
 	/** The database connection. */
-	@Option(names = { "-d", "--dbconnect" })
+	@Option(names = { "-d",
+			"--dbconnect" }, description = "Collected data are send to database, when this parameter is used.")
 	private boolean dbConnect = false;
 
 	/** The spec. */
