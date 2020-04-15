@@ -34,11 +34,13 @@ public class RunStats implements Runnable {
 	private static Logger logger = LogManager.getLogger(RunStats.class);
 
 	/** The user. */
-	@Option(names = { "-u", "--user" }, description = "Defines user name for connection to issue tracker tool.")
+	@Option(names = { "-u",
+			"--user" }, required = true, description = "Defines user name for connection to issue tracker tool.")
 	private String user;
 
 	/** The password. */
-	@Option(names = { "-p", "--password" }, description = "Defines password for connection to issue tracker tool.")
+	@Option(names = { "-p",
+			"--password" }, required = true, description = "Defines password for connection to issue tracker tool.")
 	private String password;
 
 	/** The database connection. */
