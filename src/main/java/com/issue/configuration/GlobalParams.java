@@ -3,6 +3,7 @@
  */
 package com.issue.configuration;
 
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,6 +19,10 @@ public class GlobalParams {
 
 	/** The sprint label. */
 	private String sprintLabel;
+
+	private LocalDate sprintStart;
+
+	private LocalDate sprintEnd;
 
 	/** The db uri. */
 	private String dbUri;
@@ -90,6 +95,34 @@ public class GlobalParams {
 	 */
 	public String getSprintLabel() {
 		return sprintLabel;
+	}
+
+	/**
+	 * @return the sprintStart
+	 */
+	public LocalDate getSprintStart() {
+		return sprintStart;
+	}
+
+	/**
+	 * @param sprintStart the sprintStart to set
+	 */
+	public void setSprintStart(LocalDate sprintStart) {
+		this.sprintStart = sprintStart;
+	}
+
+	/**
+	 * @return the sprintEnd
+	 */
+	public LocalDate getSprintEnd() {
+		return sprintEnd;
+	}
+
+	/**
+	 * @param sprintEnd the sprintEnd to set
+	 */
+	public void setSprintEnd(LocalDate sprintEnd) {
+		this.sprintEnd = sprintEnd;
 	}
 
 	/**

@@ -12,6 +12,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.time.LocalDate;
 import java.util.Base64;
 import java.util.EnumMap;
 import java.util.HashSet;
@@ -111,6 +112,8 @@ public class Utils {
 
 		// Get content from general properties
 		globalParams.setSprintLabel(props.getProperty("sprintLabel", null));
+		globalParams.setSprintStart(LocalDate.parse(props.getProperty("sprintStart", "1970-01-01")));
+		globalParams.setSprintEnd(LocalDate.parse(props.getProperty("sprintEnd", "1970-01-01")));
 
 		// Get content from database properties
 		globalParams.setDbUri(props.getProperty("dbUri", ""));

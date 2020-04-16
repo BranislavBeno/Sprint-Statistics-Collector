@@ -114,7 +114,10 @@ class TeamsTest {
 		// Get teams
 		TeamDao<String, Team> teams = Teams.createTeamRepo(globalParams);
 
+		assertThat(globalParams.isXlsxOutput()).isTrue();
 		assertThat(globalParams.getOutputFileName4Xlsx()).isEqualTo("Test.xlsx");
+		assertThat(globalParams.getSprintStart().getYear()).isEqualTo(2020);
+		assertThat(globalParams.getSprintEnd().getDayOfMonth()).isEqualTo(20);
 		assertThat(teams.getAll().size()).isEqualTo(2);
 	}
 
