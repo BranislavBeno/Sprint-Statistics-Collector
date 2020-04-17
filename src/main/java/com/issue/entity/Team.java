@@ -79,13 +79,13 @@ public class Team {
 	private long timeSpent = 0L;
 
 	/** The sprint start. */
-	private LocalDate sprintStart;
+	private LocalDate sprintStart = LocalDate.of(1970, 1, 1);
 
 	/** The sprint end. */
-	private LocalDate sprintEnd;
+	private LocalDate sprintEnd = LocalDate.of(1970, 1, 1);
 
 	/** The goals. */
-	private List<String> goals = null;
+	private List<String> goals;
 
 	/**
 	 * Instantiates a new team impl.
