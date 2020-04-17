@@ -13,13 +13,18 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -97,6 +102,37 @@ public class Utils {
 	}
 
 	/**
+	 * Parses the goals.
+	 *
+	 * @param propName the prop name
+	 * @param props the props
+	 * @return the map
+	 */
+	private static Map<String, List<String>> parseGoals(final String propName, final Properties props) {
+		// Prepare list of goal related keys
+		var keys = props.keySet().stream().filter(k -> k.toString().startsWith(propName)).collect(Collectors.toList());
+
+		// Initialize hash
+		Map<String, List<String>> map = new HashMap<>();
+
+		// Gather team goals
+		for (Object prop : keys) {
+			String propKey = prop.toString();
+			List<String> list = Arrays.asList(propKey.split("\\."));
+			if (list.size() == 3) {
+				String team = list.get(1).toLowerCase();
+				var goals = map.get(team);
+				if (goals == null)
+					goals = new ArrayList<String>();
+				goals.add(props.getProperty(propKey, ""));
+				map.put(team, goals);
+			}
+		}
+
+		return map;
+	}
+
+	/**
 	 * Provide global params.
 	 *
 	 * @param propFile the prop file
@@ -114,6 +150,9 @@ public class Utils {
 		globalParams.setSprintLabel(props.getProperty("sprintLabel", null));
 		globalParams.setSprintStart(LocalDate.parse(props.getProperty("sprintStart", "1970-01-01")));
 		globalParams.setSprintEnd(LocalDate.parse(props.getProperty("sprintEnd", "1970-01-01")));
+
+		// Get hash of sprint goals lists
+		globalParams.setGoals(parseGoals("team", props));
 
 		// Get content from database properties
 		globalParams.setDbUri(props.getProperty("dbUri", ""));

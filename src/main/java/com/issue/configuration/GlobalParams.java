@@ -4,6 +4,7 @@
 package com.issue.configuration;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -20,8 +21,10 @@ public class GlobalParams {
 	/** The sprint label. */
 	private String sprintLabel;
 
+	/** The sprint start. */
 	private LocalDate sprintStart;
 
+	/** The sprint end. */
 	private LocalDate sprintEnd;
 
 	/** The db uri. */
@@ -69,8 +72,11 @@ public class GlobalParams {
 	/** The refinements. */
 	private Map<Integer, Set<String>> refinements = null;
 
+	/** The goals. */
+	private Map<String, List<String>> goals = null;
+
 	/**
-	 * Instantiates a new global params.
+	 * Instantiates a new global parameters.
 	 */
 	private GlobalParams() {
 		// Basic constructor is empty
@@ -98,6 +104,8 @@ public class GlobalParams {
 	}
 
 	/**
+	 * Gets the sprint start.
+	 *
 	 * @return the sprintStart
 	 */
 	public LocalDate getSprintStart() {
@@ -105,6 +113,8 @@ public class GlobalParams {
 	}
 
 	/**
+	 * Sets the sprint start.
+	 *
 	 * @param sprintStart the sprintStart to set
 	 */
 	public void setSprintStart(LocalDate sprintStart) {
@@ -112,6 +122,8 @@ public class GlobalParams {
 	}
 
 	/**
+	 * Gets the sprint end.
+	 *
 	 * @return the sprintEnd
 	 */
 	public LocalDate getSprintEnd() {
@@ -119,6 +131,8 @@ public class GlobalParams {
 	}
 
 	/**
+	 * Sets the sprint end.
+	 *
 	 * @param sprintEnd the sprintEnd to set
 	 */
 	public void setSprintEnd(LocalDate sprintEnd) {
@@ -402,5 +416,23 @@ public class GlobalParams {
 	 */
 	public void setRefinements(Map<Integer, Set<String>> refinements) {
 		this.refinements = refinements;
+	}
+
+	/**
+	 * Gets the goals.
+	 *
+	 * @return the goals
+	 */
+	public Map<String, List<String>> getGoals() {
+		return goals;
+	}
+
+	/**
+	 * Sets the goals.
+	 *
+	 * @param goals the goals to set
+	 */
+	public void setGoals(Map<String, List<String>> goals) {
+		this.goals = goals;
 	}
 }

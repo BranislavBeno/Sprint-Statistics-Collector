@@ -1,6 +1,7 @@
 package com.issue.utils;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -49,7 +50,7 @@ public class Teams {
 	/**
 	 * Creates the from querires.
 	 *
-	 * @param sprinLabel the sprin label
+	 * @param sprinLabel  the sprin label
 	 * @param setOfQuries the set of quries
 	 * @param teamsRepo   the teams repo
 	 */
@@ -75,7 +76,7 @@ public class Teams {
 	/**
 	 * Creates the empty team repo.
 	 *
-	 * @param sprinLabel the sprin label
+	 * @param sprinLabel  the sprin label
 	 * @param setOfQuries the set of quries
 	 * @param repo        the repo
 	 * @return the team dao
@@ -144,15 +145,41 @@ public class Teams {
 		TeamDao<String, Team> teamsRepo = initializeTeamRepo(globalParams);
 
 		if (teamsRepo != null) {
+			// Set sprint dates and goals
+			addSprintDatesAndGoals(globalParams, teamsRepo);
+
 			// Summarize finished stories
 			Stories.gatherFinishedStories(globalParams, features, teamsRepo);
+
 			// Summarize not finished stories
 			StoriesCounter.NOT_FINISHED.gatherStories(globalParams, teamsRepo);
+
 			// Summarize stories added after sprint start
 			StoriesCounter.ADDED_REMOVED.gatherStories(globalParams, teamsRepo);
 		}
 
 		return teamsRepo;
+	}
+
+	/**
+	 * Adds the sprint dates and goals.
+	 *
+	 * @param globalParams the global params
+	 * @param teamsRepo the teams repo
+	 */
+	private static void addSprintDatesAndGoals(final GlobalParams globalParams, TeamDao<String, Team> teamsRepo) {
+		Map<String, Team> teams = teamsRepo.getAll();
+		teams.values().forEach(team -> {
+			// Set sprint starting date
+			team.setSprintStart(globalParams.getSprintStart());
+			// Set sprint ending date
+			team.setSprintEnd(globalParams.getSprintEnd());
+			// Get team name in lower case
+			String teamName = team.getTeamName().toLowerCase();
+			// Set teams goals
+			if (globalParams.getGoals().containsKey(teamName))
+				team.setGoals(globalParams.getGoals().get(teamName));
+		});
 	}
 
 	/**

@@ -3,7 +3,9 @@
  */
 package com.issue.entity;
 
+import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -75,6 +77,15 @@ public class Team {
 
 	/** The time spent. */
 	private long timeSpent = 0L;
+
+	/** The sprint start. */
+	private LocalDate sprintStart;
+
+	/** The sprint end. */
+	private LocalDate sprintEnd;
+
+	/** The goals. */
+	private List<String> goals = null;
 
 	/**
 	 * Instantiates a new team impl.
@@ -397,5 +408,59 @@ public class Team {
 	 */
 	public void setTimeSpent(long timeSpent) {
 		this.timeSpent = timeSpent;
+	}
+
+	/**
+	 * Gets the sprint start.
+	 *
+	 * @return the sprintStart
+	 */
+	public LocalDate getSprintStart() {
+		return sprintStart;
+	}
+
+	/**
+	 * Sets the sprint start.
+	 *
+	 * @param sprintStart the sprintStart to set
+	 */
+	public void setSprintStart(LocalDate sprintStart) {
+		this.sprintStart = sprintStart;
+	}
+
+	/**
+	 * Gets the sprint end.
+	 *
+	 * @return the sprintEnd
+	 */
+	public LocalDate getSprintEnd() {
+		return sprintEnd;
+	}
+
+	/**
+	 * Sets the sprint end.
+	 *
+	 * @param sprintEnd the sprintEnd to set
+	 */
+	public void setSprintEnd(LocalDate sprintEnd) {
+		this.sprintEnd = sprintEnd;
+	}
+
+	/**
+	 * Gets the goals.
+	 *
+	 * @return the goals
+	 */
+	public List<String> getGoals() {
+		return goals;
+	}
+
+	/**
+	 * Sets the goals.
+	 *
+	 * @param goals the goals to set
+	 */
+	public void setGoals(List<String> goals) {
+		this.goals = goals;
 	}
 }

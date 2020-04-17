@@ -40,6 +40,12 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 	/** The Constant VARCHAR_64_DEFAULT_NULL. */
 	private static final String VARCHAR_64_DEFAULT_NULL = "VARCHAR(64) DEFAULT NULL";
 
+	/** The Constant JSON_DEFAULT_NULL. */
+	private static final String JSON_DEFAULT_NULL = "JSON DEFAULT NULL";
+
+	/** The Constant DATETIME_DEFAULT_NULL. */
+	private static final String DATETIME_DEFAULT_NULL = "DATETIME DEFAULT NULL";
+
 	/** The Constant FINISHED_SP_COLUMN. */
 	private static final String FINISHED_SP_COLUMN = "finished_sp";
 
@@ -94,6 +100,15 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 	/** The Constant SPRINT_COLUMN. */
 	private static final String SPRINT_COLUMN = "sprint";
 
+	/** The Constant SPRINT_START_COLUMN. */
+	private static final String SPRINT_START_COLUMN = "sprint_start";
+
+	/** The Constant SPRINT_END_COLUMN. */
+	private static final String SPRINT_END_COLUMN = "sprint_end";
+
+	/** The Constant SPRINT_GOALS_COLUMN. */
+	private static final String SPRINT_GOALS_COLUMN = "sprint_goals";
+
 	/** The logger. */
 	static Logger logger = LogManager.getLogger(TeamDao4DBImpl.class);
 
@@ -145,9 +160,25 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 			finishedSP = new ObjectMapper()
 					.writeValueAsString(team.getFinishedStoryPoints().orElse(new EnumMap<>(FeatureScope.class)));
 		} catch (JsonProcessingException e) {
-			logger.error("Json processing interrupted with exception.");
+			logger.error("Finished story points conversion to json interrupted with exception.");
 		}
 		return finishedSP;
+	}
+
+	/**
+	 * Goals 2 json.
+	 *
+	 * @param team the team
+	 * @return the string
+	 */
+	private String goals2Json(Team team) {
+		String goals = "";
+		try {
+			goals = new ObjectMapper().writeValueAsString(team.getGoals());
+		} catch (JsonProcessingException e) {
+			logger.error("Finished goals conversion to json interrupted with exception.");
+		}
+		return goals;
 	}
 
 	/**
@@ -157,7 +188,7 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 	 */
 	private String statement4TableCreation() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("create table if not exists ").append(table).append(" ( ")
+		sb.append("CREATE TABLE IF NOT EXISTS ").append(table).append(" ( ")
 				.append(column4Creation("id", "INT(11) NOT NULL AUTO_INCREMENT"))
 				.append(column4Creation(SPRINT_COLUMN, VARCHAR_64_DEFAULT_NULL))
 				.append(column4Creation(TEAM_NAME_COLUMN, VARCHAR_64_DEFAULT_NULL))
@@ -176,7 +207,10 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 				.append(column4Creation(NOT_CLOSED_HIGH_PRIOR_STORIES_COLUMN, DECIMAL_3_DEFAULT_0))
 				.append(column4Creation(DELTA_SP_COLUMN, DOUBLE_5_2_DEFAULT_0))
 				.append(column4Creation(PLANNED_SP_CLOSED_COLUMN, DOUBLE_5_2_DEFAULT_0))
-				.append(column4Creation(FINISHED_SP_COLUMN, "JSON DEFAULT NULL")).append("PRIMARY KEY (`id`)) ")
+				.append(column4Creation(SPRINT_START_COLUMN, DATETIME_DEFAULT_NULL))
+				.append(column4Creation(SPRINT_END_COLUMN, DATETIME_DEFAULT_NULL))
+				.append(column4Creation(FINISHED_SP_COLUMN, JSON_DEFAULT_NULL))
+				.append(column4Creation(SPRINT_GOALS_COLUMN, JSON_DEFAULT_NULL)).append("PRIMARY KEY (`id`)) ")
 				.append("ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;");
 
 		return sb.toString();
@@ -206,9 +240,12 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		sj.add(NOT_CLOSED_HIGH_PRIOR_STORIES_COLUMN);
 		sj.add(DELTA_SP_COLUMN);
 		sj.add(PLANNED_SP_CLOSED_COLUMN);
+		sj.add(SPRINT_START_COLUMN);
+		sj.add(SPRINT_END_COLUMN);
 		sj.add(FINISHED_SP_COLUMN);
+		sj.add(SPRINT_GOALS_COLUMN);
 
-		return "insert into " + table + sj.toString() + "values " + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		return "INSERT INTO " + table + sj.toString() + "VALUES " + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	}
 
 	/**
@@ -234,9 +271,12 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		sj.add(column4Update(NOT_CLOSED_HIGH_PRIOR_STORIES_COLUMN));
 		sj.add(column4Update(DELTA_SP_COLUMN));
 		sj.add(column4Update(PLANNED_SP_CLOSED_COLUMN));
+		sj.add(column4Update(SPRINT_START_COLUMN));
+		sj.add(column4Update(SPRINT_END_COLUMN));
 		sj.add(column4Update(FINISHED_SP_COLUMN));
+		sj.add(column4Update(SPRINT_GOALS_COLUMN));
 
-		return "update " + table + " set " + sj.toString() + " where " + SPRINT_COLUMN + "= ?";
+		return "UPDATE " + table + " SET " + sj.toString() + " WHERE " + SPRINT_COLUMN + "= ?";
 	}
 
 	/**
@@ -264,7 +304,10 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		stmt.setInt(15, team.getNotClosedHighPriorStoriesCount());
 		stmt.setDouble(16, team.getDeltaStoryPoints());
 		stmt.setDouble(17, team.getPlannedStoryPointsClosed());
-		stmt.setString(18, finishedSP2Json(team));
+		stmt.setDate(18, java.sql.Date.valueOf(team.getSprintStart()));
+		stmt.setDate(19, java.sql.Date.valueOf(team.getSprintEnd()));
+		stmt.setString(20, finishedSP2Json(team));
+		stmt.setString(21, goals2Json(team));
 		stmt.addBatch();
 	}
 
@@ -292,8 +335,11 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		stmt.setInt(14, team.getNotClosedHighPriorStoriesCount());
 		stmt.setDouble(15, team.getDeltaStoryPoints());
 		stmt.setDouble(16, team.getPlannedStoryPointsClosed());
-		stmt.setString(17, finishedSP2Json(team));
-		stmt.setString(18, team.getSprintLabel());
+		stmt.setDate(17, java.sql.Date.valueOf(team.getSprintStart()));
+		stmt.setDate(18, java.sql.Date.valueOf(team.getSprintEnd()));
+		stmt.setString(19, finishedSP2Json(team));
+		stmt.setString(20, goals2Json(team));
+		stmt.setString(21, team.getSprintLabel());
 		stmt.addBatch();
 	}
 
