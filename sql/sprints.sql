@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS sprints.engineer (
 ) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table sprints.engineer: ~7 rows (approximately)
-/*!40000 ALTER TABLE `engineer` DISABLE KEYS */;
+/*!40000 ALTER TABLE sprints.engineer DISABLE KEYS */;
 INSERT INTO sprints.engineer (`id`, `engineer_name`, `sprint`, `finished_sp`, `not_finished_sp`) VALUES
 	(1, 'Adamik Silvester', 'Sprint 55', 3, 0),
 	(2, 'Bukovy Lubomir', 'Sprint 55', 8, 0),
@@ -58,7 +58,7 @@ INSERT INTO sprints.engineer (`id`, `engineer_name`, `sprint`, `finished_sp`, `n
 	(32, 'Paulen Juraj', 'Sprint 56', 0, 5),
 	(33, 'Schmid Hubert', 'Sprint 56', 0, 3),
 	(34, 'Veselovsky Ivan', 'Sprint 56', 0, 1);
-/*!40000 ALTER TABLE `engineer` ENABLE KEYS */;
+/*!40000 ALTER TABLE sprints.engineer ENABLE KEYS */;
 
 -- Dumping structure for table sprints.sprint
 CREATE TABLE IF NOT EXISTS sprints.sprint (
@@ -69,14 +69,14 @@ CREATE TABLE IF NOT EXISTS sprints.sprint (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table sprints.sprint: ~4 rows (approximately)
-/*!40000 ALTER TABLE `sprint` DISABLE KEYS */;
+/*!40000 ALTER TABLE sprints.sprint DISABLE KEYS */;
 INSERT INTO sprints.sprint (`id`, `sprint`, `refined_SP`) VALUES
 	(1, 'Sprint 57', '{"BASIC": 100, "FUTURE": 0, "ADVANCED": 28, "COMMERCIAL": 0}'),
 	(2, 'Sprint 58', '{"BASIC": 74, "FUTURE": 0, "ADVANCED": 16, "COMMERCIAL": 0}'),
 	(3, 'Sprint 59', '{"BASIC": 10, "FUTURE": 0, "ADVANCED": 47, "COMMERCIAL": 0}'),
 	(4, 'Sprint 60', '{"BASIC": 13, "FUTURE": 0, "ADVANCED": 18, "COMMERCIAL": 0}'),
 	(5, 'Sprint 56', '{"BASIC": 192, "FUTURE": 0, "ADVANCED": 34, "COMMERCIAL": 0}');
-/*!40000 ALTER TABLE `sprint` ENABLE KEYS */;
+/*!40000 ALTER TABLE sprints.sprint ENABLE KEYS */;
 
 -- Dumping structure for table sprints.team_black
 CREATE TABLE IF NOT EXISTS sprints.team_black (
