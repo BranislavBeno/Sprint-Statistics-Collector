@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.EnumMap;
 import java.util.Optional;
 import java.util.StringJoiner;
@@ -37,8 +38,12 @@ public class SprintDao4DBImpl implements Dao4DB<Sprint> {
 	/** The Constant SPRINT_COLUMN. */
 	private static final String SPRINT_COLUMN = "sprint";
 
+	private static final String UPDATED_COLUMN = "updated";
+
 	/** The Constant VARCHAR_64_DEFAULT_NULL. */
 	private static final String VARCHAR_64_DEFAULT_NULL = "VARCHAR(64) DEFAULT NULL";
+
+	private static final String DATETIME_DEFAULT_NULL = "DATETIME DEFAULT NULL";
 
 	/** The logger. */
 	static Logger logger = LogManager.getLogger(SprintDao4DBImpl.class);
@@ -102,7 +107,8 @@ public class SprintDao4DBImpl implements Dao4DB<Sprint> {
 	 */
 	private void params4Update(PreparedStatement stmt, final Sprint sprint) throws SQLException {
 		stmt.setString(1, finishedSP2Json(sprint));
-		stmt.setString(2, sprint.getSprintLabel());
+		stmt.setDate(2, java.sql.Date.valueOf(LocalDate.now()));
+		stmt.setString(3, sprint.getSprintLabel());
 		stmt.addBatch();
 	}
 
@@ -116,6 +122,7 @@ public class SprintDao4DBImpl implements Dao4DB<Sprint> {
 	private void params4Insertion(PreparedStatement stmt, final Sprint sprint) throws SQLException {
 		stmt.setString(1, sprint.getSprintLabel());
 		stmt.setString(2, finishedSP2Json(sprint));
+		stmt.setDate(3, java.sql.Date.valueOf(LocalDate.now()));
 		stmt.addBatch();
 	}
 
@@ -139,6 +146,7 @@ public class SprintDao4DBImpl implements Dao4DB<Sprint> {
 				.append(column4Creation("id", "INT(11) NOT NULL AUTO_INCREMENT"))
 				.append(column4Creation(SPRINT_COLUMN, VARCHAR_64_DEFAULT_NULL))
 				.append(column4Creation(REFINED_SP_COLUMN, "JSON DEFAULT NULL")).append("PRIMARY KEY (`id`)) ")
+				.append(column4Creation(UPDATED_COLUMN, DATETIME_DEFAULT_NULL))
 				.append("ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;");
 
 		return sb.toString();
@@ -153,8 +161,9 @@ public class SprintDao4DBImpl implements Dao4DB<Sprint> {
 		StringJoiner sj = new StringJoiner(", ", " (", ") ");
 		sj.add(SPRINT_COLUMN);
 		sj.add(REFINED_SP_COLUMN);
+		sj.add(UPDATED_COLUMN);
 
-		return "INSERT INTO " + DB_TABLE + sj.toString() + "VALUES " + "(?,?)";
+		return "INSERT INTO " + DB_TABLE + sj.toString() + "VALUES " + "(?,?,?)";
 	}
 
 	/**
