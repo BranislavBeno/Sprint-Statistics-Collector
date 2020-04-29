@@ -126,11 +126,10 @@ public class Send2DB {
 				logger.error("Sprint data are null, hence no sprint data send to database.");
 
 			// Send engineers repository to data base
-			if (engineers != null)
-				sendEngineers2DB(conn);
-			else
-				logger.error("Engineers data are null, hence no engineers data send to database.");
-
+			/*
+			 * if (engineers != null) sendEngineers2DB(conn); else logger.
+			 * error("Engineers data are null, hence no engineers data send to database.");
+			 */
 		} catch (SQLException e) {
 			logger.error("Sending data to database failed!");
 			logger.error("Check whether proper connection parameters are provided or database is connected.");

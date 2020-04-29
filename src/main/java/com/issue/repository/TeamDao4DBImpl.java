@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.EnumMap;
 import java.util.Optional;
 import java.util.StringJoiner;
@@ -27,6 +28,9 @@ import com.issue.iface.Dao4DB;
  * @author benito
  */
 public class TeamDao4DBImpl implements Dao4DB<Team> {
+
+	/** The Constant TEAM_TABLE_PREFIX. */
+	private static final String TEAM_TABLE_PREFIX = "team_";
 
 	/** The Constant DOUBLE_5_2_DEFAULT_0. */
 	private static final String DOUBLE_5_2_DEFAULT_0 = "DOUBLE(5,2) DEFAULT 0";
@@ -105,6 +109,9 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 
 	/** The Constant SPRINT_END_COLUMN. */
 	private static final String SPRINT_END_COLUMN = "sprint_end";
+
+	/** The Constant UPDATED_COLUMN. */
+	private static final String UPDATED_COLUMN = "updated";
 
 	/** The Constant SPRINT_GOALS_COLUMN. */
 	private static final String SPRINT_GOALS_COLUMN = "sprint_goals";
@@ -209,6 +216,7 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 				.append(column4Creation(PLANNED_SP_CLOSED_COLUMN, DOUBLE_5_2_DEFAULT_0))
 				.append(column4Creation(SPRINT_START_COLUMN, DATETIME_DEFAULT_NULL))
 				.append(column4Creation(SPRINT_END_COLUMN, DATETIME_DEFAULT_NULL))
+				.append(column4Creation(UPDATED_COLUMN, DATETIME_DEFAULT_NULL))
 				.append(column4Creation(FINISHED_SP_COLUMN, JSON_DEFAULT_NULL))
 				.append(column4Creation(SPRINT_GOALS_COLUMN, JSON_DEFAULT_NULL)).append("PRIMARY KEY (`id`)) ")
 				.append("ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;");
@@ -242,10 +250,11 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		sj.add(PLANNED_SP_CLOSED_COLUMN);
 		sj.add(SPRINT_START_COLUMN);
 		sj.add(SPRINT_END_COLUMN);
+		sj.add(UPDATED_COLUMN);
 		sj.add(FINISHED_SP_COLUMN);
 		sj.add(SPRINT_GOALS_COLUMN);
 
-		return "INSERT INTO " + table + sj.toString() + "VALUES " + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		return "INSERT INTO " + table + sj.toString() + "VALUES " + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	}
 
 	/**
@@ -273,6 +282,7 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		sj.add(column4Update(PLANNED_SP_CLOSED_COLUMN));
 		sj.add(column4Update(SPRINT_START_COLUMN));
 		sj.add(column4Update(SPRINT_END_COLUMN));
+		sj.add(column4Update(UPDATED_COLUMN));
 		sj.add(column4Update(FINISHED_SP_COLUMN));
 		sj.add(column4Update(SPRINT_GOALS_COLUMN));
 
@@ -306,8 +316,9 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		stmt.setDouble(17, team.getPlannedStoryPointsClosed());
 		stmt.setDate(18, java.sql.Date.valueOf(team.getSprintStart()));
 		stmt.setDate(19, java.sql.Date.valueOf(team.getSprintEnd()));
-		stmt.setString(20, finishedSP2Json(team));
-		stmt.setString(21, goals2Json(team));
+		stmt.setDate(20, java.sql.Date.valueOf(LocalDate.now()));
+		stmt.setString(21, finishedSP2Json(team));
+		stmt.setString(22, goals2Json(team));
 		stmt.addBatch();
 	}
 
@@ -337,9 +348,10 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		stmt.setDouble(16, team.getPlannedStoryPointsClosed());
 		stmt.setDate(17, java.sql.Date.valueOf(team.getSprintStart()));
 		stmt.setDate(18, java.sql.Date.valueOf(team.getSprintEnd()));
-		stmt.setString(19, finishedSP2Json(team));
-		stmt.setString(20, goals2Json(team));
-		stmt.setString(21, team.getSprintLabel());
+		stmt.setDate(19, java.sql.Date.valueOf(LocalDate.now()));
+		stmt.setString(20, finishedSP2Json(team));
+		stmt.setString(21, goals2Json(team));
+		stmt.setString(22, team.getSprintLabel());
 		stmt.addBatch();
 	}
 
@@ -466,7 +478,7 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 	 */
 	public void saveOrUpdate(final Team team) {
 		// Set database table name
-		this.table = "team_" + team.getTeamName().toLowerCase();
+		this.table = TEAM_TABLE_PREFIX + team.getTeamName().toLowerCase();
 
 		// Save sprint data for particular team
 		if (isTableRowAvailable(team.getSprintLabel())) {
