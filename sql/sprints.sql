@@ -21,8 +21,8 @@ CREATE TABLE IF NOT EXISTS sprints.engineer (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=521 DEFAULT CHARSET=utf8;
 
--- Dumping data for table sprints.engineer: ~479 rows (approximately)
-/*!40000 ALTER TABLE sprints.engineer DISABLE KEYS */;
+-- Dumping data for table sprints.engineer: ~475 rows (approximately)
+/*!40000 ALTER TABLE `engineer` DISABLE KEYS */;
 INSERT INTO sprints.engineer (`id`, `engineer_name`, `sprint`, `finished_sp`, `not_finished_sp`) VALUES
 	(1, 'Adamik Silvester', 'Sprint 38', 8, 0),
 	(2, 'Bukovy Lubomir', 'Sprint 38', 8, 0),
@@ -544,7 +544,7 @@ INSERT INTO sprints.engineer (`id`, `engineer_name`, `sprint`, `finished_sp`, `n
 	(518, 'Veselovsky Ivan', 'Sprint 57', 0, 1),
 	(519, 'Kocvara Lubos', 'Sprint 57', 1, 0),
 	(520, 'Veselovsky Ivan', 'Sprint 57', 0, 1);
-/*!40000 ALTER TABLE sprints.engineer ENABLE KEYS */;
+/*!40000 ALTER TABLE `engineer` ENABLE KEYS */;
 
 -- Dumping structure for table sprints.sprint
 CREATE TABLE IF NOT EXISTS sprints.sprint (
@@ -555,7 +555,7 @@ CREATE TABLE IF NOT EXISTS sprints.sprint (
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table sprints.sprint: ~21 rows (approximately)
-/*!40000 ALTER TABLE sprints.sprint DISABLE KEYS */;
+/*!40000 ALTER TABLE `sprint` DISABLE KEYS */;
 INSERT INTO sprints.sprint (`id`, `sprint`, `refined_SP`) VALUES
 	(1, 'Sprint 39', '{"BASIC": 247, "FUTURE": 0, "ADVANCED": 8, "COMMERCIAL": 0}'),
 	(2, 'Sprint 40', '{"BASIC": 217, "FUTURE": 0, "ADVANCED": 0, "COMMERCIAL": 0}'),
@@ -580,7 +580,7 @@ INSERT INTO sprints.sprint (`id`, `sprint`, `refined_SP`) VALUES
 	(21, 'Sprint 59', '{"BASIC": 26, "FUTURE": 0, "ADVANCED": 39, "COMMERCIAL": 0}'),
 	(22, 'Sprint 60', '{"BASIC": 19, "FUTURE": 0, "ADVANCED": 23, "COMMERCIAL": 0}'),
 	(23, 'Sprint 61', '{"BASIC": 2, "FUTURE": 0, "ADVANCED": 24, "COMMERCIAL": 0}');
-/*!40000 ALTER TABLE sprints.sprint ENABLE KEYS */;
+/*!40000 ALTER TABLE `sprint` ENABLE KEYS */;
 
 -- Dumping structure for table sprints.team_black
 CREATE TABLE IF NOT EXISTS sprints.team_black (
@@ -610,7 +610,7 @@ CREATE TABLE IF NOT EXISTS sprints.team_black (
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table sprints.team_black: ~17 rows (approximately)
-/*!40000 ALTER TABLE sprints.team_black DISABLE KEYS */;
+/*!40000 ALTER TABLE `team_black` DISABLE KEYS */;
 INSERT INTO sprints.team_black (`id`, `sprint`, `team_name`, `team_member_count`, `on_begin_planned_sp_sum`, `on_end_planned_sp_sum`, `finished_sp_sum`, `not_finished_sp_sum`, `to_do_sp_sum`, `in_progress_sp_sum`, `finished_stories_sp_sum`, `finished_bugs_sp_sum`, `time_estimation`, `time_planned`, `time_spent`, `not_closed_high_prior_stories`, `delta_sp`, `planned_sp_closed`, `sprint_start`, `sprint_end`, `finished_sp`, `sprint_goals`) VALUES
 	(1, 'Sprint 38', 'Black', 9, 84, 87, 76, 11, 11, 0, 74, 2, 568, 583, 599, 1, 0.04, 0.90, '2020-04-02 00:00:00', '2020-04-20 00:00:00', '{"BASIC": 76, "FUTURE": 0, "ADVANCED": 0, "COMMERCIAL": 0}', 'null'),
 	(2, 'Sprint 39', 'Black', 10, 80, 83, 83, 0, 0, 0, 77, 6, 609, 616, 488, 0, 0.04, 1.04, '2020-04-02 00:00:00', '2020-04-20 00:00:00', '{"BASIC": 83, "FUTURE": 0, "ADVANCED": 0, "COMMERCIAL": 0}', 'null'),
@@ -632,7 +632,7 @@ INSERT INTO sprints.team_black (`id`, `sprint`, `team_name`, `team_member_count`
 	(18, 'Sprint 55', 'Black', 7, 78, 83, 40, 43, 29, 14, 34, 6, 576, 626, 776, 1, 0.06, 0.51, '2020-04-02 00:00:00', '2020-04-20 00:00:00', '{"BASIC": 31, "FUTURE": 0, "ADVANCED": 9, "COMMERCIAL": 0}', 'null'),
 	(19, 'Sprint 56', 'Black', 7, 71, 79, 79, 0, 0, 0, 68, 11, 490, 545, 559, 0, 0.11, 1.11, '2020-04-02 00:00:00', '2020-04-20 00:00:00', '{"BASIC": 71, "FUTURE": 0, "ADVANCED": 8, "COMMERCIAL": 0}', '["No spillovers"]'),
 	(20, 'Sprint 57', 'Black', 0, 73, 78, 13, 65, 43, 22, 8, 5, 443, 475, 114, 0, 0.07, 0.18, '2020-04-23 00:00:00', '2020-05-11 00:00:00', '{"BASIC": 8, "FUTURE": 0, "ADVANCED": 5, "COMMERCIAL": 0}', '["Finalize the new Design and switch off the old design."]');
-/*!40000 ALTER TABLE sprints.team_black ENABLE KEYS */;
+/*!40000 ALTER TABLE `team_black` ENABLE KEYS */;
 
 -- Dumping structure for table sprints.team_blue
 CREATE TABLE IF NOT EXISTS sprints.team_blue (
@@ -662,7 +662,7 @@ CREATE TABLE IF NOT EXISTS sprints.team_blue (
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table sprints.team_blue: ~17 rows (approximately)
-/*!40000 ALTER TABLE sprints.team_blue DISABLE KEYS */;
+/*!40000 ALTER TABLE `team_blue` DISABLE KEYS */;
 INSERT INTO sprints.team_blue (`id`, `sprint`, `team_name`, `team_member_count`, `on_begin_planned_sp_sum`, `on_end_planned_sp_sum`, `finished_sp_sum`, `not_finished_sp_sum`, `to_do_sp_sum`, `in_progress_sp_sum`, `finished_stories_sp_sum`, `finished_bugs_sp_sum`, `time_estimation`, `time_planned`, `time_spent`, `not_closed_high_prior_stories`, `delta_sp`, `planned_sp_closed`, `sprint_start`, `sprint_end`, `finished_sp`, `sprint_goals`) VALUES
 	(1, 'Sprint 40', 'Blue', 6, 32, 32, 24, 8, 8, 0, 24, 0, 240, 240, 226, 0, 0.00, 0.75, '2020-04-02 00:00:00', '2020-04-20 00:00:00', '{"BASIC": 24, "FUTURE": 0, "ADVANCED": 0, "COMMERCIAL": 0}', 'null'),
 	(2, 'Sprint 41', 'Blue', 5, 47, 47, 47, 0, 0, 0, 47, 0, 294, 294, 270, 0, 0.00, 1.00, '2020-04-02 00:00:00', '2020-04-20 00:00:00', '{"BASIC": 47, "FUTURE": 0, "ADVANCED": 0, "COMMERCIAL": 0}', 'null'),
@@ -682,7 +682,7 @@ INSERT INTO sprints.team_blue (`id`, `sprint`, `team_name`, `team_member_count`,
 	(16, 'Sprint 55', 'Blue', 7, 42, 43, 43, 0, 0, 0, 41, 2, 298, 298, 291, 0, 0.02, 1.02, '2020-04-02 00:00:00', '2020-04-20 00:00:00', '{"BASIC": 43, "FUTURE": 0, "ADVANCED": 0, "COMMERCIAL": 0}', 'null'),
 	(17, 'Sprint 56', 'Blue', 7, 43, 44, 44, 0, 0, 0, 43, 1, 383, 385, 295, 0, 0.02, 1.02, '2020-04-02 00:00:00', '2020-04-20 00:00:00', '{"BASIC": 44, "FUTURE": 0, "ADVANCED": 0, "COMMERCIAL": 0}', '[""]'),
 	(18, 'Sprint 57', 'Blue', 2, 38, 38, 3, 35, 11, 24, 3, 0, 329, 329, 118, 0, 0.00, 0.08, '2020-04-23 00:00:00', '2020-05-11 00:00:00', '{"BASIC": 3, "FUTURE": 0, "ADVANCED": 0, "COMMERCIAL": 0}', '["Have first performance test and extend options to used test data."]');
-/*!40000 ALTER TABLE sprints.team_blue ENABLE KEYS */;
+/*!40000 ALTER TABLE `team_blue` ENABLE KEYS */;
 
 -- Dumping structure for table sprints.team_green
 CREATE TABLE IF NOT EXISTS sprints.team_green (
@@ -712,7 +712,7 @@ CREATE TABLE IF NOT EXISTS sprints.team_green (
 ) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table sprints.team_green: ~17 rows (approximately)
-/*!40000 ALTER TABLE sprints.team_green DISABLE KEYS */;
+/*!40000 ALTER TABLE `team_green` DISABLE KEYS */;
 INSERT INTO sprints.team_green (`id`, `sprint`, `team_name`, `team_member_count`, `on_begin_planned_sp_sum`, `on_end_planned_sp_sum`, `finished_sp_sum`, `not_finished_sp_sum`, `to_do_sp_sum`, `in_progress_sp_sum`, `finished_stories_sp_sum`, `finished_bugs_sp_sum`, `time_estimation`, `time_planned`, `time_spent`, `not_closed_high_prior_stories`, `delta_sp`, `planned_sp_closed`, `sprint_start`, `sprint_end`, `finished_sp`, `sprint_goals`) VALUES
 	(1, 'Sprint 38', 'Green', 11, 91, 108, 54, 54, 51, 3, 53, 1, 559, 644, 936, 0, 0.19, 0.59, '2020-04-02 00:00:00', '2020-04-20 00:00:00', '{"BASIC": 54, "FUTURE": 0, "ADVANCED": 0, "COMMERCIAL": 0}', 'null'),
 	(2, 'Sprint 40', 'Green', 8, 80, 79, 53, 26, 26, 0, 51, 2, 593, 585, 801, 0, 0.01, 0.66, '2020-04-02 00:00:00', '2020-04-20 00:00:00', '{"BASIC": 53, "FUTURE": 0, "ADVANCED": 0, "COMMERCIAL": 0}', 'null'),
@@ -733,7 +733,7 @@ INSERT INTO sprints.team_green (`id`, `sprint`, `team_name`, `team_member_count`
 	(17, 'Sprint 55', 'Green', 8, 59, 59, 56, 3, 3, 0, 49, 7, 494, 496, 560, 0, 0.00, 0.95, '2020-04-02 00:00:00', '2020-04-20 00:00:00', '{"BASIC": 56, "FUTURE": 0, "ADVANCED": 0, "COMMERCIAL": 0}', 'null'),
 	(18, 'Sprint 56', 'Green', 8, 60, 61, 48, 13, 0, 13, 32, 16, 472, 477, 435, 1, 0.02, 0.80, '2020-04-02 00:00:00', '2020-04-20 00:00:00', '{"BASIC": 48, "FUTURE": 0, "ADVANCED": 0, "COMMERCIAL": 0}', '["Show SW-Update widget (SW-Update)", "gs-update: implement status machine (SW-Update)", "make unit tests of init component green again (Bugfix)", "make unit tests of global settings component green again (Bugfix)", "report staged SWPFs (SW-Update)", "implement SWPF pre-distribution checks (SW-Update)", "fix alarm list (Bugfix)", "adjust access to system controller for BSP 0.16.0 (Bugfix)"]'),
 	(19, 'Sprint 57', 'Green', 0, 61, 61, 13, 48, 12, 36, 13, 0, 518, 518, 246, 1, 0.00, 0.21, '2020-04-23 00:00:00', '2020-05-11 00:00:00', '{"BASIC": 13, "FUTURE": 0, "ADVANCED": 0, "COMMERCIAL": 0}', '["We want to select one SWPF for installation, distribute it to all nodes and install the single SW-images.", "SW-Update obeys therapy mode (SW-Update)", "Extract SW-images and install to smart sensors (SW-Update)", "Extract SW-images and install to System Controller, Host, Inductive Transformers (SW-Update)", "Implement pull-based staging (SW-Update)", "mount USB devices (SW-Update)", "Covert Mode works correlty after system start (Bugfix)", "Create StorageFilePath Library (Others)", "Improvement of time system (Others)"]');
-/*!40000 ALTER TABLE sprints.team_green ENABLE KEYS */;
+/*!40000 ALTER TABLE `team_green` ENABLE KEYS */;
 
 -- Dumping structure for table sprints.team_red
 CREATE TABLE IF NOT EXISTS sprints.team_red (
@@ -763,7 +763,7 @@ CREATE TABLE IF NOT EXISTS sprints.team_red (
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 -- Dumping data for table sprints.team_red: ~17 rows (approximately)
-/*!40000 ALTER TABLE sprints.team_red DISABLE KEYS */;
+/*!40000 ALTER TABLE `team_red` DISABLE KEYS */;
 INSERT INTO sprints.team_red (`id`, `sprint`, `team_name`, `team_member_count`, `on_begin_planned_sp_sum`, `on_end_planned_sp_sum`, `finished_sp_sum`, `not_finished_sp_sum`, `to_do_sp_sum`, `in_progress_sp_sum`, `finished_stories_sp_sum`, `finished_bugs_sp_sum`, `time_estimation`, `time_planned`, `time_spent`, `not_closed_high_prior_stories`, `delta_sp`, `planned_sp_closed`, `sprint_start`, `sprint_end`, `finished_sp`, `sprint_goals`) VALUES
 	(1, 'Sprint 38', 'Red', 8, 56, 68, 68, 0, 0, 0, 66, 2, 459, 539, 428, 0, 0.21, 1.21, '2020-04-02 00:00:00', '2020-04-20 00:00:00', '{"BASIC": 68, "FUTURE": 0, "ADVANCED": 0, "COMMERCIAL": 0}', 'null'),
 	(2, 'Sprint 39', 'Red', 8, 32, 61, 56, 5, 5, 0, 56, 0, 168, 384, 318, 0, 0.91, 1.75, '2020-04-02 00:00:00', '2020-04-20 00:00:00', '{"BASIC": 56, "FUTURE": 0, "ADVANCED": 0, "COMMERCIAL": 0}', 'null'),
@@ -785,7 +785,7 @@ INSERT INTO sprints.team_red (`id`, `sprint`, `team_name`, `team_member_count`, 
 	(18, 'Sprint 55', 'Red', 5, 47, 51, 48, 3, 3, 0, 40, 8, 373, 395, 310, 0, 0.09, 1.02, '2020-04-02 00:00:00', '2020-04-20 00:00:00', '{"BASIC": 24, "FUTURE": 0, "ADVANCED": 24, "COMMERCIAL": 0}', 'null'),
 	(19, 'Sprint 56', 'Red', 5, 44, 47, 42, 5, 0, 5, 37, 5, 248, 256, 249, 0, 0.07, 0.95, '2020-04-02 00:00:00', '2020-04-20 00:00:00', '{"BASIC": 21, "FUTURE": 0, "ADVANCED": 21, "COMMERCIAL": 0}', '["We will start the implementation of Trends-Feature. Gaps are filled with stabilisations and bug fixing."]'),
 	(20, 'Sprint 57', 'Red', 0, 40, 40, 9, 31, 18, 13, 7, 2, 267, 267, 112, 0, 0.00, 0.22, '2020-04-23 00:00:00', '2020-05-11 00:00:00', '{"BASIC": 4, "FUTURE": 0, "ADVANCED": 5, "COMMERCIAL": 0}', '["The stabilisation of the system in a \\"green built\\" is our goal."]');
-/*!40000 ALTER TABLE sprints.team_red ENABLE KEYS */;
+/*!40000 ALTER TABLE `team_red` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

@@ -8,7 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.EnumMap;
 import java.util.Optional;
 import java.util.StringJoiner;
@@ -32,8 +33,8 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 	/** The Constant TEAM_TABLE_PREFIX. */
 	private static final String TEAM_TABLE_PREFIX = "team_";
 
-	/** The Constant DOUBLE_5_2_DEFAULT_0. */
-	private static final String DOUBLE_5_2_DEFAULT_0 = "DOUBLE(5,2) DEFAULT 0";
+	/** The Constant DOUBLE_7_4_DEFAULT_0. */
+	private static final String DOUBLE_7_4_DEFAULT_0 = "DOUBLE(7,4) DEFAULT 0";
 
 	/** The Constant DECIMAL_3_DEFAULT_0. */
 	private static final String DECIMAL_3_DEFAULT_0 = "DECIMAL(3) DEFAULT 0";
@@ -212,8 +213,8 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 				.append(column4Creation(TIME_PLANNED_COLUMN, DECIMAL_3_DEFAULT_0))
 				.append(column4Creation(TIME_SPENT_COLUMN, DECIMAL_3_DEFAULT_0))
 				.append(column4Creation(NOT_CLOSED_HIGH_PRIOR_STORIES_COLUMN, DECIMAL_3_DEFAULT_0))
-				.append(column4Creation(DELTA_SP_COLUMN, DOUBLE_5_2_DEFAULT_0))
-				.append(column4Creation(PLANNED_SP_CLOSED_COLUMN, DOUBLE_5_2_DEFAULT_0))
+				.append(column4Creation(DELTA_SP_COLUMN, DOUBLE_7_4_DEFAULT_0))
+				.append(column4Creation(PLANNED_SP_CLOSED_COLUMN, DOUBLE_7_4_DEFAULT_0))
 				.append(column4Creation(SPRINT_START_COLUMN, DATETIME_DEFAULT_NULL))
 				.append(column4Creation(SPRINT_END_COLUMN, DATETIME_DEFAULT_NULL))
 				.append(column4Creation(UPDATED_COLUMN, DATETIME_DEFAULT_NULL))
@@ -316,7 +317,7 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		stmt.setDouble(17, team.getPlannedStoryPointsClosed());
 		stmt.setDate(18, java.sql.Date.valueOf(team.getSprintStart()));
 		stmt.setDate(19, java.sql.Date.valueOf(team.getSprintEnd()));
-		stmt.setDate(20, java.sql.Date.valueOf(LocalDate.now()));
+		stmt.setTimestamp(20, Timestamp.valueOf(LocalDateTime.now()));
 		stmt.setString(21, finishedSP2Json(team));
 		stmt.setString(22, goals2Json(team));
 		stmt.addBatch();
@@ -348,7 +349,7 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		stmt.setDouble(16, team.getPlannedStoryPointsClosed());
 		stmt.setDate(17, java.sql.Date.valueOf(team.getSprintStart()));
 		stmt.setDate(18, java.sql.Date.valueOf(team.getSprintEnd()));
-		stmt.setDate(19, java.sql.Date.valueOf(LocalDate.now()));
+		stmt.setTimestamp(19, Timestamp.valueOf(LocalDateTime.now()));
 		stmt.setString(20, finishedSP2Json(team));
 		stmt.setString(21, goals2Json(team));
 		stmt.setString(22, team.getSprintLabel());

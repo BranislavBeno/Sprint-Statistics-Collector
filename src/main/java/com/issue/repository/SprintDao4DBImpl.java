@@ -8,7 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.EnumMap;
 import java.util.Optional;
 import java.util.StringJoiner;
@@ -38,11 +39,13 @@ public class SprintDao4DBImpl implements Dao4DB<Sprint> {
 	/** The Constant SPRINT_COLUMN. */
 	private static final String SPRINT_COLUMN = "sprint";
 
+	/** The Constant UPDATED_COLUMN. */
 	private static final String UPDATED_COLUMN = "updated";
 
 	/** The Constant VARCHAR_64_DEFAULT_NULL. */
 	private static final String VARCHAR_64_DEFAULT_NULL = "VARCHAR(64) DEFAULT NULL";
 
+	/** The Constant DATETIME_DEFAULT_NULL. */
 	private static final String DATETIME_DEFAULT_NULL = "DATETIME DEFAULT NULL";
 
 	/** The logger. */
@@ -107,7 +110,7 @@ public class SprintDao4DBImpl implements Dao4DB<Sprint> {
 	 */
 	private void params4Update(PreparedStatement stmt, final Sprint sprint) throws SQLException {
 		stmt.setString(1, finishedSP2Json(sprint));
-		stmt.setDate(2, java.sql.Date.valueOf(LocalDate.now()));
+		stmt.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
 		stmt.setString(3, sprint.getSprintLabel());
 		stmt.addBatch();
 	}
@@ -122,7 +125,7 @@ public class SprintDao4DBImpl implements Dao4DB<Sprint> {
 	private void params4Insertion(PreparedStatement stmt, final Sprint sprint) throws SQLException {
 		stmt.setString(1, sprint.getSprintLabel());
 		stmt.setString(2, finishedSP2Json(sprint));
-		stmt.setDate(3, java.sql.Date.valueOf(LocalDate.now()));
+		stmt.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
 		stmt.addBatch();
 	}
 
@@ -132,7 +135,11 @@ public class SprintDao4DBImpl implements Dao4DB<Sprint> {
 	 * @return the string
 	 */
 	private String statement4Update() {
-		return "UPDATE " + DB_TABLE + " SET " + column4Update(REFINED_SP_COLUMN) + " WHERE " + SPRINT_COLUMN + "= ?";
+		StringJoiner sj = new StringJoiner(", ");
+		sj.add(column4Update(REFINED_SP_COLUMN));
+		sj.add(column4Update(UPDATED_COLUMN));
+
+		return "UPDATE " + DB_TABLE + " SET " + sj.toString() + " WHERE " + SPRINT_COLUMN + "= ?";
 	}
 
 	/**
@@ -145,8 +152,8 @@ public class SprintDao4DBImpl implements Dao4DB<Sprint> {
 		sb.append("CREATE TABLE IF NOT EXISTS ").append(DB_TABLE).append(" ( ")
 				.append(column4Creation("id", "INT(11) NOT NULL AUTO_INCREMENT"))
 				.append(column4Creation(SPRINT_COLUMN, VARCHAR_64_DEFAULT_NULL))
-				.append(column4Creation(REFINED_SP_COLUMN, "JSON DEFAULT NULL")).append("PRIMARY KEY (`id`)) ")
-				.append(column4Creation(UPDATED_COLUMN, DATETIME_DEFAULT_NULL))
+				.append(column4Creation(REFINED_SP_COLUMN, "JSON DEFAULT NULL"))
+				.append(column4Creation(UPDATED_COLUMN, DATETIME_DEFAULT_NULL)).append("PRIMARY KEY (`id`)) ")
 				.append("ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;");
 
 		return sb.toString();
@@ -246,7 +253,7 @@ public class SprintDao4DBImpl implements Dao4DB<Sprint> {
 			logger.info("Table '{}' exists or created successfully.", DB_TABLE);
 
 		} catch (SQLException e) {
-			logger.error("DB table {} creation failed!", DB_TABLE);
+			logger.error("DB table '{}' creation failed!", DB_TABLE);
 		}
 	}
 
