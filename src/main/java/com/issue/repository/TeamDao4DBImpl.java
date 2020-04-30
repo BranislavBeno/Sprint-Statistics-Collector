@@ -36,6 +36,9 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 	/** The Constant DOUBLE_7_4_DEFAULT_0. */
 	private static final String DOUBLE_7_4_DEFAULT_0 = "DOUBLE(7,4) DEFAULT 0";
 
+	/** The Constant DECIMAL_4_DEFAULT_0. */
+	private static final String DECIMAL_4_DEFAULT_0 = "DECIMAL(4) DEFAULT 0";
+
 	/** The Constant DECIMAL_3_DEFAULT_0. */
 	private static final String DECIMAL_3_DEFAULT_0 = "DECIMAL(3) DEFAULT 0";
 
@@ -209,9 +212,9 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 				.append(column4Creation(IN_PROGRESS_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
 				.append(column4Creation(FINISHED_STORIES_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
 				.append(column4Creation(FINISHED_BUGS_SP_SUM_COLUMN, DECIMAL_3_DEFAULT_0))
-				.append(column4Creation(TIME_ESTIMATION_COLUMN, DECIMAL_3_DEFAULT_0))
-				.append(column4Creation(TIME_PLANNED_COLUMN, DECIMAL_3_DEFAULT_0))
-				.append(column4Creation(TIME_SPENT_COLUMN, DECIMAL_3_DEFAULT_0))
+				.append(column4Creation(TIME_ESTIMATION_COLUMN, DECIMAL_4_DEFAULT_0))
+				.append(column4Creation(TIME_PLANNED_COLUMN, DECIMAL_4_DEFAULT_0))
+				.append(column4Creation(TIME_SPENT_COLUMN, DECIMAL_4_DEFAULT_0))
 				.append(column4Creation(NOT_CLOSED_HIGH_PRIOR_STORIES_COLUMN, DECIMAL_3_DEFAULT_0))
 				.append(column4Creation(DELTA_SP_COLUMN, DOUBLE_7_4_DEFAULT_0))
 				.append(column4Creation(PLANNED_SP_CLOSED_COLUMN, DOUBLE_7_4_DEFAULT_0))
