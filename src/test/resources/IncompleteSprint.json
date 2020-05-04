@@ -181,6 +181,9 @@
      "self": "http://jira/rest/api/2/customFieldOption/17242"
     },
     "customfield_10002": 5,
+    "resolution": {
+     "name": "Canceled"
+    },
     "status": {
      "statusCategory": {
       "key": "done",

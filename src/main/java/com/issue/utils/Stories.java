@@ -4,6 +4,8 @@
 package com.issue.utils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -88,8 +90,9 @@ public class Stories {
 	private static String askIssueTracker(String username, String password, String issueTrackerUri, String query)
 			throws IOException, InterruptedException {
 		String request = createRequestUri(issueTrackerUri, query,
-				"status,priority,aggregatetimeoriginalestimate,aggregatetimespent," + STORY_POINTS_FIELD_ID + ","
-						+ EPIC_LINK_FIELD_ID + "," + STORY_OWNER_FIELD_ID + "," + STORY_TYPE_FIELD_ID);
+				"assignee,status,resolution,priority,aggregatetimeoriginalestimate,aggregatetimespent,"
+						+ STORY_POINTS_FIELD_ID + "," + EPIC_LINK_FIELD_ID + "," + STORY_OWNER_FIELD_ID + ","
+						+ STORY_TYPE_FIELD_ID);
 
 		return Utils.gatherJsonString(username, password, request);
 	}
@@ -162,11 +165,19 @@ public class Stories {
 		// Initialize story owner name
 		JsonNode storyOwnerName = null;
 
-		// Get story owner field
-		JsonNode storyOwnerField = issueFields.get(STORY_OWNER_FIELD_ID);
+		// Get assignee field
+		JsonNode storyOwnerField = issueFields.get("assignee");
 
-		if (storyOwnerField != null)
+		// Is assignee found?
+		if (storyOwnerField != null) {
 			storyOwnerName = storyOwnerField.get("displayName");
+		} else {
+			// Get story owner field inn case that no assignee was found
+			storyOwnerField = issueFields.get(STORY_OWNER_FIELD_ID);
+
+			if (storyOwnerField != null)
+				storyOwnerName = storyOwnerField.get("displayName");
+		}
 
 		// Get story owner
 		JsonNode owner = Optional.ofNullable(storyOwnerName).orElse(new ObjectNode(null));
@@ -235,6 +246,26 @@ public class Stories {
 	}
 
 	/**
+	 * Parses the story resolution.
+	 *
+	 * @param issueFields the issue fields
+	 * @return the string
+	 */
+	private static String parseStoryResolution(JsonNode issueFields) {
+		// Initialize resolution name json node
+		JsonNode resolutionName = null;
+
+		// Get json node resolution
+		JsonNode resolutionField = issueFields.get("resolution");
+
+		if (resolutionField != null) {
+			resolutionName = resolutionField.get("name");
+		}
+
+		return Optional.ofNullable(resolutionName).orElse(new ObjectNode(null)).asText();
+	}
+
+	/**
 	 * Extract stories.
 	 *
 	 * @param jsonString the json string
@@ -281,10 +312,13 @@ public class Stories {
 				// Get story status
 				String status = parseStoryStatus(issueFields);
 
+				// Get story resolution
+				String resolution = parseStoryResolution(issueFields);
+
 				// Add new story into list
 				stories.save(new Story.Builder().epic(epic).storyPoints(sp).storyOwner(storyOwner).priority(priority)
 						.timeEstimation(timeEstimation).timeSpent(timeSpent).storyType(storyType).status(status)
-						.build());
+						.resolution(resolution).build());
 			}
 		}));
 
@@ -416,6 +450,37 @@ public class Stories {
 	}
 
 	/**
+	 * Removes the canceled stories.
+	 *
+	 * @param stories the stories
+	 */
+	public static void removeCanceledStories(StoryDao<Story> stories) {
+		// Get list of stories
+		List<Story> storiesList = stories.getAll();
+
+		if (!storiesList.isEmpty()) {
+			// Prepare set of story resolutions
+			Set<String> resolutions = Set.of("Canceled");
+
+			// Prepare empty list of canceled stories
+			List<Story> canceledStories = new ArrayList<>();
+
+			// Iterate through stories list
+			for (Story story : storiesList) {
+				// Get story resolution
+				String resolution = story.getResolution().orElse("");
+
+				// Add canceled story into list of canceled stories
+				if (!resolution.isBlank() && resolutions.contains(resolution))
+					canceledStories.add(story);
+			}
+
+			// Remove all canceled stories
+			stories.getAll().removeAll(canceledStories);
+		}
+	}
+
+	/**
 	 * Gather finished stories.
 	 *
 	 * @param globalParams the global params
@@ -455,6 +520,9 @@ public class Stories {
 
 					// Add issues finished outside of the sprint which are related to sprint id
 					addStoriesFinishedOutOfSprint(globalParams, sprintId, stories);
+
+					// Remove canceled stories
+					removeCanceledStories(stories);
 
 					// Summarize story points from stories finished within sprint(s)
 					team.setFinishedStoryPoints(Utils.countFeatureFocus(features, stories));

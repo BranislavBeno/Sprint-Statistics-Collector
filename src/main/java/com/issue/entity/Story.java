@@ -36,6 +36,9 @@ public class Story {
 	/** The status. */
 	private String status;
 
+	/** The resolution. */
+	private String resolution;
+
 	/**
 	 * Instantiates a new story.
 	 *
@@ -50,6 +53,7 @@ public class Story {
 		this.timeEstimation = builder.timeEstimation;
 		this.timeSpent = builder.timeSpent;
 		this.status = builder.status;
+		this.resolution = builder.resolution;
 	}
 
 	/**
@@ -125,6 +129,15 @@ public class Story {
 	}
 
 	/**
+	 * Gets the resolution.
+	 *
+	 * @return the resolution
+	 */
+	public Optional<String> getResolution() {
+		return Optional.ofNullable(resolution);
+	}
+
+	/**
 	 * The Class Builder.
 	 */
 	public static class Builder {
@@ -152,6 +165,9 @@ public class Story {
 
 		/** The status. */
 		private String status;
+
+		/** The resolution. */
+		private String resolution;
 
 		/**
 		 * Epic.
@@ -238,6 +254,17 @@ public class Story {
 		 */
 		public Builder status(String status) {
 			this.status = status;
+			return this;
+		}
+
+		/**
+		 * Resolution.
+		 *
+		 * @param resolution the resolution
+		 * @return the builder
+		 */
+		public Builder resolution(String resolution) {
+			this.resolution = resolution;
 			return this;
 		}
 

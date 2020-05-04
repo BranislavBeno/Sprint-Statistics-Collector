@@ -45,6 +45,10 @@
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
      "self": "http://jira/rest/api/2/status/5",
      "name": "Resolved"
+    },
+    "assignee": null,
+    "resolution": {
+     "name": "Fixed"
     }
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
@@ -93,6 +97,9 @@
      "iconUrl": "http://jira/images/icons/statuses/resolved.png",
      "self": "http://jira/rest/api/2/status/5",
      "name": "Resolved"
+    },
+    "resolution": {
+     "name": "Canceled"
     },
     "aggregatetimespent": 64800
    },
@@ -192,21 +199,7 @@
      "self": "http://jira/rest/api/2/priority/3"
     },
     "aggregatetimeoriginalestimate": 64800,
-    "customfield_16040": {
-     "active": true,
-     "key": "jane",
-     "timeZone": "Europe/Berlin",
-     "emailAddress": "jane@example.com",
-     "displayName": "Jane",
-     "self": "http://jira/rest/api/2/user?username=jane",
-     "name": "jane",
-     "avatarUrls": {
-      "24x24": "http://jira/secure/useravatar?size=small&avatarId=10162",
-      "16x16": "http://jira/secure/useravatar?size=xsmall&avatarId=10162",
-      "48x48": "http://jira/secure/useravatar?avatarId=10162",
-      "32x32": "http://jira/secure/useravatar?size=medium&avatarId=10162"
-     }
-    },
+    "customfield_16040": null,
     "customfield_12640": "ISSUE-10648",
     "customfield_10540": {
      "value": "Bugfix",
@@ -227,6 +220,22 @@
      "self": "http://jira/rest/api/2/status/5",
      "name": "Resolved"
     },
+    "assignee": {
+     "active": true,
+     "key": "jane",
+     "timeZone": "Europe/Berlin",
+     "emailAddress": "jane@example.com",
+     "displayName": "Jane",
+     "self": "http://jira/rest/api/2/user?username=jane",
+     "name": "jane",
+     "avatarUrls": {
+      "24x24": "http://jira/secure/useravatar?size=small&avatarId=10162",
+      "16x16": "http://jira/secure/useravatar?size=xsmall&avatarId=10162",
+      "48x48": "http://jira/secure/useravatar?avatarId=10162",
+      "32x32": "http://jira/secure/useravatar?size=medium&avatarId=10162"
+     }
+    },
+    "resolution": null,
     "aggregatetimespent": 10800
    },
    "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
