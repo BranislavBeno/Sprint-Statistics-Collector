@@ -241,9 +241,27 @@ class StoriesTest {
 		// extract stories from json
 		StoryDao<Story> stories = Stories.extractStories(jsonString);
 
+		// Test full amount of stories
 		assertThat(stories.getAll().size()).isEqualTo(17);
 		assertThat(stories.getAll().get(0).getEpic().orElse("")).isEqualTo("ISSUE-465");
 		assertThat(stories.getAll().get(2).getStoryPoints().orElse(null)).isEqualTo(3);
+
+		// Test reduced amount of stories
+		Stories.removeCanceledStories(stories);
+		assertThat(stories.getAll().size()).isEqualTo(16);
+	}
+
+	@Test
+	void testStoriesExtractionFromEmptyList() throws IOException {
+		// Get Json string
+		String jsonString = readFileContent("src/test/resources/CompleteOutsideSprint.json");
+		// extract stories from json
+		StoryDao<Story> stories = Stories.extractStories(jsonString);
+
+		assertThat(stories.getAll().size()).isEqualTo(0);
+
+		Stories.removeCanceledStories(stories);
+		assertThat(stories.getAll().size()).isEqualTo(0);
 	}
 
 	/**

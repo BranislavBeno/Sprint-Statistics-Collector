@@ -458,26 +458,24 @@ public class Stories {
 		// Get list of stories
 		List<Story> storiesList = stories.getAll();
 
-		if (!storiesList.isEmpty()) {
-			// Prepare set of story resolutions
-			Set<String> resolutions = Set.of("Canceled");
+		// Prepare set of story resolutions
+		Set<String> resolutions = Set.of("Canceled");
 
-			// Prepare empty list of canceled stories
-			List<Story> canceledStories = new ArrayList<>();
+		// Prepare empty list of canceled stories
+		List<Story> canceledStories = new ArrayList<>();
 
-			// Iterate through stories list
-			for (Story story : storiesList) {
-				// Get story resolution
-				String resolution = story.getResolution().orElse("");
+		// Iterate through stories list
+		for (Story story : storiesList) {
+			// Get story resolution
+			String resolution = story.getResolution().orElse("");
 
-				// Add canceled story into list of canceled stories
-				if (!resolution.isBlank() && resolutions.contains(resolution))
-					canceledStories.add(story);
-			}
-
-			// Remove all canceled stories
-			stories.getAll().removeAll(canceledStories);
+			// Add canceled story into list of canceled stories
+			if (!resolution.isBlank() && resolutions.contains(resolution))
+				canceledStories.add(story);
 		}
+
+		// Remove all canceled stories
+		stories.getAll().removeAll(canceledStories);
 	}
 
 	/**

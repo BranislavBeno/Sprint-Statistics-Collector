@@ -1,3 +1,15 @@
+Changes against version 2.3.0
+-----------------------------
+- Fixed stories counting without canceled stories
+
+Changes against version 2.2.0
+-----------------------------
+- Fixed not sufficient digital length for time related values sent to database
+- Implemented parsing for sprint goals
+- Added properties for sprint start and sprint end
+- CLI options --user and --password are now required
+- Application CLI enhanced with version and help output
+
 Changes against version 2.1.0
 -----------------------------
 - Enabled engineer related data sending to database
