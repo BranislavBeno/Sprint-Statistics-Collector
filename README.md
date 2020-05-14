@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Gradle](https://img.shields.io/badge/gradle-v6.4-blue)](https://img.shields.io/badge/gradle-v6.4-blue)
-[![Build Status](https://travis-ci.org/BranislavBeno/Project-Implementation-Progress.svg?branch=master)](https://travis-ci.org/BranislavBeno/Project-Implementation-Progress)
+[![Build Status](https://travis-ci.org/BranislavBeno/Sprint-Statistics-Collector.svg?branch=master)](https://travis-ci.org/BranislavBeno/Sprint-Statistics-Collector)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=BranislavBeno_SprintStats&metric=alert_status)](https://sonarcloud.io/dashboard?id=BranislavBeno_SprintStats)
 [![Coverage](https://img.shields.io/sonar/coverage/BranislavBeno_SprintStats?server=https%3A%2F%2Fsonarcloud.io)](https://sonarcloud.io/dashboard?id=BranislavBeno_SprintStats)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=BranislavBeno_SprintStats&metric=ncloc)](https://sonarcloud.io/dashboard?id=BranislavBeno_SprintStats)
