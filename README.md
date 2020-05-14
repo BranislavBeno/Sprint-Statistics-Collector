@@ -7,9 +7,6 @@
 [![Coverage](https://img.shields.io/sonar/coverage/BranislavBeno_SprintStats?server=https%3A%2F%2Fsonarcloud.io)](https://sonarcloud.io/dashboard?id=BranislavBeno_SprintStats)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=BranislavBeno_SprintStats&metric=ncloc)](https://sonarcloud.io/dashboard?id=BranislavBeno_SprintStats)
 
-[![pipeline status](https://gitlab.websupport.sk/biea/sprint-statistics/badges/master/pipeline.svg)](https://gitlab.websupport.sk/biea/sprint-statistics/commits/master)
-[![coverage report](https://gitlab.websupport.sk/biea/sprint-statistics/badges/master/coverage.svg)](https://gitlab.websupport.sk/biea/sprint-statistics/commits/master)
-
 
 Abstract
 ========
