@@ -16,11 +16,13 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'org.sonarqube'
 
 mainClassName = 'com.issue.runner.RunStats'
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
 
 ext {
   junitVersion = '5.4.2'
+  sonarProjectName = 'SprintStats'
+  sonarProjectKey = 'com.issue.sprintstats'
   jacocoDestinationFile = file("$buildDir/jacoco/test.exec")
 }
 
@@ -91,6 +93,5 @@ jacocoTestReport {
 sonarqube {
   properties {
     property "sonar.projectKey", "BranislavBeno_SprintStats"
-
   }
 }
