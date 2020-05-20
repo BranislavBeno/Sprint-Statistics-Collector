@@ -1,17 +1,14 @@
 FROM alpine:latest
 
-RUN apk --update add openjdk11
+# Install jdk
+RUN apk add --no-cache openjdk11
 
-COPY ./build/libs/SprintStats-R1.0.1-all.jar /var/www/java/
+COPY ./build/libs/SprintStatsCollector.jar /app/
+COPY ./conf/application.properties /app/conf/
 
-COPY ./*.json /var/www/java/
+WORKDIR /app
 
-#COPY . /var/www/java
+ENV APP_USER user
+ENV APP_PASSWD passwd
 
-WORKDIR /var/www/java
-
-RUN pwd
-
-RUN ls -la
-
-ENTRYPOINT ["java", "-jar", "SprintStats-R1.0.1-all.jar", "-d"]
+CMD /usr/bin/java -jar SprintStatsCollector.jar -u $APP_USER -p $APP_PASSWD -d
