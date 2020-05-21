@@ -1,0 +1,8 @@
+$ docker ps
+$ docker cp hoge.sql [cotaier-id]:/hoge.sql
+$ sudo docker-compose exec db bash (docker exec -it [container-id] /bin/bash)
+$ mysql -u root -p
+$ show databases;
+$ use [your_database_name];
+$ show tables
+$ source hoge.sql

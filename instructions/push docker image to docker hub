@@ -1,0 +1,2 @@
+$ docker login
+$ docker push [docker_hub_personal_id]/[docker_image]:[tag]
