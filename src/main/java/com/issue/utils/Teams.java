@@ -1,6 +1,7 @@
 package com.issue.utils;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -165,7 +166,7 @@ public class Teams {
 	 * Adds the sprint dates and goals.
 	 *
 	 * @param globalParams the global params
-	 * @param teamsRepo the teams repo
+	 * @param teamsRepo    the teams repo
 	 */
 	private static void addSprintDatesAndGoals(final GlobalParams globalParams, TeamDao<String, Team> teamsRepo) {
 		Map<String, Team> teams = teamsRepo.getAll();
@@ -214,5 +215,71 @@ public class Teams {
 	public static long summarizeTimeSpent(StoryDao<Story> stories) {
 		return stories.getAll().stream().map(s -> s.getTimeSpent().orElse(0)).collect(Collectors.toList()).stream()
 				.collect(Collectors.summingInt(Integer::intValue)).longValue() / 3600;
+	}
+
+	/**
+	 * Creates the refinement queries.
+	 *
+	 * @param finishedInSprintJql the finished in sprint jql
+	 * @return the map
+	 */
+	public static Map<Integer, String> createRefinementQueries(final String finishedInSprintJql) {
+		// Initialize hash map for queries
+		Map<Integer, String> queries = new HashMap<>();
+
+		// Search for particular string inside query
+		Pattern pattern = Pattern.compile("'(.+)'");
+		Matcher matcher = pattern.matcher(finishedInSprintJql);
+
+		if (matcher.find()) {
+			// Gather sprint label
+			String sprintLabel = matcher.group(1);
+
+			// Set new regex
+			pattern = Pattern.compile("(\\d+)");
+			matcher = pattern.matcher(sprintLabel);
+
+			if (matcher.find()) {
+				// Gather sprint number
+				Integer sprint = Optional.ofNullable(matcher.group(1)).map(Integer::valueOf).orElse(0);
+
+				// Create map of queries related to particular sprint
+				queries = createQueries(sprintLabel, sprint);
+			}
+		}
+
+		// Add new queries
+		return queries;
+	}
+
+	/**
+	 * Creates the queries.
+	 *
+	 * @param sprintLabel the sprint label
+	 * @param sprintNr the sprint nr
+	 * @return the map
+	 */
+	private static Map<Integer, String> createQueries(final String sprintLabel, final Integer sprintNr) {
+		// Initialize hash map for queries
+		Map<Integer, String> queries = new HashMap<>();
+
+		// Iterate counter to get new queries for refinement
+		Integer sprint = sprintNr;
+		for (int i = 0; i <= 3; i++) {
+			sprint++;
+
+			// Create new sprint label
+			String sprintLbl = sprintLabel.replaceFirst("(\\d+)", sprint.toString());
+
+			// Create new query
+			String query = "issuetype = Story AND Sprint in ('" + sprintLbl + "')";
+
+			// Add query
+			queries.put(sprint, query);
+
+			logger.debug("Created query for refinement: {}", query);
+		}
+
+		return queries;
 	}
 }

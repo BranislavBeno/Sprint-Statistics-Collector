@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.issue.enums.FeatureScope;
+import com.issue.iface.SprintDao;
 import com.issue.utils.Stories;
 
 /**
@@ -83,6 +84,9 @@ public class Team {
 
 	/** The sprint end. */
 	private LocalDate sprintEnd = LocalDate.of(1970, 1, 1);
+
+	/** The refined story points. */
+	private SprintDao<String, Sprint> refinedStoryPoints;
 
 	/** The goals. */
 	private List<String> goals;
@@ -444,6 +448,24 @@ public class Team {
 	 */
 	public void setSprintEnd(LocalDate sprintEnd) {
 		this.sprintEnd = sprintEnd;
+	}
+
+	/**
+	 * Gets the refined story points.
+	 *
+	 * @return the refinedStoryPoints
+	 */
+	public SprintDao<String, Sprint> getRefinedStoryPoints() {
+		return refinedStoryPoints;
+	}
+
+	/**
+	 * Sets the refined story points.
+	 *
+	 * @param refinedStoryPoints the refinedStoryPoints to set
+	 */
+	public void setRefinedStoryPoints(SprintDao<String, Sprint> refinedStoryPoints) {
+		this.refinedStoryPoints = refinedStoryPoints;
 	}
 
 	/**

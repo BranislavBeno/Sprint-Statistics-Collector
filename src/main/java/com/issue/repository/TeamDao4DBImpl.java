@@ -11,14 +11,18 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.EnumMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.StringJoiner;
+import java.util.TreeMap;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.issue.entity.Sprint;
 import com.issue.entity.Team;
 import com.issue.enums.FeatureScope;
 import com.issue.iface.Dao4DB;
@@ -117,6 +121,9 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 	/** The Constant UPDATED_COLUMN. */
 	private static final String UPDATED_COLUMN = "updated";
 
+	/** The Constant REFINED_STORY_POINTS. */
+	private static final String REFINED_STORY_POINTS = "refined_story_points";
+
 	/** The Constant SPRINT_GOALS_COLUMN. */
 	private static final String SPRINT_GOALS_COLUMN = "sprint_goals";
 
@@ -177,6 +184,32 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 	}
 
 	/**
+	 * Refined SP 2 json.
+	 *
+	 * @param team the team
+	 * @return the string
+	 */
+	private String refinedSP2Json(Team team) {
+		String refinedSP = "";
+		try {
+			Map<String, String> map = new TreeMap<>();
+
+			for (Entry<String, Sprint> entry : team.getRefinedStoryPoints().getAll().entrySet()) {
+				Sprint val = entry.getValue();
+				String sp = new ObjectMapper()
+						.writeValueAsString(val.getRefinedStoryPoints().orElse(new EnumMap<>(FeatureScope.class)));
+				map.put(val.getSprintLabel(), sp);
+			}
+
+			refinedSP = new ObjectMapper().writeValueAsString(map);
+
+		} catch (JsonProcessingException e) {
+			logger.error("Refined story points conversion to json interrupted with exception.");
+		}
+		return refinedSP;
+	}
+
+	/**
 	 * Goals 2 json.
 	 *
 	 * @param team the team
@@ -187,7 +220,7 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		try {
 			goals = new ObjectMapper().writeValueAsString(team.getGoals());
 		} catch (JsonProcessingException e) {
-			logger.error("Finished goals conversion to json interrupted with exception.");
+			logger.error("Sprint goals conversion to json interrupted with exception.");
 		}
 		return goals;
 	}
@@ -222,6 +255,7 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 				.append(column4Creation(SPRINT_END_COLUMN, DATETIME_DEFAULT_NULL))
 				.append(column4Creation(UPDATED_COLUMN, DATETIME_DEFAULT_NULL))
 				.append(column4Creation(FINISHED_SP_COLUMN, JSON_DEFAULT_NULL))
+				.append(column4Creation(REFINED_STORY_POINTS, JSON_DEFAULT_NULL))
 				.append(column4Creation(SPRINT_GOALS_COLUMN, JSON_DEFAULT_NULL)).append("PRIMARY KEY (`id`)) ")
 				.append("ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;");
 
@@ -256,9 +290,10 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		sj.add(SPRINT_END_COLUMN);
 		sj.add(UPDATED_COLUMN);
 		sj.add(FINISHED_SP_COLUMN);
+		sj.add(REFINED_STORY_POINTS);
 		sj.add(SPRINT_GOALS_COLUMN);
 
-		return "INSERT INTO " + table + sj.toString() + "VALUES " + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		return "INSERT INTO " + table + sj.toString() + "VALUES " + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	}
 
 	/**
@@ -288,6 +323,7 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		sj.add(column4Update(SPRINT_END_COLUMN));
 		sj.add(column4Update(UPDATED_COLUMN));
 		sj.add(column4Update(FINISHED_SP_COLUMN));
+		sj.add(column4Update(REFINED_STORY_POINTS));
 		sj.add(column4Update(SPRINT_GOALS_COLUMN));
 
 		return "UPDATE " + table + " SET " + sj.toString() + " WHERE " + SPRINT_COLUMN + "= ?";
@@ -322,7 +358,8 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		stmt.setDate(19, java.sql.Date.valueOf(team.getSprintEnd()));
 		stmt.setTimestamp(20, Timestamp.valueOf(LocalDateTime.now()));
 		stmt.setString(21, finishedSP2Json(team));
-		stmt.setString(22, goals2Json(team));
+		stmt.setString(22, refinedSP2Json(team));
+		stmt.setString(23, goals2Json(team));
 		stmt.addBatch();
 	}
 
@@ -354,8 +391,9 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		stmt.setDate(18, java.sql.Date.valueOf(team.getSprintEnd()));
 		stmt.setTimestamp(19, Timestamp.valueOf(LocalDateTime.now()));
 		stmt.setString(20, finishedSP2Json(team));
-		stmt.setString(21, goals2Json(team));
-		stmt.setString(22, team.getSprintLabel());
+		stmt.setString(21, refinedSP2Json(team));
+		stmt.setString(22, goals2Json(team));
+		stmt.setString(23, team.getSprintLabel());
 		stmt.addBatch();
 	}
 

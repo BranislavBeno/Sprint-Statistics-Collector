@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -21,12 +22,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.issue.configuration.GlobalParams;
 import com.issue.entity.Feature;
+import com.issue.entity.Sprint;
 import com.issue.entity.Story;
 import com.issue.entity.Team;
 import com.issue.enums.FeatureScope;
 import com.issue.iface.FeatureDao;
+import com.issue.iface.SprintDao;
 import com.issue.iface.StoryDao;
 import com.issue.iface.TeamDao;
+import com.issue.repository.SprintDaoImpl;
 import com.issue.repository.StoryDaoImpl;
 
 /**
@@ -558,6 +562,10 @@ public class Stories {
 					// Collect team members participating on sprint(s)
 					Teams.collectTeamMembers(stories, team);
 
+					// Collect refined story points
+					team.setRefinedStoryPoints(collectRefinedStoryPoints(globalParams, features, finishedInSprintJql));
+					logger.info("Collected refined story points for team {}", team.getTeamName());
+
 					// Save particular team into repository
 					teamsRepo.save(team);
 				}
@@ -565,5 +573,50 @@ public class Stories {
 				logger.info("{} finished stories for Team {} processed.", stories.getAll().size(), teamName);
 			}
 		}
+	}
+
+	/**
+	 * Collect refined story points.
+	 *
+	 * @param globalParams the global params
+	 * @param features the features
+	 * @param finishedInSprintJql the finished in sprint jql
+	 * @return the sprint dao
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws InterruptedException the interrupted exception
+	 */
+	private static SprintDao<String, Sprint> collectRefinedStoryPoints(final GlobalParams globalParams,
+			final FeatureDao<String, Feature> features, String finishedInSprintJql)
+			throws IOException, InterruptedException {
+		// Initialize new repository for refined story points
+		SprintDao<String, Sprint> sprintsRepo = new SprintDaoImpl();
+
+		// Create list of queries for gathering refined story points
+		Map<Integer, String> queries = Teams.createRefinementQueries(finishedInSprintJql);
+		logger.debug("Added new queries for refined stories");
+
+		// Run through refined and planned sprints
+		for (Entry<Integer, String> entry : queries.entrySet()) {
+			// Initialize repository for refined stories
+			StoryDao<Story> refinementStories = new StoryDaoImpl();
+
+			// Get query
+			String query = entry.getValue();
+
+			// Create stories repository
+			refinementStories.saveAll(Stories.createStoriesRepo(globalParams.getUsername(), globalParams.getPassword(),
+					globalParams.getIssueTrackerUri(), query).getAll());
+
+			// Initialize sprint object
+			Sprint sprint = new Sprint("Sprint " + entry.getKey());
+
+			// Count story points from stories refined for particular sprint
+			sprint.setRefinedStoryPoints(Utils.countFeatureFocus(features, refinementStories));
+
+			// Save refined sprint analysis
+			sprintsRepo.save(sprint);
+		}
+
+		return sprintsRepo;
 	}
 }
