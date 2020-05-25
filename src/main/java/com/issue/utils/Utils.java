@@ -340,7 +340,7 @@ public class Utils {
 		// Write into DB
 		if (write2DB) {
 			// Send gathered statistics to data base
-			Send2DB send2DB = new Send2DB(globalParams, teams, sprints, engineers);
+			Send2DB send2DB = new Send2DB(globalParams, teams);
 			send2DB.sendStats2DB();
 		}
 

@@ -8,21 +8,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.issue.configuration.GlobalParams;
-import com.issue.entity.Engineer;
-import com.issue.entity.Sprint;
 import com.issue.entity.Team;
-import com.issue.iface.EngineerDao;
-import com.issue.iface.SprintDao;
 import com.issue.iface.TeamDao;
-import com.issue.repository.EngineerDaoImpl;
-import com.issue.repository.SprintDaoImpl;
 import com.issue.repository.TeamDaoImpl;
 import com.issue.utils.Utils;
 
@@ -34,7 +26,7 @@ import com.issue.utils.Utils;
 class Send2DBTest {
 
 	/**
-	 * Prepare team repo.
+	 * Prepare team repository.
 	 *
 	 * @return the team dao
 	 */
@@ -50,42 +42,6 @@ class Send2DBTest {
 	}
 
 	/**
-	 * Prepare sprint repo.
-	 *
-	 * @return the sprint dao
-	 */
-	private SprintDao<String, Sprint> prepareSprintRepo() {
-		// Prepare one sprint
-		Sprint sprint = new Sprint("Test");
-
-		// Prepare sprint repository
-		SprintDao<String, Sprint> sprints = new SprintDaoImpl();
-		sprints.save(sprint);
-
-		return sprints;
-	}
-
-	/**
-	 * Prepare engineer repo.
-	 *
-	 * @return the engineer dao
-	 */
-	private EngineerDao<String, Engineer> prepareEngineerRepo() {
-		// Prepare one engineer
-		Engineer engineer = new Engineer("John Doe", "Test");
-
-		// Prepare map of engineers
-		Map<String, Engineer> engMap = new HashMap<>();
-		engMap.put(engineer.getName(), engineer);
-
-		// Prepare engineer repository
-		EngineerDao<String, Engineer> engineers = new EngineerDaoImpl();
-		engineers.saveAll(engMap);
-
-		return engineers;
-	}
-
-	/**
 	 * Test no object created.
 	 *
 	 * @throws SQLException the SQL exception
@@ -93,7 +49,7 @@ class Send2DBTest {
 	@Test
 	@DisplayName("Test whether no object is created and IllegalArgumentException is raised")
 	void testNoObjectCreated() throws SQLException {
-		assertThrows(IllegalArgumentException.class, () -> new Send2DB(null, null, null, null));
+		assertThrows(IllegalArgumentException.class, () -> new Send2DB(null, null));
 	}
 
 	/**
@@ -110,7 +66,7 @@ class Send2DBTest {
 				.provideGlobalParams("src/test/resources/test_negative1_application.properties");
 
 		// Create object for database connection
-		Send2DB send2DB = new Send2DB(globalParams, null, null, null);
+		Send2DB send2DB = new Send2DB(globalParams, null);
 		// Send data to database
 		send2DB.sendStats2DB();
 
@@ -131,7 +87,7 @@ class Send2DBTest {
 				.provideGlobalParams("src/test/resources/test_positive_application.properties");
 
 		// Create object for database connection
-		Send2DB send2DB = new Send2DB(globalParams, null, null, null);
+		Send2DB send2DB = new Send2DB(globalParams, null);
 		// Send data to database
 		send2DB.sendStats2DB();
 
@@ -154,14 +110,8 @@ class Send2DBTest {
 		// Prepare team repository
 		TeamDao<String, Team> teams = prepareTeamRepo();
 
-		// Prepare sprint repository
-		SprintDao<String, Sprint> sprints = prepareSprintRepo();
-
-		// Prepare engineer repository
-		EngineerDao<String, Engineer> engineers = prepareEngineerRepo();
-
 		// Create object for database connection
-		Send2DB send2DB = new Send2DB(globalParams, teams, sprints, engineers);
+		Send2DB send2DB = new Send2DB(globalParams, teams);
 		// Send data to database
 		send2DB.sendStats2DB();
 

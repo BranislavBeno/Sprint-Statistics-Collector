@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.EnumMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,8 +20,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import com.issue.entity.Sprint;
 import com.issue.entity.Team;
+import com.issue.enums.FeatureScope;
 import com.issue.iface.Dao4DB;
+import com.issue.iface.SprintDao;
 
 /**
  * The Class TeamDao4DBImplTest.
@@ -123,6 +128,26 @@ class TeamDao4DBImplTest {
 	 * @throws SQLException the SQL exception
 	 */
 	@Test
+	@DisplayName("Test whether database new minimal row insertion will be successfull")
+	void testPositiveNewMinimalTableRowCreation() throws SQLException {
+		Mockito.when(mockedConnection.createStatement()).thenReturn(mockedStatement);
+		Mockito.when(mockedStatement.executeQuery(Mockito.anyString())).thenReturn(mockedResultSet);
+		Mockito.when(mockedResultSet.first()).thenReturn(false);
+
+		Mockito.when(mockedConnection.prepareStatement(Mockito.anyString())).thenReturn(mockedPreparedStatement);
+		Mockito.when(mockedPreparedStatement.executeBatch()).thenReturn(new int[] { 1 });
+
+		// Create new team
+		team = new Team("Apple", "First");
+
+		// Create new team repo
+		dao = new TeamDao4DBImpl(mockedConnection);
+		dao.saveOrUpdate(team);
+
+		Mockito.verify(mockedPreparedStatement).executeBatch();
+	}
+
+	@Test
 	@DisplayName("Test whether database new row insertion will be successfull")
 	void testPositiveNewTableRowCreation() throws SQLException {
 		Mockito.when(mockedConnection.createStatement()).thenReturn(mockedStatement);
@@ -134,6 +159,24 @@ class TeamDao4DBImplTest {
 
 		// Create new team
 		team = new Team("Apple", "First");
+
+		// Create map of refined story points
+		Map<FeatureScope, Integer> map = new EnumMap<>(FeatureScope.class);
+		map.put(FeatureScope.BASIC, 7);
+		map.put(FeatureScope.ADVANCED, 5);
+		map.put(FeatureScope.COMMERCIAL, 3);
+		map.put(FeatureScope.FUTURE, 1);
+
+		// Create sprint
+		Sprint sprint = new Sprint("Test sprint");
+		sprint.setRefinedStoryPoints(map);
+
+		// Create sprint repository
+		SprintDao<String, Sprint> refinedStoryPoints = new SprintDaoImpl();
+		refinedStoryPoints.save(sprint);
+
+		// Add refined story points
+		team.setRefinedStoryPoints(refinedStoryPoints);
 
 		// Create new team repo
 		dao = new TeamDao4DBImpl(mockedConnection);
