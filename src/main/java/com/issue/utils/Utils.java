@@ -329,13 +329,13 @@ public class Utils {
 		TeamDao<String, Team> teams = Teams.createTeamRepo(globalParams);
 		Optional.ofNullable(teams).ifPresent(t -> logger.info("{} teams processed.", t.getAll().size()));
 
+		// Get sprints repository
+		SprintDao<String, Sprint> sprints = Sprints.createSprintRepo(teams);
+		Optional.ofNullable(sprints).ifPresent(s -> logger.info("{} sprint refinements processed.", s.getAll().size()));
+
 		// Get engineers repository
 		EngineerDao<String, Engineer> engineers = Engineers.createEngineersRepo(globalParams);
 		Optional.ofNullable(engineers).ifPresent(e -> logger.info("{} engineers processed.", e.getAll().size()));
-
-		// Get sprints repository
-		SprintDao<String, Sprint> sprints = Sprints.createSprintRepo(globalParams);
-		Optional.ofNullable(sprints).ifPresent(s -> logger.info("{} sprint refinements processed.", s.getAll().size()));
 
 		// Write into DB
 		if (write2DB) {

@@ -3,28 +3,19 @@
  */
 package com.issue.utils;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Optional;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.issue.configuration.GlobalParams;
-import com.issue.entity.Feature;
 import com.issue.entity.Sprint;
-import com.issue.entity.Story;
-import com.issue.iface.FeatureDao;
+import com.issue.entity.Team;
+import com.issue.enums.FeatureScope;
 import com.issue.iface.SprintDao;
-import com.issue.iface.StoryDao;
+import com.issue.iface.TeamDao;
 import com.issue.repository.SprintDaoImpl;
-import com.issue.repository.StoryDaoImpl;
 
 /**
  * The Class Utils.
@@ -44,126 +35,60 @@ public class Sprints {
 	}
 
 	/**
-	 * Creates the queries.
+	 * Creates the sprint repository.
 	 *
-	 * @param queries     the queries
-	 * @param sprintLabel the sprint label
-	 * @param sprintNr    the sprint nr
+	 * @param globalParams the global parameters
+	 * @return the sprint dao
 	 */
-	private static void createQueries(Map<Integer, Set<String>> queries, final String sprintLabel,
-			final Integer sprintNr) {
-		Integer sprint = sprintNr;
-		for (int i = 0; i <= 3; i++) {
-			sprint++;
+	public static SprintDao<String, Sprint> createSprintRepo(final TeamDao<String, Team> teams) {
+		// Initialize sprints repository
+		SprintDao<String, Sprint> sprintsRepo = new SprintDaoImpl();
 
-			// Create new sprint label
-			String sprintLbl = sprintLabel.replaceFirst("(\\d+)", sprint.toString());
+		// Run through team data
+		if (teams != null) {
+			for (Entry<String, Team> teamEntry : teams.getAll().entrySet()) {
+				// Get team
+				Team team = teamEntry.getValue();
 
-			// Create new query
-			String query = "issuetype = Story AND Sprint in ('" + sprintLbl + "')";
+				// Get map of refined story points
+				if (team.getRefinedStoryPoints() != null) {
+					SprintDao<String, Sprint> sprints = team.getRefinedStoryPoints();
 
-			// Set subsequent set
-			Set<String> qSet = queries.get(sprint);
+					for (Entry<String, Sprint> sprintEntry : sprints.getAll().entrySet()) {
+						// Get particular sprint
+						Sprint sprint = sprintEntry.getValue();
+						String sprintLabel = sprint.getSprintLabel();
 
-			if (qSet == null)
-				qSet = new HashSet<>();
+						if (sprintsRepo.getAll().containsKey(sprintLabel)) {
+							// Get team related refined story points
+							Map<FeatureScope, Integer> teamSP = sprint.getRefinedStoryPoints()
+									.orElse(new EnumMap<>(FeatureScope.class));
 
-			qSet.add(query);
+							// Get summary of refined story points
+							Map<FeatureScope, Integer> sumSP = sprintsRepo.getAll().get(sprintLabel)
+									.getRefinedStoryPoints().orElse(new EnumMap<>(FeatureScope.class));
 
-			// Add query into set
-			queries.put(sprint, qSet);
+							// Initialize new map of refined story points
+							Map<FeatureScope, Integer> newSP = new EnumMap<>(FeatureScope.class);
 
-			logger.debug("New created query is: {}", query);
-		}
-	}
+							// Count summary of refined story points
+							for (Entry<FeatureScope, Integer> spEntry : sumSP.entrySet()) {
+								// Get scope as key
+								FeatureScope key = spEntry.getKey();
 
-	/**
-	 * Creates the refinement queries.
-	 *
-	 * @param globalParams the global params
-	 */
-	public static void createRefinementQueries(GlobalParams globalParams) {
-		if (globalParams.getCompletedSprints() != null) {
-			// Initialize hash set for queries
-			Map<Integer, Set<String>> queries = new HashMap<>();
+								// Add team related story points to summarized story points
+								int count = spEntry.getValue() + teamSP.get(key);
 
-			// Run through queries for finished sprint(s)
-			for (String jql : globalParams.getCompletedSprints()) {
+								// Set new counted story points value
+								newSP.put(key, count);
+							}
+							sprint.setRefinedStoryPoints(newSP);
+						}
 
-				// Search for particular string inside query
-				Pattern pattern = Pattern.compile("'(.+)'");
-				Matcher matcher = pattern.matcher(jql);
-
-				if (matcher.find()) {
-					// Gather sprint label
-					String sprintLabel = matcher.group(1);
-
-					// Set new regex
-					pattern = Pattern.compile("(\\d+)");
-					matcher = pattern.matcher(sprintLabel);
-
-					if (matcher.find()) {
-						// Gather sprint number
-						Integer sprint = Optional.ofNullable(matcher.group(1)).map(Integer::valueOf).orElse(0);
-
-						// Create map of queries related to particular sprint
-						createQueries(queries, sprintLabel, sprint);
+						// Create new sprint item
+						sprintsRepo.save(sprint);
 					}
 				}
-			}
-
-			// Add new queries
-			globalParams.setRefinements(queries);
-			logger.info("Added new queries for refined stories");
-		}
-	}
-
-	/**
-	 * Creates the sprint repo.
-	 *
-	 * @param globalParams the global params
-	 * @return the sprint dao
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws InterruptedException the interrupted exception
-	 */
-	public static SprintDao<String, Sprint> createSprintRepo(final GlobalParams globalParams)
-			throws IOException, InterruptedException {
-		// Initialize sprints repository
-		SprintDao<String, Sprint> sprintsRepo = null;
-
-		// Create new queries for refined stories
-		Sprints.createRefinementQueries(globalParams);
-
-		if (globalParams.getRefinements() != null) {
-			// Create features repository
-			FeatureDao<String, Feature> features = Features.createFeaturesRepo(globalParams);
-			logger.info("{} features processed.", features.getAll().size());
-
-			sprintsRepo = new SprintDaoImpl();
-
-			// Run through refined and planned sprints
-			for (Entry<Integer, Set<String>> entry : globalParams.getRefinements().entrySet()) {
-				// Initialize stories repo
-				StoryDao<Story> stories = new StoryDaoImpl();
-
-				// Get queries set
-				Set<String> queries = entry.getValue();
-
-				// Run through queries
-				for (String query : queries) {
-					// Create stories repository
-					stories.saveAll(Stories.createStoriesRepo(globalParams.getUsername(), globalParams.getPassword(),
-							globalParams.getIssueTrackerUri(), query).getAll());
-				}
-
-				// Initialize sprint object
-				Sprint sprint = new Sprint("Sprint " + entry.getKey());
-
-				// Count story points from stories refined for particular sprint
-				sprint.setRefinedStoryPoints(Utils.countFeatureFocus(features, stories));
-
-				// Save refined sprint analysis
-				sprintsRepo.save(sprint);
 			}
 		}
 

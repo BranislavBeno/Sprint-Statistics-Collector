@@ -69,9 +69,6 @@ public class GlobalParams {
 	/** The removed after sprint start. */
 	private Set<String> removedAfterSprintStart = null;
 
-	/** The refinements. */
-	private Map<Integer, Set<String>> refinements = null;
-
 	/** The goals. */
 	private Map<String, List<String>> goals = null;
 
@@ -398,24 +395,6 @@ public class GlobalParams {
 	 */
 	public void setRemovedAfterSprintStart(Set<String> removedAfterSprintStart) {
 		this.removedAfterSprintStart = removedAfterSprintStart;
-	}
-
-	/**
-	 * Gets the refinements.
-	 *
-	 * @return the refinements
-	 */
-	public Map<Integer, Set<String>> getRefinements() {
-		return refinements;
-	}
-
-	/**
-	 * Sets the refinements.
-	 *
-	 * @param refinements the refinements to set
-	 */
-	public void setRefinements(Map<Integer, Set<String>> refinements) {
-		this.refinements = refinements;
 	}
 
 	/**
