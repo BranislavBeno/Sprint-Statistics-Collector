@@ -92,7 +92,7 @@ class Send2DBTest {
 	 */
 	@Test
 	@DisplayName("Test whether no object is created and IllegalArgumentException is raised")
-	public void testNoObjectCreated() throws SQLException {
+	void testNoObjectCreated() throws SQLException {
 		assertThrows(IllegalArgumentException.class, () -> new Send2DB(null, null, null, null));
 	}
 
@@ -104,7 +104,7 @@ class Send2DBTest {
 	 */
 	@Test
 	@DisplayName("Test whether object is created but database connection parameters are false")
-	public void testObjectCreatedButDataBaseConnectionDataAreFalse() throws SQLException, IOException {
+	void testObjectCreatedButDataBaseConnectionDataAreFalse() throws SQLException, IOException {
 		// Prepare parameters for database connection
 		GlobalParams globalParams = Utils
 				.provideGlobalParams("src/test/resources/test_negative1_application.properties");
@@ -125,7 +125,7 @@ class Send2DBTest {
 	 */
 	@Test
 	@DisplayName("Test whether object is created but data for sending to database are null")
-	public void testObjectCreatedButDataToSendAreNull() throws SQLException, IOException {
+	void testObjectCreatedButDataToSendAreNull() throws SQLException, IOException {
 		// Prepare parameters for database connection
 		GlobalParams globalParams = Utils
 				.provideGlobalParams("src/test/resources/test_positive_application.properties");
@@ -146,7 +146,7 @@ class Send2DBTest {
 	 */
 	@Test
 	@DisplayName("Test whether data are sent to database")
-	public void testDataAreSentToDB() throws SQLException, IOException {
+	void testDataAreSentToDB() throws SQLException, IOException {
 		// Prepare parameters for database connection
 		GlobalParams globalParams = Utils
 				.provideGlobalParams("src/test/resources/test_positive_application.properties");

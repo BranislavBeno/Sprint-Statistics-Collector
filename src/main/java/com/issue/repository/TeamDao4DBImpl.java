@@ -194,16 +194,20 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		try {
 			Map<String, String> map = new TreeMap<>();
 
-			for (Entry<String, Sprint> entry : team.getRefinedStoryPoints().getAll().entrySet()) {
-				Sprint val = entry.getValue();
-				String sp = new ObjectMapper()
-						.writeValueAsString(val.getRefinedStoryPoints().orElse(new EnumMap<>(FeatureScope.class)));
-				map.put(val.getSprintLabel(), sp);
+			if (team.getRefinedStoryPoints() != null) {
+				for (Entry<String, Sprint> entry : team.getRefinedStoryPoints().getAll().entrySet()) {
+					Sprint val = entry.getValue();
+					String sp = new ObjectMapper()
+							.writeValueAsString(val.getRefinedStoryPoints().orElse(new EnumMap<>(FeatureScope.class)));
+					map.put(val.getSprintLabel(), sp);
+				}
 			}
 
 			refinedSP = new ObjectMapper().writeValueAsString(map);
 
-		} catch (JsonProcessingException e) {
+		} catch (
+
+		JsonProcessingException e) {
 			logger.error("Refined story points conversion to json interrupted with exception.");
 		}
 		return refinedSP;

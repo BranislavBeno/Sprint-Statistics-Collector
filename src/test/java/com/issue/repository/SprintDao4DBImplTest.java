@@ -51,7 +51,7 @@ public class SprintDao4DBImplTest {
 	 * @throws SQLException the SQL exception
 	 */
 	@BeforeEach
-	public void init() throws SQLException {
+	void init() throws SQLException {
 		MockitoAnnotations.initMocks(this);
 	}
 
@@ -62,7 +62,7 @@ public class SprintDao4DBImplTest {
 	 */
 	@Test
 	@DisplayName("Test whether no established connection to database raises IllegalArgumentException")
-	public void testNegativeNoConnectionEstablished() throws SQLException {
+	void testNegativeNoConnectionEstablished() throws SQLException {
 		assertThrows(IllegalArgumentException.class, () -> new SprintDao4DBImpl(null));
 	}
 
@@ -74,7 +74,7 @@ public class SprintDao4DBImplTest {
 	 */
 	@Test
 	@DisplayName("Test whether non existing prepared statement for database row insertion will be properly handled")
-	public void testNegativeNonExistingPreparedStatementHenceNoNewTableRowCreation() throws SQLException {
+	void testNegativeNonExistingPreparedStatementHenceNoNewTableRowCreation() throws SQLException {
 		Mockito.when(mockedConnection.createStatement()).thenReturn(mockedStatement);
 		Mockito.when(mockedStatement.executeQuery(Mockito.anyString())).thenReturn(mockedResultSet);
 		Mockito.when(mockedResultSet.first()).thenReturn(false);
@@ -97,7 +97,7 @@ public class SprintDao4DBImplTest {
 	 */
 	@Test
 	@DisplayName("Test whether non existing prepared statement for database row update will be properly handled")
-	public void testNegativeNonExistingPreparedStatementHenceNoExistingTableRowUpdate() throws SQLException {
+	void testNegativeNonExistingPreparedStatementHenceNoExistingTableRowUpdate() throws SQLException {
 		Mockito.when(mockedConnection.createStatement()).thenReturn(mockedStatement);
 		Mockito.when(mockedStatement.executeQuery(Mockito.anyString())).thenReturn(mockedResultSet);
 		Mockito.when(mockedResultSet.first()).thenReturn(true);
@@ -119,7 +119,7 @@ public class SprintDao4DBImplTest {
 	 */
 	@Test
 	@DisplayName("Test whether database new row insertion will be successfull")
-	public void testPositiveNewTableRowCreation() throws SQLException {
+	void testPositiveNewTableRowCreation() throws SQLException {
 		Mockito.when(mockedConnection.createStatement()).thenReturn(mockedStatement);
 		Mockito.when(mockedStatement.executeQuery(Mockito.anyString())).thenReturn(mockedResultSet);
 		Mockito.when(mockedResultSet.first()).thenReturn(false);
@@ -144,7 +144,7 @@ public class SprintDao4DBImplTest {
 	 */
 	@Test
 	@DisplayName("Test whether database existing row update will be successfull")
-	public void testPositiveExistingTableRowUpdate() throws SQLException {
+	void testPositiveExistingTableRowUpdate() throws SQLException {
 		Mockito.when(mockedConnection.createStatement()).thenReturn(mockedStatement);
 		Mockito.when(mockedStatement.executeQuery(Mockito.anyString())).thenReturn(mockedResultSet);
 		Mockito.when(mockedResultSet.first()).thenReturn(true);

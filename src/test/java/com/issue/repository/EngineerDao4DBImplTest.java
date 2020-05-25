@@ -48,19 +48,19 @@ public class EngineerDao4DBImplTest {
 	private Dao4DB<Engineer> dao;
 
 	@BeforeEach
-	public void init() throws SQLException {
+	void init() throws SQLException {
 		MockitoAnnotations.initMocks(this);
 	}
 
 	@Test
 	@DisplayName("Test whether non existing connection to database raises IllegalArgumentException")
-	public void testNegativeNoConnectionEstablished() throws SQLException {
+	void testNegativeNoConnectionEstablished() throws SQLException {
 		assertThrows(IllegalArgumentException.class, () -> new TeamDao4DBImpl(null));
 	}
 
 	@Test
 	@DisplayName("Test whether non existing prepared statement for database row insertion will be properly handled")
-	public void testNegativeNonExistingPreparedStatementHenceNoNewTableRowCreation() throws SQLException {
+	void testNegativeNonExistingPreparedStatementHenceNoNewTableRowCreation() throws SQLException {
 		Mockito.when(mockedConnection.createStatement()).thenReturn(mockedStatement);
 		Mockito.when(mockedStatement.executeQuery(Mockito.anyString())).thenReturn(mockedResultSet);
 		Mockito.when(mockedResultSet.first()).thenReturn(false);
@@ -77,7 +77,7 @@ public class EngineerDao4DBImplTest {
 
 	@Test
 	@DisplayName("Test whether non existing prepared statement for database row update will be properly handled")
-	public void testNegativeNonExistingPreparedStatementHenceNoExistingTableRowUpdate() throws SQLException {
+	void testNegativeNonExistingPreparedStatementHenceNoExistingTableRowUpdate() throws SQLException {
 		Mockito.when(mockedConnection.createStatement()).thenReturn(mockedStatement);
 		Mockito.when(mockedStatement.executeQuery(Mockito.anyString())).thenReturn(mockedResultSet);
 		Mockito.when(mockedResultSet.first()).thenReturn(true);
@@ -94,7 +94,7 @@ public class EngineerDao4DBImplTest {
 
 	@Test
 	@DisplayName("Test whether database new row insertion will be successfull")
-	public void testPositiveNewTableRowCreation() throws SQLException {
+	void testPositiveNewTableRowCreation() throws SQLException {
 		Mockito.when(mockedConnection.createStatement()).thenReturn(mockedStatement);
 		Mockito.when(mockedStatement.executeQuery(Mockito.anyString())).thenReturn(mockedResultSet);
 		Mockito.when(mockedResultSet.first()).thenReturn(false);
@@ -114,7 +114,7 @@ public class EngineerDao4DBImplTest {
 
 	@Test
 	@DisplayName("Test whether database existing row update will be successfull")
-	public void testPositiveExistingTableRowUpdate() throws SQLException {
+	void testPositiveExistingTableRowUpdate() throws SQLException {
 		Mockito.when(mockedConnection.createStatement()).thenReturn(mockedStatement);
 		Mockito.when(mockedStatement.executeQuery(Mockito.anyString())).thenReturn(mockedResultSet);
 		Mockito.when(mockedResultSet.first()).thenReturn(true);
