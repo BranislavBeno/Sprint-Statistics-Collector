@@ -11,6 +11,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.EnumMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -18,10 +20,13 @@ import com.issue.configuration.GlobalParams;
 import com.issue.entity.Feature;
 import com.issue.entity.Sprint;
 import com.issue.entity.Story;
+import com.issue.entity.Team;
+import com.issue.enums.FeatureScope;
 import com.issue.iface.Dao2Output;
 import com.issue.iface.FeatureDao;
 import com.issue.iface.SprintDao;
 import com.issue.iface.StoryDao;
+import com.issue.iface.TeamDao;
 import com.issue.repository.EngineerDaoImpl;
 import com.issue.repository.SprintDaoImpl;
 import com.issue.repository.TeamDaoImpl;
@@ -48,64 +53,79 @@ class SprintsTest {
 		}
 	}
 
-	/**
-	 * Test negative team list extraction with false properties.
-	 *
-	 * @throws IOException          Signals that an I/O exception has occurred.
-	 * @throws InterruptedException the interrupted exception
-	 */
 	@Test
-	void testNegativeTeamListExtractionWithFalseProperties() throws IOException, InterruptedException {
-		// provide global parameters
-		GlobalParams globalParams = Utils
-				.provideGlobalParams("src/test/resources/test_negative1_application.properties");
-
+	void testSprintListExtractionWithNullTeamRepository() throws IOException, InterruptedException {
 		// Get sprints
-		SprintDao<String, Sprint> sprints = Sprints.createSprintRepo(globalParams);
+		SprintDao<String, Sprint> sprints = Sprints.createSprintRepo(null);
 
 		assertThat(sprints).isNotNull();
 	}
 
-	/**
-	 * Test negative team list extraction with false authentication.
-	 *
-	 * @throws IOException          Signals that an I/O exception has occurred.
-	 * @throws InterruptedException the interrupted exception
-	 */
 	@Test
-	void testNegativeTeamListExtractionWithFalseAuthentication() throws IOException, InterruptedException {
-		// provide global parameters
-		GlobalParams globalParams = Utils
-				.provideGlobalParams("src/test/resources/test_negative2_application.properties");
+	void testSprintListExtractionWithEmptyTeamRepository() throws IOException, InterruptedException {
+		// Create team repository
+		TeamDao<String, Team> teams = new TeamDaoImpl();
 
 		// Get sprints
-		SprintDao<String, Sprint> sprints = Sprints.createSprintRepo(globalParams);
+		SprintDao<String, Sprint> sprints = Sprints.createSprintRepo(teams);
+
+		assertThat(sprints).isNotNull();
+	}
+
+	@Test
+	void testSprintListExtractionWithNonEmptyTeamRepositoryContainingInitialTeam()
+			throws IOException, InterruptedException {
+		// Create new team
+		Team team = new Team("Apple", "First");
+
+		// Create team repository
+		TeamDao<String, Team> teams = new TeamDaoImpl();
+		teams.save(team);
+
+		// Get sprints
+		SprintDao<String, Sprint> sprints = Sprints.createSprintRepo(teams);
 
 		assertThat(sprints.getAll().size()).isEqualTo(0);
 	}
 
-	/**
-	 * Test positive sprint list extraction.
-	 *
-	 * @throws IOException          Signals that an I/O exception has occurred.
-	 * @throws InterruptedException the interrupted exception
-	 */
 	@Test
-	void testPositiveSprintListExtraction() throws IOException, InterruptedException {
-		// provide global parameters
-		GlobalParams globalParams = Utils
-				.provideGlobalParams("src/test/resources/test_positive_application.properties");
+	void testSprintListExtractionWithNonEmptyTeamRepositoryContainingNecessaryFeaturedTeam()
+			throws IOException, InterruptedException {
+		// Create new team
+		Team team = new Team("Apple", "First");
+
+		// Create map of refined story points
+		Map<FeatureScope, Integer> map = new EnumMap<>(FeatureScope.class);
+		map.put(FeatureScope.BASIC, 7);
+		map.put(FeatureScope.ADVANCED, 5);
+		map.put(FeatureScope.COMMERCIAL, 3);
+		map.put(FeatureScope.FUTURE, 1);
+
+		// Create sprint
+		Sprint sprint = new Sprint("Test sprint");
+		sprint.setRefinedStoryPoints(map);
+
+		// Create sprint repository
+		SprintDao<String, Sprint> refinedStoryPoints = new SprintDaoImpl();
+		refinedStoryPoints.save(sprint);
+
+		// Add refined story points
+		team.setRefinedStoryPoints(refinedStoryPoints);
+
+		// Create team repository
+		TeamDao<String, Team> teams = new TeamDaoImpl();
+		teams.save(team);
 
 		// Get sprints
-		SprintDao<String, Sprint> sprints = Sprints.createSprintRepo(globalParams);
+		SprintDao<String, Sprint> sprints = Sprints.createSprintRepo(teams);
 
-		assertThat(sprints.getAll().size()).isEqualTo(4);
+		assertThat(sprints.getAll().size()).isEqualTo(1);
 	}
 
 	/**
 	 * Test positive xlsx output file exists.
 	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException          Signals that an I/O exception has occurred.
 	 * @throws InterruptedException the interrupted exception
 	 */
 	@Test
