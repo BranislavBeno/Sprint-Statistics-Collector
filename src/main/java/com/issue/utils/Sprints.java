@@ -68,21 +68,7 @@ public class Sprints {
 							Map<FeatureScope, Integer> sumSP = sprintsRepo.getAll().get(sprintLabel)
 									.getRefinedStoryPoints().orElse(new EnumMap<>(FeatureScope.class));
 
-							// Initialize new map of refined story points
-							Map<FeatureScope, Integer> newSP = new EnumMap<>(FeatureScope.class);
-
-							// Count summary of refined story points
-							for (Entry<FeatureScope, Integer> spEntry : sumSP.entrySet()) {
-								// Get scope as key
-								FeatureScope key = spEntry.getKey();
-
-								// Add team related story points to summarized story points
-								int count = spEntry.getValue() + teamSP.get(key);
-
-								// Set new counted story points value
-								newSP.put(key, count);
-							}
-							sprint.setRefinedStoryPoints(newSP);
+							sprint.setRefinedStoryPoints(countRefinedSP(teamSP, sumSP));
 						}
 
 						// Create new sprint item
@@ -93,5 +79,24 @@ public class Sprints {
 		}
 
 		return sprintsRepo;
+	}
+
+	private static Map<FeatureScope, Integer> countRefinedSP(final Map<FeatureScope, Integer> teamSP,
+			final Map<FeatureScope, Integer> sumSP) {
+		// Initialize new map of refined story points
+		Map<FeatureScope, Integer> newSP = new EnumMap<>(FeatureScope.class);
+
+		// Count summary of refined story points
+		for (Entry<FeatureScope, Integer> spEntry : sumSP.entrySet()) {
+			// Get scope as key
+			FeatureScope key = spEntry.getKey();
+
+			// Add team related story points to summarized story points
+			int count = spEntry.getValue() + teamSP.get(key);
+
+			// Set new counted story points value
+			newSP.put(key, count);
+		}
+		return newSP;
 	}
 }
