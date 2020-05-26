@@ -251,6 +251,11 @@ class StoriesTest {
 		assertThat(stories.getAll().size()).isEqualTo(16);
 	}
 
+	/**
+	 * Test stories extraction from empty list.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	@Test
 	void testStoriesExtractionFromEmptyList() throws IOException {
 		// Get Json string

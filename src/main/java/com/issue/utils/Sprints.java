@@ -37,7 +37,7 @@ public class Sprints {
 	/**
 	 * Creates the sprint repository.
 	 *
-	 * @param globalParams the global parameters
+	 * @param teams the teams
 	 * @return the sprint dao
 	 */
 	public static SprintDao<String, Sprint> createSprintRepo(final TeamDao<String, Team> teams) {
@@ -81,6 +81,13 @@ public class Sprints {
 		return sprintsRepo;
 	}
 
+	/**
+	 * Count refined SP.
+	 *
+	 * @param teamSP the team SP
+	 * @param sumSP the sum SP
+	 * @return the map
+	 */
 	private static Map<FeatureScope, Integer> countRefinedSP(final Map<FeatureScope, Integer> teamSP,
 			final Map<FeatureScope, Integer> sumSP) {
 		// Initialize new map of refined story points

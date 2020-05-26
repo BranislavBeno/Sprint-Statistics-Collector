@@ -53,6 +53,12 @@ class SprintsTest {
 		}
 	}
 
+	/**
+	 * Test sprint list extraction with null team repository.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws InterruptedException the interrupted exception
+	 */
 	@Test
 	void testSprintListExtractionWithNullTeamRepository() throws IOException, InterruptedException {
 		// Get sprints
@@ -61,6 +67,12 @@ class SprintsTest {
 		assertThat(sprints).isNotNull();
 	}
 
+	/**
+	 * Test sprint list extraction with empty team repository.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws InterruptedException the interrupted exception
+	 */
 	@Test
 	void testSprintListExtractionWithEmptyTeamRepository() throws IOException, InterruptedException {
 		// Create team repository
@@ -72,6 +84,12 @@ class SprintsTest {
 		assertThat(sprints).isNotNull();
 	}
 
+	/**
+	 * Test sprint list extraction with non empty team repository containing initial team.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws InterruptedException the interrupted exception
+	 */
 	@Test
 	void testSprintListExtractionWithNonEmptyTeamRepositoryContainingInitialTeam()
 			throws IOException, InterruptedException {
@@ -88,6 +106,12 @@ class SprintsTest {
 		assertThat(sprints.getAll().size()).isEqualTo(0);
 	}
 
+	/**
+	 * Test sprint list extraction with non empty team repository containing necessary featured team.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws InterruptedException the interrupted exception
+	 */
 	@Test
 	void testSprintListExtractionWithNonEmptyTeamRepositoryContainingNecessaryFeaturedTeam()
 			throws IOException, InterruptedException {

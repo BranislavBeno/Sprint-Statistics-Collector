@@ -13,8 +13,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.issue.configuration.GlobalParams;
+import com.issue.entity.Sprint;
 import com.issue.entity.Team;
+import com.issue.iface.SprintDao;
 import com.issue.iface.TeamDao;
+import com.issue.repository.SprintDaoImpl;
 import com.issue.repository.TeamDaoImpl;
 import com.issue.utils.Utils;
 
@@ -42,6 +45,22 @@ class Send2DBTest {
 	}
 
 	/**
+	 * Prepare sprint repo.
+	 *
+	 * @return the sprint dao
+	 */
+	private SprintDao<String, Sprint> prepareSprintRepo() {
+		// Prepare one sprint
+		Sprint sprint = new Sprint("Test");
+
+		// Prepare sprint repository
+		SprintDao<String, Sprint> sprints = new SprintDaoImpl();
+		sprints.save(sprint);
+
+		return sprints;
+	}
+
+	/**
 	 * Test no object created.
 	 *
 	 * @throws SQLException the SQL exception
@@ -49,7 +68,7 @@ class Send2DBTest {
 	@Test
 	@DisplayName("Test whether no object is created and IllegalArgumentException is raised")
 	void testNoObjectCreated() throws SQLException {
-		assertThrows(IllegalArgumentException.class, () -> new Send2DB(null, null));
+		assertThrows(IllegalArgumentException.class, () -> new Send2DB(null, null, null));
 	}
 
 	/**
@@ -66,7 +85,7 @@ class Send2DBTest {
 				.provideGlobalParams("src/test/resources/test_negative1_application.properties");
 
 		// Create object for database connection
-		Send2DB send2DB = new Send2DB(globalParams, null);
+		Send2DB send2DB = new Send2DB(globalParams, null, null);
 		// Send data to database
 		send2DB.sendStats2DB();
 
@@ -87,7 +106,7 @@ class Send2DBTest {
 				.provideGlobalParams("src/test/resources/test_positive_application.properties");
 
 		// Create object for database connection
-		Send2DB send2DB = new Send2DB(globalParams, null);
+		Send2DB send2DB = new Send2DB(globalParams, null, null);
 		// Send data to database
 		send2DB.sendStats2DB();
 
@@ -110,8 +129,11 @@ class Send2DBTest {
 		// Prepare team repository
 		TeamDao<String, Team> teams = prepareTeamRepo();
 
+		// Prepare sprint repository
+		SprintDao<String, Sprint> sprints = prepareSprintRepo();
+
 		// Create object for database connection
-		Send2DB send2DB = new Send2DB(globalParams, teams);
+		Send2DB send2DB = new Send2DB(globalParams, teams, sprints);
 		// Send data to database
 		send2DB.sendStats2DB();
 
