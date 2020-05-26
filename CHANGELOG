@@ -1,3 +1,9 @@
+Changes against version 2.4.0
+-----------------------------
+- Removed unused sending engineers to database
+- Refinded story points are now collected and sent to database pro team
+- Reworked Dockerfile for docker image creation
+
 Changes against version 2.3.1
 -----------------------------
 - Changed required location for application.properties file
