@@ -91,9 +91,6 @@ class SprintsTest {
 	@Test
 	void testSprintListExtractionWithNonEmptyTeamRepositoryContainingNecessaryFeaturedTeam()
 			throws IOException, InterruptedException {
-		// Create new team
-		Team team = new Team("Apple", "First");
-
 		// Create map of refined story points
 		Map<FeatureScope, Integer> map = new EnumMap<>(FeatureScope.class);
 		map.put(FeatureScope.BASIC, 7);
@@ -109,12 +106,23 @@ class SprintsTest {
 		SprintDao<String, Sprint> refinedStoryPoints = new SprintDaoImpl();
 		refinedStoryPoints.save(sprint);
 
+		// Create first team
+		Team team1 = new Team("Apple", "Test sprint");
 		// Add refined story points
-		team.setRefinedStoryPoints(refinedStoryPoints);
+		team1.setRefinedStoryPoints(refinedStoryPoints);
 
 		// Create team repository
 		TeamDao<String, Team> teams = new TeamDaoImpl();
-		teams.save(team);
+		// Add team to repository
+		teams.save(team1);
+
+		// Create second team
+		Team team2 = new Team("Banana", "Test sprint");
+		// Add refined story points
+		team2.setRefinedStoryPoints(refinedStoryPoints);
+
+		// Add team to repository
+		teams.save(team2);
 
 		// Get sprints
 		SprintDao<String, Sprint> sprints = Sprints.createSprintRepo(teams);
