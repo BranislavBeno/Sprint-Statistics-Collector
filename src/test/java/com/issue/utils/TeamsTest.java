@@ -135,15 +135,22 @@ class TeamsTest {
 
 		globalParams.setOutputFileName4Xlsx("teams.xlsx");
 
-		Team team = new Team("Pear", globalParams.getSprintLabel());
-		team.addTeamMembers(Set.of("John Doe"));
+		Team team1 = new Team("Pear", globalParams.getSprintLabel());
+		team1.addTeamMembers(Set.of("John Doe"));
 		Map<FeatureScope, Integer> storyPoints = new EnumMap<>(FeatureScope.class);
 		for (FeatureScope scope : FeatureScope.values())
 			storyPoints.put(scope, 0);
-		team.setFinishedStoryPoints(storyPoints);
+		team1.setFinishedStoryPoints(storyPoints);
 
 		TeamDao<String, Team> teamDao = new TeamDaoImpl();
-		teamDao.save(team);
+		teamDao.save(team1);
+
+		Team team2 = new Team("Banana", globalParams.getSprintLabel());
+		team2.addTeamMembers(Set.of("J.I. Jane"));
+		team2.setFinishedStoryPoints(storyPoints);
+		team2.setClosedHighPriorStoriesSuccessRate(-1.);
+
+		teamDao.save(team2);
 
 		// Create XLSX output
 		Dao2Output xlsxOutput = OutputCreators.createXlsxOutput(globalParams, teamDao, new SprintDaoImpl(),
