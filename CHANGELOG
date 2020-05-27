@@ -1,3 +1,7 @@
+Changes against version 2.5.0
+-----------------------------
+- Output for KPI's enhanced with critical & high priority stories closed out success rate
+
 Changes against version 2.4.0
 -----------------------------
 - Removed unused sending engineers to database
