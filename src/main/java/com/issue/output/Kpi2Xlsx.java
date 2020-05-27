@@ -46,7 +46,8 @@ public class Kpi2Xlsx {
 
 		// Create column with captions
 		OutputCreators.createCaptionColumn(workbook, sheetIdx,
-				List.of("", "Sprint", "Delta number SP", "Finished SP percentage", "Not closed high prior stories"));
+				List.of("", "Sprint", "Delta number SP", "Finished SP percentage", "Not closed high prior stories",
+						"Critical & high priority stories closed out success rate"));
 
 		// Initialize column
 		int colIdx = 1;
@@ -63,8 +64,11 @@ public class Kpi2Xlsx {
 			// Row 3 - Finished SP percentage
 			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 3, team.getPlannedStoryPointsClosed());
 
-			// Row 4 - Not closed high prior stories
+			// Row 4 - Not closed high priority stories
 			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 4, team.getNotClosedHighPriorStoriesCount());
+
+			// Row 5 - High priority stories closed out success rate
+			OutputCreators.writeCell(workbook, sheetIdx, colIdx, 5, team.getClosedHighPriorStoriesSuccessRate());
 
 			colIdx++;
 		}

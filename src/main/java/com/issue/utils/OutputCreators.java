@@ -54,6 +54,18 @@ public class OutputCreators {
 	}
 
 	/**
+	 * Apply border style.
+	 *
+	 * @param contentStyle the content style
+	 */
+	private static void applyBorderStyle(CellStyle contentStyle) {
+		contentStyle.setBorderRight(BorderStyle.THIN);
+		contentStyle.setBorderLeft(BorderStyle.THIN);
+		contentStyle.setBorderTop(BorderStyle.THIN);
+		contentStyle.setBorderBottom(BorderStyle.THIN);
+	}
+
+	/**
 	 * Caption style.
 	 *
 	 * @param workbook  the workbook
@@ -74,11 +86,8 @@ public class OutputCreators {
 		headerStyle.setFillForegroundColor(IndexedColors.LIGHT_CORNFLOWER_BLUE.getIndex());
 		headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		headerStyle.setFont(font);
-		headerStyle.setBorderTop(BorderStyle.THIN);
-		headerStyle.setBorderRight(BorderStyle.THIN);
-		headerStyle.setBorderBottom(BorderStyle.THIN);
-		headerStyle.setBorderLeft(BorderStyle.THIN);
 		headerStyle.setAlignment(alignment);
+		applyBorderStyle(headerStyle);
 
 		return headerStyle;
 	}
@@ -95,10 +104,7 @@ public class OutputCreators {
 		CellStyle contentStyle = workbook.createCellStyle();
 		contentStyle.setFont(defaultFont(workbook));
 		contentStyle.setAlignment(alignment);
-		contentStyle.setBorderRight(BorderStyle.THIN);
-		contentStyle.setBorderLeft(BorderStyle.THIN);
-		contentStyle.setBorderTop(BorderStyle.THIN);
-		contentStyle.setBorderBottom(BorderStyle.THIN);
+		applyBorderStyle(contentStyle);
 		return contentStyle;
 	}
 
@@ -115,9 +121,7 @@ public class OutputCreators {
 		contentStyle.setFont(defaultFont(workbook));
 		contentStyle.setDataFormat(workbook.createDataFormat().getFormat("0.00%"));
 		contentStyle.setAlignment(alignment);
-		contentStyle.setBorderRight(BorderStyle.THIN);
-		contentStyle.setBorderLeft(BorderStyle.THIN);
-		contentStyle.setBorderTop(BorderStyle.THIN);
+		applyBorderStyle(contentStyle);
 		return contentStyle;
 	}
 
@@ -165,8 +169,13 @@ public class OutputCreators {
 	 * @param value    the value
 	 */
 	public static void content2Cell(Workbook workbook, Cell cell, final double value) {
-		cell.setCellValue(value);
-		cell.setCellStyle(columnPercentageStyle(workbook, HorizontalAlignment.CENTER));
+		if (value >= 0) {
+			cell.setCellValue(value);
+			cell.setCellStyle(columnPercentageStyle(workbook, HorizontalAlignment.CENTER));
+		} else {
+			cell.setCellValue("N/A");
+			cell.setCellStyle(columnStyle(workbook, HorizontalAlignment.CENTER));
+		}
 	}
 
 	/**

@@ -313,12 +313,12 @@ class StoriesTest {
 	}
 
 	/**
-	 * Test not closed high prior stories counting.
+	 * Test high prior stories counting.
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	@Test
-	void testNotClosedHighPriorStoriesCounting() throws IOException {
+	void testHighPriorStoriesCounting() throws IOException {
 		// Get Json string
 		String jsonString = readFileContent("src/test/resources/CompleteSprint.json");
 
@@ -326,23 +326,23 @@ class StoriesTest {
 		StoryDao<Story> stories = Stories.extractStories(jsonString);
 
 		// Summarize not closed high prior stories count
-		int count = Stories.summarizeNotClosedHighPriorStoriesCount(stories);
+		int count = Stories.summarizeHighPriorStoriesCount(stories);
 
 		assertThat(count).isEqualTo(2);
 	}
 
 	/**
-	 * Test not closed high prior stories counting from null json.
+	 * Test high prior stories counting from null json.
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	@Test
-	void testNotClosedHighPriorStoriesCountingFromNullJson() throws IOException {
+	void testHighPriorStoriesCountingFromNullJson() throws IOException {
 		// Get stories from null json
 		StoryDao<Story> stories = Stories.extractStories(null);
 
 		// Summarize not closed high prior stories count
-		int count = Stories.summarizeNotClosedHighPriorStoriesCount(stories);
+		int count = Stories.summarizeHighPriorStoriesCount(stories);
 
 		assertThat(count).isEqualTo(0);
 	}

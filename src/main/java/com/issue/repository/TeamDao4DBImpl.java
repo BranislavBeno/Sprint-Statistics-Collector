@@ -70,6 +70,9 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 	/** The Constant NOT_CLOSED_HIGH_PRIOR_STORIES_COLUMN. */
 	private static final String NOT_CLOSED_HIGH_PRIOR_STORIES_COLUMN = "not_closed_high_prior_stories";
 
+	/** The Constant CLOSED_HIGH_PRIOR_STORIES_SUCCESS_RATE_COLUMN. */
+	private static final String CLOSED_HIGH_PRIOR_STORIES_SUCCESS_RATE_COLUMN = "closed_high_prior_stories_success_rate";
+
 	/** The Constant TIME_SPENT_COLUMN. */
 	private static final String TIME_SPENT_COLUMN = "time_spent";
 
@@ -253,6 +256,7 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 				.append(column4Creation(TIME_PLANNED_COLUMN, DECIMAL_4_DEFAULT_0))
 				.append(column4Creation(TIME_SPENT_COLUMN, DECIMAL_4_DEFAULT_0))
 				.append(column4Creation(NOT_CLOSED_HIGH_PRIOR_STORIES_COLUMN, DECIMAL_3_DEFAULT_0))
+				.append(column4Creation(CLOSED_HIGH_PRIOR_STORIES_SUCCESS_RATE_COLUMN, DOUBLE_7_4_DEFAULT_0))
 				.append(column4Creation(DELTA_SP_COLUMN, DOUBLE_7_4_DEFAULT_0))
 				.append(column4Creation(PLANNED_SP_CLOSED_COLUMN, DOUBLE_7_4_DEFAULT_0))
 				.append(column4Creation(SPRINT_START_COLUMN, DATETIME_DEFAULT_NULL))
@@ -267,11 +271,11 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 	}
 
 	/**
-	 * Statment 4 insertion.
+	 * Statement for insertion.
 	 *
 	 * @return the string
 	 */
-	private String statment4Insertion() {
+	private String statement4Insertion() {
 		StringJoiner sj = new StringJoiner(", ", " (", ") ");
 		sj.add(SPRINT_COLUMN);
 		sj.add(TEAM_NAME_COLUMN);
@@ -288,6 +292,7 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		sj.add(TIME_PLANNED_COLUMN);
 		sj.add(TIME_SPENT_COLUMN);
 		sj.add(NOT_CLOSED_HIGH_PRIOR_STORIES_COLUMN);
+		sj.add(CLOSED_HIGH_PRIOR_STORIES_SUCCESS_RATE_COLUMN);
 		sj.add(DELTA_SP_COLUMN);
 		sj.add(PLANNED_SP_CLOSED_COLUMN);
 		sj.add(SPRINT_START_COLUMN);
@@ -297,11 +302,11 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		sj.add(REFINED_STORY_POINTS);
 		sj.add(SPRINT_GOALS_COLUMN);
 
-		return "INSERT INTO " + table + sj.toString() + "VALUES " + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		return "INSERT INTO " + table + sj.toString() + "VALUES " + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 	}
 
 	/**
-	 * Statement 4 update.
+	 * Statement for update.
 	 *
 	 * @return the string
 	 */
@@ -321,6 +326,7 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		sj.add(column4Update(TIME_PLANNED_COLUMN));
 		sj.add(column4Update(TIME_SPENT_COLUMN));
 		sj.add(column4Update(NOT_CLOSED_HIGH_PRIOR_STORIES_COLUMN));
+		sj.add(column4Update(CLOSED_HIGH_PRIOR_STORIES_SUCCESS_RATE_COLUMN));
 		sj.add(column4Update(DELTA_SP_COLUMN));
 		sj.add(column4Update(PLANNED_SP_CLOSED_COLUMN));
 		sj.add(column4Update(SPRINT_START_COLUMN));
@@ -334,13 +340,34 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 	}
 
 	/**
-	 * Params 4 insertion.
+	 * Handle double as na N.
 	 *
-	 * @param stmt the stmt
+	 * @param team the team
+	 * @return the double
+	 */
+	private Double handleDoubleAsNaN(final Team team) {
+		// Set default value for closed high prior stories success rate
+		Double closedHighPriorStoriesSuccessRate = -1.;
+		// Setting computed value in case that value is NaN
+		// MySQL as a target database doesn't support NaN,
+		// therefore instead of NaN value will be -1 send to database
+		if (!Double.isNaN(team.getClosedHighPriorStoriesSuccessRate()))
+			closedHighPriorStoriesSuccessRate = team.getClosedHighPriorStoriesSuccessRate();
+		return closedHighPriorStoriesSuccessRate;
+	}
+
+	/**
+	 * Parameters for insertion.
+	 *
+	 * @param stmt the statement
 	 * @param team the team
 	 * @throws SQLException the SQL exception
 	 */
 	private void params4Insertion(PreparedStatement stmt, final Team team) throws SQLException {
+		// Set value for closed high prior stories success rate
+		Double closedHighPriorStoriesSuccessRate = handleDoubleAsNaN(team);
+
+		// Set statement for database query
 		stmt.setString(1, team.getSprintLabel());
 		stmt.setString(2, team.getTeamName());
 		stmt.setInt(3, team.getTeamMemberCount());
@@ -356,25 +383,30 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		stmt.setLong(13, team.getTimePlanned());
 		stmt.setLong(14, team.getTimeSpent());
 		stmt.setInt(15, team.getNotClosedHighPriorStoriesCount());
-		stmt.setDouble(16, team.getDeltaStoryPoints());
-		stmt.setDouble(17, team.getPlannedStoryPointsClosed());
-		stmt.setDate(18, java.sql.Date.valueOf(team.getSprintStart()));
-		stmt.setDate(19, java.sql.Date.valueOf(team.getSprintEnd()));
-		stmt.setTimestamp(20, Timestamp.valueOf(LocalDateTime.now()));
-		stmt.setString(21, finishedSP2Json(team));
-		stmt.setString(22, refinedSP2Json(team));
-		stmt.setString(23, goals2Json(team));
+		stmt.setDouble(16, closedHighPriorStoriesSuccessRate);
+		stmt.setDouble(17, team.getDeltaStoryPoints());
+		stmt.setDouble(18, team.getPlannedStoryPointsClosed());
+		stmt.setDate(19, java.sql.Date.valueOf(team.getSprintStart()));
+		stmt.setDate(20, java.sql.Date.valueOf(team.getSprintEnd()));
+		stmt.setTimestamp(21, Timestamp.valueOf(LocalDateTime.now()));
+		stmt.setString(22, finishedSP2Json(team));
+		stmt.setString(23, refinedSP2Json(team));
+		stmt.setString(24, goals2Json(team));
 		stmt.addBatch();
 	}
 
 	/**
-	 * Params 4 update.
+	 * Parameters for update.
 	 *
-	 * @param stmt the stmt
+	 * @param stmt the statement
 	 * @param team the team
 	 * @throws SQLException the SQL exception
 	 */
 	private void params4Update(PreparedStatement stmt, final Team team) throws SQLException {
+		// Set value for closed high prior stories success rate
+		Double closedHighPriorStoriesSuccessRate = handleDoubleAsNaN(team);
+
+		// Set statement for database query
 		stmt.setString(1, team.getTeamName());
 		stmt.setInt(2, team.getTeamMemberCount());
 		stmt.setInt(3, team.getOnBeginPlannedStoryPointsSum());
@@ -389,15 +421,16 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		stmt.setLong(12, team.getTimePlanned());
 		stmt.setLong(13, team.getTimeSpent());
 		stmt.setInt(14, team.getNotClosedHighPriorStoriesCount());
-		stmt.setDouble(15, team.getDeltaStoryPoints());
-		stmt.setDouble(16, team.getPlannedStoryPointsClosed());
-		stmt.setDate(17, java.sql.Date.valueOf(team.getSprintStart()));
-		stmt.setDate(18, java.sql.Date.valueOf(team.getSprintEnd()));
-		stmt.setTimestamp(19, Timestamp.valueOf(LocalDateTime.now()));
-		stmt.setString(20, finishedSP2Json(team));
-		stmt.setString(21, refinedSP2Json(team));
-		stmt.setString(22, goals2Json(team));
-		stmt.setString(23, team.getSprintLabel());
+		stmt.setDouble(15, closedHighPriorStoriesSuccessRate);
+		stmt.setDouble(16, team.getDeltaStoryPoints());
+		stmt.setDouble(17, team.getPlannedStoryPointsClosed());
+		stmt.setDate(18, java.sql.Date.valueOf(team.getSprintStart()));
+		stmt.setDate(19, java.sql.Date.valueOf(team.getSprintEnd()));
+		stmt.setTimestamp(20, Timestamp.valueOf(LocalDateTime.now()));
+		stmt.setString(21, finishedSP2Json(team));
+		stmt.setString(22, refinedSP2Json(team));
+		stmt.setString(23, goals2Json(team));
+		stmt.setString(24, team.getSprintLabel());
 		stmt.addBatch();
 	}
 
@@ -463,7 +496,7 @@ public class TeamDao4DBImpl implements Dao4DB<Team> {
 		logger.info("Inserting a new sprint data for '{}' into table '{}'.", team.getSprintLabel(), table);
 
 		// Create statement for data insertion
-		String insertDataQuery = statment4Insertion();
+		String insertDataQuery = statement4Insertion();
 
 		try (PreparedStatement statement = connection.prepareStatement(insertDataQuery);) {
 			// Prepare statement for data insertion

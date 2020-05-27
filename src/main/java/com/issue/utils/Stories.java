@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
-import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -393,16 +393,16 @@ public class Stories {
 	}
 
 	/**
-	 * Summarize not closed high prior stories count.
+	 * Summarize high prior stories count.
 	 *
 	 * @param stories the stories
 	 * @return the int
 	 */
-	public static int summarizeNotClosedHighPriorStoriesCount(StoryDao<Story> stories) {
+	public static int summarizeHighPriorStoriesCount(StoryDao<Story> stories) {
 		// Prepare set of high prior statuses
 		Set<String> priorities = Set.of("High", "Critical", "Blocking");
 
-		// Get not finished high prior, critical, blocking stories
+		// Count stories with high prior status
 		return stories.getAll().stream().filter(s -> priorities.contains(s.getPriority().orElse("")))
 				.collect(Collectors.counting()).intValue();
 	}
@@ -410,23 +410,34 @@ public class Stories {
 	/**
 	 * Calculate delta.
 	 *
-	 * @param started  the started
-	 * @param finished the finished
+	 * @param onBeginPlanned the on begin planned
+	 * @param onEndPlanned   the on end planned
 	 * @return the double
 	 */
-	public static double calculateDelta(int started, int finished) {
-		return Math.abs(finished - started) / (double) started;
+	public static double calculateDelta(final int onBeginPlanned, final int onEndPlanned) {
+		return Math.abs(onEndPlanned - onBeginPlanned) / (double) onBeginPlanned;
 	}
 
 	/**
 	 * Planned story points closed.
 	 *
-	 * @param finished the finished
 	 * @param planned  the planned
+	 * @param finished the finished
 	 * @return the double
 	 */
-	public static double plannedStoryPointsClosed(int finished, int planned) {
+	public static double plannedStoryPointsClosed(final int planned, final int finished) {
 		return finished / (double) planned;
+	}
+
+	/**
+	 * Calculate success rate.
+	 *
+	 * @param notFinished the not finished
+	 * @param finished    the finished
+	 * @return the double
+	 */
+	public static double calculateSuccessRate(final int notFinished, final int finished) {
+		return (double) finished / (finished + notFinished);
 	}
 
 	/**
@@ -547,8 +558,15 @@ public class Stories {
 							team.getOnEndPlannedStoryPointsSum()));
 
 					// Set planned story points closed
-					team.setPlannedStoryPointsClosed(Stories.plannedStoryPointsClosed(team.getFinishedStoryPointsSum(),
-							team.getOnBeginPlannedStoryPointsSum()));
+					team.setPlannedStoryPointsClosed(Stories.plannedStoryPointsClosed(
+							team.getOnBeginPlannedStoryPointsSum(), team.getFinishedStoryPointsSum()));
+
+					// Summarize finished high prior stories within sprint(s)
+					team.setClosedHighPriorStoriesCount(Stories.summarizeHighPriorStoriesCount(stories));
+
+					// Calculate high priority stories closed out success rate
+					team.setClosedHighPriorStoriesSuccessRate(
+							Stories.calculateSuccessRate(0, team.getClosedHighPriorStoriesCount()));
 
 					// Summarize time estimation
 					team.setTimeEstimation(Teams.summarizeTimeEstimation(stories));
@@ -578,11 +596,11 @@ public class Stories {
 	/**
 	 * Collect refined story points.
 	 *
-	 * @param globalParams the global params
-	 * @param features the features
+	 * @param globalParams        the global params
+	 * @param features            the features
 	 * @param finishedInSprintJql the finished in sprint jql
 	 * @return the sprint dao
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws IOException          Signals that an I/O exception has occurred.
 	 * @throws InterruptedException the interrupted exception
 	 */
 	private static SprintDao<String, Sprint> collectRefinedStoryPoints(final GlobalParams globalParams,

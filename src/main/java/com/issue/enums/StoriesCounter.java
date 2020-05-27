@@ -74,11 +74,14 @@ public enum StoriesCounter implements Countable {
 
 						// Count planned story points closed
 						team.setPlannedStoryPointsClosed(Stories.plannedStoryPointsClosed(
-								team.getFinishedStoryPointsSum(), team.getOnBeginPlannedStoryPointsSum()));
+								team.getOnBeginPlannedStoryPointsSum(), team.getFinishedStoryPointsSum()));
 
-						// Count count of not finished high prior stories within sprint(s)
-						team.setNotClosedHighPriorStoriesCount(
-								Stories.summarizeNotClosedHighPriorStoriesCount(stories));
+						// Summarize not finished high prior stories within sprint(s)
+						team.setNotClosedHighPriorStoriesCount(Stories.summarizeHighPriorStoriesCount(stories));
+
+						// Calculate high priority stories closed out success rate
+						team.setClosedHighPriorStoriesSuccessRate(Stories.calculateSuccessRate(
+								team.getNotClosedHighPriorStoriesCount(), team.getClosedHighPriorStoriesCount()));
 
 						// Summarize time estimation
 						team.setTimeEstimation(team.getTimeEstimation() + Teams.summarizeTimeEstimation(stories));
@@ -187,7 +190,7 @@ public enum StoriesCounter implements Countable {
 
 						// Summarize planned story points closed
 						team.setPlannedStoryPointsClosed(Stories.plannedStoryPointsClosed(
-								team.getFinishedStoryPointsSum(), team.getOnBeginPlannedStoryPointsSum()));
+								team.getOnBeginPlannedStoryPointsSum(), team.getFinishedStoryPointsSum()));
 
 						// Summarize time estimation
 						team.setTimeEstimation(team.getTimeEstimation() - Teams.summarizeTimeEstimation(stories)

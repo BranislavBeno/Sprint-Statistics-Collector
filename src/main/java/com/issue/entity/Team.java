@@ -64,6 +64,12 @@ public class Team {
 	/** The not closed high prior stories count. */
 	private int notClosedHighPriorStoriesCount = 0;
 
+	/** The closed high prior stories count. */
+	private int closedHighPriorStoriesCount = 0;
+
+	/** The closed high prior stories success rate. */
+	private double closedHighPriorStoriesSuccessRate = 0;
+
 	/** The finished stories SP sum. */
 	private int finishedStoriesSPSum = 0;
 
@@ -322,6 +328,42 @@ public class Team {
 	 */
 	public void setNotClosedHighPriorStoriesCount(int notClosedHighPriorStoriesCount) {
 		this.notClosedHighPriorStoriesCount = notClosedHighPriorStoriesCount;
+	}
+
+	/**
+	 * Gets the closed high prior stories count.
+	 *
+	 * @return the closedHighPriorStoriesCount
+	 */
+	public int getClosedHighPriorStoriesCount() {
+		return closedHighPriorStoriesCount;
+	}
+
+	/**
+	 * Sets the closed high prior stories count.
+	 *
+	 * @param closedHighPriorStoriesCount the closedHighPriorStoriesCount to set
+	 */
+	public void setClosedHighPriorStoriesCount(int closedHighPriorStoriesCount) {
+		this.closedHighPriorStoriesCount = closedHighPriorStoriesCount;
+	}
+
+	/**
+	 * Gets the closed high prior stories success rate.
+	 *
+	 * @return the closedHighPriorStoriesSuccessRate
+	 */
+	public double getClosedHighPriorStoriesSuccessRate() {
+		return closedHighPriorStoriesSuccessRate;
+	}
+
+	/**
+	 * Sets the closed high prior stories success rate.
+	 *
+	 * @param closedHighPriorStoriesSuccessRate the closedHighPriorStoriesSuccessRate to set
+	 */
+	public void setClosedHighPriorStoriesSuccessRate(double closedHighPriorStoriesSuccessRate) {
+		this.closedHighPriorStoriesSuccessRate = closedHighPriorStoriesSuccessRate;
 	}
 
 	/**
