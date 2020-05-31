@@ -1,3 +1,7 @@
+Changes against version 2.6.0
+-----------------------------
+- Fixed false refined story points summing on team related values
+
 Changes against version 2.5.0
 -----------------------------
 - Output for KPI's enhanced with critical & high priority stories closed out success rate

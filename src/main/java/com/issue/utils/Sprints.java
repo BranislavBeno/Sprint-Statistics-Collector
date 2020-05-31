@@ -55,8 +55,12 @@ public class Sprints {
 					SprintDao<String, Sprint> sprints = team.getRefinedStoryPoints();
 
 					for (Entry<String, Sprint> sprintEntry : sprints.getAll().entrySet()) {
-						// Get particular sprint
-						Sprint sprint = sprintEntry.getValue();
+						// Create new particular sprint
+						Sprint sprint = new Sprint(sprintEntry.getValue().getSprintLabel());
+						sprint.setRefinedStoryPoints(sprintEntry.getValue().getRefinedStoryPoints()
+								.orElse(new EnumMap<>(FeatureScope.class)));
+
+						// Set sprint label
 						String sprintLabel = sprint.getSprintLabel();
 
 						if (sprintsRepo.getAll().containsKey(sprintLabel)) {
@@ -85,7 +89,7 @@ public class Sprints {
 	 * Count refined SP.
 	 *
 	 * @param teamSP the team SP
-	 * @param sumSP the sum SP
+	 * @param sumSP  the sum SP
 	 * @return the map
 	 */
 	private static Map<FeatureScope, Integer> countRefinedSP(final Map<FeatureScope, Integer> teamSP,
