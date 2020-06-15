@@ -190,9 +190,24 @@ public class Teams {
 	 * @return the int
 	 */
 	public static int countFinishedBugsSPSum(StoryDao<Story> stories) {
-		return stories.getAll().stream().filter(s -> s.getStoryType().orElse("").contains("Bugfix"))
+		// Initialize resulting value
+		int val = 0;
+
+		// Summarize story points from stories with story type "Bugfix"
+		val = stories.getAll().stream().filter(s -> s.getStoryType().orElse("").contains("Bugfix"))
 				.map(s -> s.getStoryPoints().orElse(0)).collect(Collectors.toList()).stream()
 				.collect(Collectors.summingInt(Integer::intValue)).intValue();
+
+		// Prepare set of bug fix related issue types
+		Set<String> issueTypes = Set.of("Anomaly", "Bug");
+
+		// Summarize and add story points from bug fix related issue types (e.g.
+		// "Bug",...)
+		val = val + stories.getAll().stream().filter(s -> issueTypes.contains(s.getIssueType().orElse("")))
+				.map(s -> s.getStoryPoints().orElse(0)).collect(Collectors.toList()).stream()
+				.collect(Collectors.summingInt(Integer::intValue)).intValue();
+
+		return val;
 	}
 
 	/**
@@ -256,7 +271,7 @@ public class Teams {
 	 * Creates the queries.
 	 *
 	 * @param sprintLabel the sprint label
-	 * @param sprintNr the sprint nr
+	 * @param sprintNr    the sprint nr
 	 * @return the map
 	 */
 	private static Map<Integer, String> createQueries(final String sprintLabel, final Integer sprintNr) {

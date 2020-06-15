@@ -1,6 +1,3 @@
-/**
- * 
- */
 package com.issue.entity;
 
 import java.util.Optional;
@@ -39,6 +36,9 @@ public class Story {
 	/** The resolution. */
 	private String resolution;
 
+	/** The issue type. */
+	private String issueType;
+
 	/**
 	 * Instantiates a new story.
 	 *
@@ -54,6 +54,7 @@ public class Story {
 		this.timeSpent = builder.timeSpent;
 		this.status = builder.status;
 		this.resolution = builder.resolution;
+		this.issueType = builder.issueType;
 	}
 
 	/**
@@ -138,6 +139,15 @@ public class Story {
 	}
 
 	/**
+	 * Gets the issue type.
+	 *
+	 * @return the issueType
+	 */
+	public Optional<String> getIssueType() {
+		return Optional.ofNullable(issueType);
+	}
+
+	/**
 	 * The Class Builder.
 	 */
 	public static class Builder {
@@ -168,6 +178,9 @@ public class Story {
 
 		/** The resolution. */
 		private String resolution;
+
+		/** The issue type. */
+		private String issueType;
 
 		/**
 		 * Epic.
@@ -265,6 +278,17 @@ public class Story {
 		 */
 		public Builder resolution(String resolution) {
 			this.resolution = resolution;
+			return this;
+		}
+
+		/**
+		 * Issue type.
+		 *
+		 * @param issueType the issue type
+		 * @return the builder
+		 */
+		public Builder issueType(String issueType) {
+			this.issueType = issueType;
 			return this;
 		}
 

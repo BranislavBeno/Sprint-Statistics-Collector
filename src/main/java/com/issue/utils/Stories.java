@@ -94,7 +94,7 @@ public class Stories {
 	private static String askIssueTracker(String username, String password, String issueTrackerUri, String query)
 			throws IOException, InterruptedException {
 		String request = createRequestUri(issueTrackerUri, query,
-				"assignee,status,resolution,priority,aggregatetimeoriginalestimate,aggregatetimespent,"
+				"assignee,issuetype,status,resolution,priority,aggregatetimeoriginalestimate,aggregatetimespent,"
 						+ STORY_POINTS_FIELD_ID + "," + EPIC_LINK_FIELD_ID + "," + STORY_OWNER_FIELD_ID + ","
 						+ STORY_TYPE_FIELD_ID);
 
@@ -270,10 +270,30 @@ public class Stories {
 	}
 
 	/**
+	 * Parses the issue type.
+	 *
+	 * @param issueFields the issue fields
+	 * @return the string
+	 */
+	private static String parseIssueType(JsonNode issueFields) {
+		// Initialize issue type name JSON node
+		JsonNode issuetypeName = null;
+
+		// Get JSON node issue type
+		JsonNode issuetypeField = issueFields.get("issuetype");
+
+		if (issuetypeField != null) {
+			issuetypeName = issuetypeField.get("name");
+		}
+
+		return Optional.ofNullable(issuetypeName).orElse(new ObjectNode(null)).asText();
+	}
+
+	/**
 	 * Extract stories.
 	 *
-	 * @param jsonString the json string
-	 * @return the story dao
+	 * @param jsonString the JSON string
+	 * @return the story DAO
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public static StoryDao<Story> extractStories(final String jsonString) throws IOException {
@@ -319,10 +339,13 @@ public class Stories {
 				// Get story resolution
 				String resolution = parseStoryResolution(issueFields);
 
+				// Get story issue type
+				String issueType = parseIssueType(issueFields);
+
 				// Add new story into list
 				stories.save(new Story.Builder().epic(epic).storyPoints(sp).storyOwner(storyOwner).priority(priority)
 						.timeEstimation(timeEstimation).timeSpent(timeSpent).storyType(storyType).status(status)
-						.resolution(resolution).build());
+						.resolution(resolution).issueType(issueType).build());
 			}
 		}));
 
@@ -537,13 +560,13 @@ public class Stories {
 					// Remove canceled stories
 					removeCanceledStories(stories);
 
-					// Summarize story points from stories finished within sprint(s)
+					// Summarize story points from all issue types finished within sprint(s)
 					team.setFinishedStoryPoints(Utils.countFeatureFocus(features, stories));
 
-					// Summarize story points from bug fixes finished within sprint(s)
+					// Summarize story points from bug fix related issues finished within sprint(s)
 					team.setFinishedBugsSPSum(Teams.countFinishedBugsSPSum(stories));
 
-					// Set story points from pure stories (without bug fixes) finished within
+					// Summarize story points from non bug fix related issues finished within
 					// sprint(s)
 					team.setFinishedStoriesSPSum(team.getFinishedStoryPointsSum() - team.getFinishedBugsSPSum());
 
