@@ -1,3 +1,7 @@
+Changes against version 2.6.1
+-----------------------------
+- Added hadling of issue type to identify new introduced bug related issues
+
 Changes against version 2.6.0
 -----------------------------
 - Fixed false refined story points summing on team related values

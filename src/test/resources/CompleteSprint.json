@@ -55,6 +55,92 @@
    "id": "1552966",
    "self": "http://jira/rest/api/2/issue/1552966"
   },{
+   "key": "ISSUE-15521",
+   "fields": {
+    "priority": {
+     "id": "4",
+     "iconUrl": "http://jira/images/icons/priorities/minor.svg",
+     "self": "http://jira/rest/api/2/priority/4",
+     "name": "Medium"
+    },
+    "aggregatetimeoriginalestimate": null,
+    "customfield_16040": null,
+    "customfield_12640": "ISSUE-8904",
+    "issuetype": {
+     "subtask": false,
+     "avatarId": 18259,
+     "id": "11502",
+     "iconUrl": "http://jira/secure/viewavatar?size=xsmall&avatarId=18259&avatarType=issuetype",
+     "self": "http://jira/rest/api/2/issuetype/11502",
+     "name": "Anomaly"
+    },
+    "status": {
+     "statusCategory": {
+      "key": "new",
+      "colorName": "blue-gray",
+      "id": 2,
+      "self": "http://jira/rest/api/2/statuscategory/2",
+      "name": "To Do"
+     },
+     "id": "1",
+     "iconUrl": "http://jira/images/icons/statuses/open.png",
+     "self": "http://jira/rest/api/2/status/1",
+     "name": "Open"
+    },
+    "assignee": null,
+    "resolution": null,
+    "aggregatetimespent": null
+   },
+   "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+   "id": "1566021",
+   "self": "http://jira/rest/api/2/issue/1566021"
+  },{
+   "key": "ISSUE-15537",
+   "fields": {
+    "priority": {
+     "id": "4",
+     "iconUrl": "http://jira/images/icons/priorities/minor.svg",
+     "self": "http://jira/rest/api/2/priority/4",
+     "name": "Medium"
+    },
+    "aggregatetimeoriginalestimate": 7200,
+    "customfield_16040": null,
+    "customfield_12640": null,
+    "customfield_10002": null,
+    "issuetype": {
+     "subtask": false,
+     "description": "A problem which impairs or prevents the functions of the product.",
+     "avatarId": 13943,
+     "id": "1",
+     "iconUrl": "http://jira/secure/viewavatar?size=xsmall&avatarId=13943&avatarType=issuetype",
+     "self": "http://jira/rest/api/2/issuetype/1",
+     "name": "Bug"
+    },
+    "status": {
+     "statusCategory": {
+      "key": "done",
+      "colorName": "green",
+      "id": 3,
+      "self": "http://jira/rest/api/2/statuscategory/3",
+      "name": "Done"
+     },
+     "id": "5",
+     "iconUrl": "http://jira/images/icons/statuses/resolved.png",
+     "self": "http://jira/rest/api/2/status/5",
+     "name": "Resolved"
+    },
+    "assignee": null,
+    "resolution": {
+     "id": "1",
+     "self": "http://jira/rest/api/2/resolution/1",
+     "name": "Fixed"
+    },
+    "aggregatetimespent": 5400
+   },
+   "expand": "operations,versionedRepresentations,editmeta,changelog,renderedFields",
+   "id": "1567482",
+   "self": "http://jira/rest/api/2/issue/1567482"
+  },{
    "key": "ISSUE-13341",
    "fields": {
     "priority": {

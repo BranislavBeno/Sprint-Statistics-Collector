@@ -236,19 +236,19 @@ class StoriesTest {
 	 */
 	@Test
 	void testStoriesExtraction() throws IOException {
-		// Get Json string
+		// Get JSON string
 		String jsonString = readFileContent("src/test/resources/CompleteSprint.json");
-		// extract stories from json
+		// extract stories from JSON
 		StoryDao<Story> stories = Stories.extractStories(jsonString);
 
 		// Test full amount of stories
-		assertThat(stories.getAll().size()).isEqualTo(17);
+		assertThat(stories.getAll().size()).isEqualTo(19);
 		assertThat(stories.getAll().get(0).getEpic().orElse("")).isEqualTo("ISSUE-465");
-		assertThat(stories.getAll().get(2).getStoryPoints().orElse(null)).isEqualTo(3);
+		assertThat(stories.getAll().get(2).getStoryPoints().orElse(null)).isEqualTo(0);
 
 		// Test reduced amount of stories
 		Stories.removeCanceledStories(stories);
-		assertThat(stories.getAll().size()).isEqualTo(16);
+		assertThat(stories.getAll().size()).isEqualTo(18);
 	}
 
 	/**
@@ -401,7 +401,7 @@ class StoriesTest {
 		// Summarize time estimation within stories repo
 		long count = Teams.summarizeTimeEstimation(stories);
 
-		assertThat(count).isEqualTo(384);
+		assertThat(count).isEqualTo(386);
 	}
 
 	/**
@@ -439,7 +439,7 @@ class StoriesTest {
 		// Summarize time spent within stories repository
 		long count = Teams.summarizeTimeSpent(stories);
 
-		assertThat(count).isEqualTo(369);
+		assertThat(count).isEqualTo(370);
 	}
 
 	/**

@@ -42,7 +42,7 @@ public class Efficiency2Xlsx {
 		Sheet sheet = workbook.createSheet(sheetName);
 
 		// Create column with captions
-		OutputCreators.createCaptionColumn(workbook, sheetIdx, List.of("", "Finished SP", "Not finished SP"));
+		OutputCreators.createCaptionColumn(workbook, sheetIdx, List.of("", "Sprint", "Finished SP", "Not finished SP"));
 
 		// Initialize column
 		int colIdx = 1;
@@ -53,10 +53,13 @@ public class Efficiency2Xlsx {
 			// Row 0 - Engineer name
 			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, rowIdx++, engineer.getName());
 
-			// Rows 1 - Finished SP
+			// Row 1 - Sprint label
+			OutputCreators.writeHeaderCell(workbook, sheetIdx, colIdx, rowIdx++, engineer.getSprintLabel());
+
+			// Row 2 - Finished SP
 			OutputCreators.writeCell(workbook, sheetIdx, colIdx, rowIdx++, engineer.getFinishedStoryPoints().orElse(0));
 
-			// Rows 2 - Not finished SP
+			// Row 3 - Not finished SP
 			OutputCreators.writeCell(workbook, sheetIdx, colIdx, rowIdx,
 					engineer.getNotFinishedStoryPoints().orElse(0));
 
