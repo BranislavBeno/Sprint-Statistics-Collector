@@ -33,6 +33,7 @@ public class Send2DB {
 
 	/** The sprints. */
 	private SprintDao<String, Sprint> sprints;
+
 	/** The global parameters. */
 	private GlobalParams globalParams;
 
@@ -41,9 +42,9 @@ public class Send2DB {
 	 *
 	 * @param globalParams the global parameters
 	 * @param teams        the teams
-	 * @param sprints the sprints
+	 * @param sprints      the sprints
 	 */
-	public Send2DB(GlobalParams globalParams, TeamDao<String, Team> teams, SprintDao<String, Sprint> sprints){
+	public Send2DB(GlobalParams globalParams, TeamDao<String, Team> teams, SprintDao<String, Sprint> sprints) {
 		this.globalParams = Optional.ofNullable(globalParams).orElseThrow(IllegalArgumentException::new);
 		this.teams = teams;
 		this.sprints = sprints;
