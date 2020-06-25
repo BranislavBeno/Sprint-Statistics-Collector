@@ -317,7 +317,7 @@ public class Utils {
 		logger.info("Processing started.");
 
 		// Kick off progress thread. // Provide global parameters
-		GlobalParams globalParams = Utils.provideGlobalParams("conf/application.properties");
+		GlobalParams globalParams = Utils.provideGlobalParams("conf/sprintstats.properties");
 
 		// Set user name for issue tracker authentication
 		globalParams.setUsername(user);

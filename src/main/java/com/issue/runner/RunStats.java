@@ -21,7 +21,7 @@ import picocli.CommandLine.Spec;
  *
  * @author branislav.beno
  */
-@Command(mixinStandardHelpOptions = true, version = "Sprint statistics collector R2.7.0", description = "Console application SprintStats, "
+@Command(mixinStandardHelpOptions = true, version = "Sprint statistics collector R2.8.0", description = "Console application SprintStats, "
 		+ "is used for automated sprint statistics gathering from issue tracker tool. "
 		+ "Collected results are according to tool settings sent to database and/or to Excel file. "
 		+ "Precondition for automated data gathering is, that issue tracker tool allows communication over REST API.")

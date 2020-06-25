@@ -1,3 +1,7 @@
+Changes against version 2.7.0
+-----------------------------
+- Properties file renamed to sprintstats.properties
+
 Changes against version 2.6.1
 -----------------------------
 - Added hadling of issue type to identify new introduced bug related issues

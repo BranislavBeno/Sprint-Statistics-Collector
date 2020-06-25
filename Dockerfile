@@ -10,7 +10,7 @@ RUN apk add --no-cache openjdk11
 COPY ./build/libs/SprintStatsCollector.jar /app/
 
 # Copy application configuration
-COPY ./conf/application.properties /app/conf/
+COPY ./conf/sprintstats.properties /app/conf/
 
 # Set working directory
 WORKDIR /app
